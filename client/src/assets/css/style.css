@@ -1,0 +1,15 @@
+.bg-image {
+    background-image: url('../dashboardImages/web/bgImage.jpg');
+}
+
+.bg-curve {
+    background-image: url('../dashboardImages/web/curved9.jpg');
+}
+
+/* Add a CSS reset */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+/* overflow: hidden;  Prevents scrolling */
+}

@@ -32,7 +32,7 @@ function UserProfile () {
           try {
             const response = await api.get(`/GetUserData/${userId}`);
             const userData = response.data;
-            console.log(userData)
+            console.log(userData.firstName)
             setValues({
               firstName: userData.firstName,
               lastName: userData.lastName,
@@ -44,8 +44,10 @@ function UserProfile () {
               role: userData.role,
               profileImageName: userData.profileImage
             });
+
             const fetchAllRoles = await api.get('/Roles');
             setAllRoles(fetchAllRoles.data);
+
             const filteredRoles = filterRoles(userData.role, fetchAllRoles.data);
             setRoles(filteredRoles);
           } catch (error) {
@@ -88,6 +90,9 @@ function UserProfile () {
     };
   
     const handleSave = async () => {
+      if (values.password !== values.confirmPassword) {
+        return window.alert("Passwords do not match");
+      }
       const formData = new FormData();
       formData.append('firstName', values.firstName);
       formData.append('lastName', values.lastName);
@@ -121,7 +126,8 @@ function UserProfile () {
   
     // const profileImage = `/images/users/${values.profileImage}`;
     const profileImage = `../../../assets/dashboardImages/users/${values.profileImage}`;
-  
+    // const profileImage = values.profileImage ? `/images/users/${values.profileImage}` : '/images/defaultProfile.png';
+    console.log(profileImage)
 return (
     <div className="absolute top-0 left-0 w-full h-full">
         {/* Sidebar */}
@@ -161,7 +167,7 @@ return (
                                 )}
                             </div>
                         </div>
-
+                        {/* <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}> */}
                         <form className="w-full md:w-4/5 p-5 space-y-4" onSubmit={handleSave} encType="multipart/form-data" >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col">

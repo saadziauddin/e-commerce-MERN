@@ -73,6 +73,7 @@ return (
                             name: 'Profile Image',
                             selector: row => {
                                 const image = `../../../assets/dashboardImages/users/${row.profileImageName}`;
+                                console.log(image);
                                 return row.profileImageName ? (
                                     <div className="flex justify-center">
                                         <img src={image} alt="Profile" className="h-10 w-10 rounded-full" />

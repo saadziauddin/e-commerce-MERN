@@ -1,21 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import verifyUser from './components/verifyUser.js';
+import verifyToken from './verifyToken.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const isProduction = process.env.NODE_ENV === 'production';
 const apiURL = isProduction ? process.env.PRODUCTION_API_URL : process.env.VITE_API_URL;
-// const mongoURI = isProduction ? process.env.MONGODB_URI_ATLAS : process.env.MONGODB_URI_LOCAL;
-
-// console.log('Environment:', process.env.NODE_ENV);
-// console.log('MongoDB URI:', mongoURI);
-// console.log('API URL:', apiURL);
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
@@ -25,7 +20,6 @@ const corsOptions = {
     allowedHeaders: ['Authorization', 'Content-Type'],
     exposedHeaders: ['Authorization'],
 };
-
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
@@ -35,28 +29,28 @@ app.use((req, res, next) => {
 });
 
 // Login Router
-import loginRouter from './components/login.js';
+import loginRouter from './routes/login.js';
 app.post('/signin', loginRouter);
 
 // Verifying user through JWT Token
-app.get('/signin', verifyUser, (req, res) => {
+app.get('/signin', verifyToken, (req, res) => {
     return res.json({ Status: "Success", name: req.name, role: req.role });
 });
 
 // Register Router
-import registerRouter from './components/register.js';
+import registerRouter from './routes/register.js';
 app.post('/Register', registerRouter);
 
 // Password Reset
-import resetRouter from './components/reset.js';
+import resetRouter from './routes/reset.js';
 app.post('/ResetPassword', resetRouter);
 
 // Logout
-import logoutRouter from './components/logout.js';
+import logoutRouter from './routes/logout.js';
 app.get('/Logout', logoutRouter);
 
 // Fetching /Roles, /GetUserData, /GetRecordingsData, /GetUserData/:userId, /GetUserRole/:userId
-import fetchdataRouter from './components/fetchdata.js';
+import fetchdataRouter from './routes/fetchdata.js';
 app.get('/Roles', fetchdataRouter);
 app.get('/GetUserData', fetchdataRouter);
 app.get('/GetRecordingsData', fetchdataRouter);
@@ -64,12 +58,12 @@ app.get('/GetUserData/:userId', fetchdataRouter);
 app.get('/GetUserRole/:userId', fetchdataRouter);
 
 // Edit/Delete User
-import editdeleteRouter from './components/editdelete.js';
+import editdeleteRouter from './routes/editdelete.js';
 app.delete('/Delete', editdeleteRouter);
 app.put('/UpdateUserData/:userId', editdeleteRouter);
 
 // Search Recordings
-import searchDataRouter from './components/searchData.js';
+import searchDataRouter from './routes/searchData.js';
 app.use('/Reports', searchDataRouter);
 
 

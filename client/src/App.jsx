@@ -1,28 +1,30 @@
 import { createBrowserRouter, RouterProvider, Outlet, createRoutesFromElements, Route, ScrollRestoration } from "react-router-dom";
-// eCommerce
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// ecommerce
 import Footer from "./components/home/Footer/Footer";
 import FooterBottom from "./components/home/Footer/FooterBottom";
 import Header from "./components/home/Header/Header";
 import HeaderBottom from "./components/home/Header/HeaderBottom";
-import About from "./pages/eCommerce/About/About";
-import Cart from "./pages/eCommerce/Cart/Cart";
-import Contact from "./pages/eCommerce/Contact/Contact";
-import Home from "./pages/eCommerce/Home/Home";
-import Offer from "./pages/eCommerce/Offer/Offer";
-import Payment from "./pages/eCommerce/payment/Payment";
-import ProductDetails from "./pages/eCommerce/ProductDetails/ProductDetails";
-import Shop from "./pages/eCommerce/Shop/Shop";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-// Dashboard
-import Login from './pages/Dashboard/Auth/Login';
-import Register from './pages/Dashboard/Auth/Register';
-import ResetPassword from "./pages/Dashboard/Auth/Reset";
-import Dashboard from './pages/Dashboard/AdminDashboard/AdminDashboard';
-import UserManagement from "./pages/Dashboard/AdminDashboard/UserManagement";
-import ReportsData from './pages/Dashboard/AdminDashboard/Reports';
-import UserProfile from './pages/Dashboard/AdminDashboard/UserProfile';
-
+import About from "./pages/ecommerce/About/About";
+import Cart from "./pages/ecommerce/Cart/Cart";
+import Contact from "./pages/ecommerce/Contact/Contact";
+import Home from "./pages/ecommerce/Home/Home";
+import Offer from "./pages/ecommerce/Offer/Offer";
+import Payment from "./pages/ecommerce/payment/Payment";
+import ProductDetails from "./pages/ecommerce/ProductDetails/ProductDetails";
+import Shop from "./pages/ecommerce/Shop/Shop";
+import SignIn from "./pages/ecommerce/Account/SignIn";
+import SignUp from "./pages/ecommerce/Account/SignUp";
+import Reset from "./pages/ecommerce/Account/Reset";
+// dashboard
+import DashboardHome from './pages/dashboard/Home/Home';
+import UserManagement from "./pages/dashboard/UserManagement/UserManagement";
+import UserProfile from './pages/dashboard/UserManagement/UserProfile';
+import Products from './pages/dashboard/Products/Products';
+import Categories from './pages/dashboard/Categories/Categories';
+import Orders from './pages/dashboard/Orders/Orders';
+import Sales from './pages/dashboard/Sales/Sales';
 
 const Layout = () => {
   return (
@@ -65,15 +67,18 @@ const router = createBrowserRouter(
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/paymentgateway" element={<Payment />}></Route>
       </Route>
+      {/* Auth Routes */}
+      <Route path="/signin" element={<SignIn />}></Route>
+      <Route path="/signup" element={<SignUp />}></Route>
+      <Route path="/reset" element={<Reset />}></Route>
       {/* Dashboard Routes */}
-      <Route path="/signin" element={<Login />}></Route>
-      <Route path="/signup" element={<Register />}></Route>
-      <Route path="/reset" element={<ResetPassword />}></Route>
-      <Route path="/dashboard/home" element={<Dashboard />}></Route>
+      <Route path="/dashboard/home" element={<DashboardHome />}></Route>
       <Route path="/dashboard/userManagement" element={<UserManagement />}></Route>
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<UserProfile />}></Route>
-      {/* /UserManagement/UserProfile/:userId */}
-      <Route path="/dashboard/reports" element={<ReportsData />}></Route>
+      <Route path="/dashboard/products" element={<Products />}></Route>
+      <Route path="/dashboard/categories" element={<Categories />}></Route>
+      <Route path="/dashboard/orders" element={<Orders />}></Route>
+      <Route path="/dashboard/sales" element={<Sales />}></Route>
     </Route>
   )
 );

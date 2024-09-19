@@ -7,7 +7,7 @@ import {
   newArrTwo,
   newArrThree,
   newArrFour,
-} from "../../../assets/webImages/index";
+} from "../../../assets/images/website_images/index";
 import SampleNextArrow from "./SampleNextArrow";
 import SamplePrevArrow from "./SamplePrevArrow";
 

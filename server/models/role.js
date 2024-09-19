@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import '../config.js';
+import './config.js';
 
 const roleSchema = new mongoose.Schema({
     name: { type: String, required: true}

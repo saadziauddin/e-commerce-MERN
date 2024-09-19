@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../../redux/orebiSlice";
-import { emptyCart } from "../../../assets/webImages/index";
+import { emptyCart } from "../../../assets/images/website_images/index";
 import ItemCard from "./ItemCard";
 
 const Cart = () => {

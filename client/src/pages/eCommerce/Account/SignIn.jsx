@@ -1,0 +1,164 @@
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faExclamationCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import api from "../../../Api/api.js";
+import LottieAnimation from "../../../assets/animations/LottieAnimation";
+import animationData from "../../../assets/animations/LoginAnimation.json";
+
+const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errEmail, setErrEmail] = useState("");
+  const [errPassword, setErrPassword] = useState("");
+  const [filled, setFilled] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setFilled(email !== "" && password !== "");
+  }, [email, password]);
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setErrEmail("");
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setErrPassword("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      setErrEmail("Enter your email");
+    }
+    if (!password) {
+      setErrPassword("Enter your password");
+    }
+    if (email && password) {
+      try {
+        const response = await api.post("/signin", { email, password });
+
+        if (response.data.message === "Login Successfull!") {
+          setEmail("");
+          setPassword("");
+
+          const role = response.data.role;
+
+          if (role === "Admin") { navigate("/dashboard/home"); }
+          else if (role === "User") { navigate("/dashboard/home"); } else { window.alert("Invalid Role!"); }
+
+        } else if (response.data.resetPassword) {
+          window.alert(response.data.message);
+          navigate("/reset");
+        } else {
+          window.alert(response.data.message);
+        }
+      } catch (err) {
+        if (err.response && err.response.data && err.response.data.error) {
+          window.alert(err.response.data.error);
+        } else {
+          window.alert("Request failed from Login");
+        }
+      }
+    }
+  };
+
+  const handleSignIn = () => {
+    handleSubmit();
+  };
+
+  return (
+    <div className="w-full h-screen flex items-center justify-center">
+      {/* Animation Section */}
+      <div className="w-0 lgl:w-[50%] h-full flex items-center justify-center p-10">
+        <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
+      </div>
+
+      {/* Form Section */}
+      <div className="w-full lgl:w-1/2 h-full flex items-center justify-center">
+        <form onSubmit={handleSubmit} className="w-full lgl:w-[450px] h-screen flex items-center justify-center">
+          <div className="px-6 py-4 w-full h-[90%] flex flex-col justify-center overflow-y-scroll scrollbar-thin scrollbar-thumb-primeColor">
+            <h1 className="font-titleFont font-semibold text-3xl mdl:text-4xl mb-4">
+              Sign in
+            </h1>
+            <div className="flex flex-col gap-3">
+              {/* Email */}
+              <div className="mb-0">
+                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Email*</label>
+                <div className="relative">
+                  <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3.5 text-gray-400" />
+                  <input
+                    onChange={handleEmail}
+                    value={email}
+                    className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
+                    type="email"
+                    name="email"
+                    placeholder="abc@example.com"
+                  />
+                </div>
+                {errEmail && (
+                  <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                    {errEmail}
+                  </p>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="mb-0">
+                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Password*</label>
+                <div className="relative">
+                  <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
+                  <input
+                    onChange={handlePassword}
+                    value={password}
+                    className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
+                    type="password"
+                    name="password"
+                    placeholder="********"
+                  />
+                </div>
+                {errPassword && (
+                  <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                    <FontAwesomeIcon icon={faExclamationCircle} />
+                    {errPassword}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className={`${filled
+                  ? "bg-[#7b246d] hover:bg-slate-500 hover:text-white hover:border-none cursor-pointer"
+                  : "bg-gray-500 hover:bg-gray-500 hover:text-white cursor-not-allowed"
+                  } text-white py-2 w-4/5 rounded-xl text-base font-medium duration-300`}
+                disabled={!filled}
+              >
+                Sign up
+              </button>
+
+              <p className="text-gray-700 text-sm text-center w-4/5">
+                Forget password?{' '}
+                <Link to="/reset" className="text-primeColor font-medium hover:text-blue-600 duration-300">
+                  Reset
+                </Link>
+              </p>
+
+              <p className="text-gray-700 text-sm text-center w-4/5">
+                Don't have an Account?{' '}
+                <Link to="/signup" className="text-primeColor font-medium hover:text-blue-600 duration-300">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  );
+};
+
+export default SignIn;

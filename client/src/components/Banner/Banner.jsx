@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Slider from "react-slick";
-import { bannerImgOne, bannerImgTwo } from "../../assets/webImages";
+import { bannerImgOne, bannerImgTwo } from "../../assets/images/website_images";
 import Image from "../designLayouts/Image";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 

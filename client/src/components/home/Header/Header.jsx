@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { motion } from "framer-motion";
-import { logo1, logo2 } from "../../../assets/webImages";
+import { logo1, logo2 } from "../../../assets/images/website_images";
 import Image from "../../designLayouts/Image";
 import { navBarList, paginationItems } from "../../../constants";
 import { FaSearch, FaUser, FaPhone, FaShoppingCart, FaPhoneAlt } from "react-icons/fa";
@@ -90,8 +90,8 @@ const Header = () => {
               <div className="fixed top-0 left-0 w-full h-screen bg-black text-gray-200 bg-opacity-80 z-50">
                 <motion.div initial={{ x: -300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="w-[80%] h-full relative">
                   <div className="w-full h-full bg-primeColor p-6">
-                    <img className="w-28 mb-6" src={logo1} alt="logo" />
-
+                    <img className="w-28 mb-6" src="" alt="main_logo" /> {/* logo1 */}
+                    
                     {/* Search Bar (Mobile View) */}
                     <div className="relative mb-4">
                       <input
@@ -193,7 +193,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
             <Link to="/">
-              <Image className="lg:w-16 md:w-14 sm:w-14 xs:w-14 object-cover" imgSrc={logo2} alt="Logo" />
+              <Image className="lg:w-16 md:w-14 sm:w-14 xs:w-14 object-cover" imgSrc="" alt="main_logo" /> {/* logo2 */}
             </Link>
           </div>
 

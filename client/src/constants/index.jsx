@@ -50,7 +50,7 @@ import {
   ricoh5,
   espson1,
   espson2,
-} from "../assets/webImages/index";
+} from "../assets/images/website_images";
 
 import "./style.css";
 

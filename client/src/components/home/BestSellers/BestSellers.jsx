@@ -6,7 +6,7 @@ import {
   bestSellerTwo,
   bestSellerThree,
   bestSellerFour,
-} from "../../../assets/webImages/index";
+} from "../../../assets/images/website_images/index";
 
 const BestSellers = () => {
   return (

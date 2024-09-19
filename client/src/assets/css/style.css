@@ -1,9 +1,5 @@
 .bg-image {
-    background-image: url('../dashboardImages/web/bgImage.jpg');
-}
-
-.bg-curve {
-    background-image: url('../dashboardImages/web/curved9.jpg');
+    background-image: url('../images/dashboard_images/web/bgImage.jpg');
 }
 
 /* Add a CSS reset */

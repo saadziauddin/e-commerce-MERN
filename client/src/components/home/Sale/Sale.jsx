@@ -4,7 +4,7 @@ import {
   saleImgOne,
   saleImgTwo,
   saleImgThree,
-} from "../../../assets/webImages/index";
+} from "../../../assets/images/website_images/index";
 import Image from "../../designLayouts/Image";
 import ShopNow from "../../designLayouts/buttons/ShopNow";
 

@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUsers, faUser, faChartLine, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUsers, faBox, faPercent, faCartPlus, faSignOutAlt, faTimes, faList } from '@fortawesome/free-solid-svg-icons';
 import logo from '../../../assets/images/website_images/nayabLogo1.png';
 import api from '../../../Api/api.js';
 
 function Sidebar({ isOpen, closeSidebar }) {
   const [role, setRole] = useState('');
+  const navigate = useNavigate();
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const fetchRole = async () => {
       try {
         const result = await api.get('/signin');
-
         if (result.data.Status === "Success") {
           setRole(result.data.role);
         } else {
@@ -24,225 +25,89 @@ function Sidebar({ isOpen, closeSidebar }) {
     };
     fetchRole();
   }, []);
-  
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isOpen) {
+        closeSidebar();
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, closeSidebar]);
+
+  const logout = () => {
+    api.get('/Logout')
+      .then(res => {
+        navigate('/signin');
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
-    <aside className={`fixed inset-y-0 my-4 ml-4 block w-64 flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-lg transition-transform duration-200 xl:left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}`}>
+    <aside ref={sidebarRef} className={`fixed inset-y-0 my-4 ml-4 block w-64 flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-lg transition-transform duration-200 xl:left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}`}>
+
       <div className="flex justify-center items-center py-4">
-        {role === "Admin" ? 
-          <NavLink to={'/dashboard/home'}>
-            <img src="" className="h-18 w-30 ease-nav-brand" alt="main_logo" />
-          </NavLink>
-        :
-          <NavLink to={'/dashboard/home'}>
-            <img src="" className="h-14 w-30 ease-nav-brand" alt="main_logo" />
-          </NavLink>
-        }
+        <NavLink to='/dashboard/home'>
+          <img src="" className="h-16 w-auto" alt="main_logo" />
+        </NavLink>
       </div>
-      <hr className="h-px mt-0 mb-3 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
+      <hr className="h-px mt-0 mb-3 bg-gray-200" />
       <div className="items-center block w-auto max-h-screen h-sidenav grow basis-full">
-        {role === "Admin" ?
-          <ul className="flex flex-col pl-0 mb-0">
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/home"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Dashboard</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              {<NavLink to="/dashboard/userManagement"></NavLink> ?
-                <NavLink to="/dashboard/userManagement"
-                  className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                    ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                  {({ isActive }) => (
-                    <>
-                      <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                        ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                        <FontAwesomeIcon icon={faUsers} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                      </div>
-                      <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">User Management</span>
-                    </>
-                  )}
+        <ul className="flex flex-col pl-0 mb-0">
+          <li className="mt-2 w-full">
+            <NavLink to="/dashboard/home" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+              <FontAwesomeIcon icon={faHome} className="mr-2" />
+              <span>Dashboard</span>
+            </NavLink>
+          </li>
+          {role === "Admin" && (
+            <>
+              <li className="mt-2 w-full">
+                <NavLink to="/dashboard/userManagement" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+                  <FontAwesomeIcon icon={faUsers} className="mr-2" />
+                  <span>User Management</span>
                 </NavLink>
-              :
-                <NavLink to="/dashboard/userManagement/userProfile"
-                  className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                    ${isActive ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-red-600 hover:to-pink-600 hover:text-white'}`} >
-                  {({ isActive }) => (
-                    <>
-                      <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                        ${isActive ? 'bg-gradient-to-tl from-red-600 to-pink-600 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-red-600 to-pink-600 shadow-soft-2xl'}`}>
-                        <FontAwesomeIcon icon={faUsers} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                      </div>
-                      <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">User Profile</span>
-                    </>
-                  )}
-                </NavLink>
-              }
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/categories"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Categories</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/products"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Products</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/sales"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Product on Sale</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/orders"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Orders</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-          </ul>
-        :
-          <ul className="flex flex-col pl-0 mb-0">
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/home"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Dashboard</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/categories"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Categories</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/products"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Products</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/sales"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Product on Sale</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-
-            <li className="mt-2 w-full">
-              <NavLink to="/dashboard/orders"
-                className={({ isActive }) => `group py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all 
-                  ${isActive ? 'bg-gradient-to-r from-pink-500 to-[#8f4783] text-white' : 'bg-white text-slate-700 hover:bg-gradient-to-r hover:from-[#8f4783] hover:to-pink-500 hover:text-white'}`} >
-                {({ isActive }) => (
-                  <>
-                    <div className={`mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5 
-                      ${isActive ? 'bg-gradient-to-tl from-[#b958a984] to-pink-500 shadow-soft-2xl text-white' : 'bg-gradient-to-tl from-pink-500 to-[#8f4783] shadow-soft-2xl'}`}>
-                      <FontAwesomeIcon icon={faHome} className={`${isActive ? 'text-white' : 'text-white group-hover:text-slate-700'}`} />
-                    </div>
-                    <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Orders</span>
-                  </>
-                )}
-              </NavLink>
-            </li>
-          </ul>
-        }
+              </li>
+            </>
+          )}
+          <li className="mt-2 w-full">
+            <NavLink to="/dashboard/categories" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+              <FontAwesomeIcon icon={faList} className="mr-2" />
+              <span>Categories</span>
+            </NavLink>
+          </li>
+          <li className="mt-2 w-full">
+            <NavLink to="/dashboard/products" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+              <FontAwesomeIcon icon={faBox} className="mr-2" />
+              <span>Products</span>
+            </NavLink>
+          </li>
+          <li className="mt-2 w-full">
+            <NavLink to="/dashboard/sales" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+              <FontAwesomeIcon icon={faPercent} className="mr-2" />
+              <span>Sales</span>
+            </NavLink>
+          </li>
+          <li className="mt-2 w-full">
+            <NavLink to="/dashboard/orders" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
+              <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
+              <span>Orders</span>
+            </NavLink>
+          </li>
+          <li className="mt-2 w-full">
+            <NavLink to="#" onClick={logout} className="py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all text-gray-600 hover:bg-gray-200 hover:text-black">
+              <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+              <span>Logout</span>
+            </NavLink>
+          </li>
+        </ul>
       </div>
-
       <div className="flex justify-center items-center w-full p-4 absolute bottom-0 right-0 cursor-pointer text-xl hover:text-slate-500 hover:bg-gray-100 text-gray-700 xl:hidden" onClick={closeSidebar}>
         <FontAwesomeIcon icon={faTimes} />
       </div>
-
     </aside>
   );
 }

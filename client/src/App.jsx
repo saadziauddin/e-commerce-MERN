@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet, createRoutesFromElements, Route, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// ecommerce
+// Website 
 import Footer from "./components/home/Footer/Footer";
 import FooterBottom from "./components/home/Footer/FooterBottom";
 import Header from "./components/home/Header/Header";
@@ -13,17 +13,29 @@ import Home from "./pages/ecommerce/Home/Home";
 import Offer from "./pages/ecommerce/Offer/Offer";
 import Payment from "./pages/ecommerce/payment/Payment";
 import ProductDetails from "./pages/ecommerce/ProductDetails/ProductDetails";
+import ProductDetails1 from "./pages/ecommerce/ProductDetails/ProductDetails1";
 import Shop from "./pages/ecommerce/Shop/Shop";
 import SignIn from "./pages/ecommerce/Account/SignIn";
 import SignUp from "./pages/ecommerce/Account/SignUp";
 import Reset from "./pages/ecommerce/Account/Reset";
-// dashboard
+// Dashboard
 import DashboardHome from './pages/dashboard/Home/Home';
+
+// User management
 import UserManagement from "./pages/dashboard/UserManagement/UserManagement";
 import UserProfile from './pages/dashboard/UserManagement/UserProfile';
-import Products from './pages/dashboard/Products/Products';
+
+// Categories management
 import Categories from './pages/dashboard/Categories/Categories';
+import AddCategory from "./pages/dashboard/Categories/AddCategory";
+
+// Products management
+import Products from './pages/dashboard/Products/Products';
+
+// Orders management
 import Orders from './pages/dashboard/Orders/Orders';
+
+// Sales management
 import Sales from './pages/dashboard/Sales/Sales';
 
 const Layout = () => {
@@ -58,12 +70,13 @@ const router = createBrowserRouter(
       <Route path="/" element={<Layout />}>
         {/* ==================== Header Navlink Start here =================== */}
         <Route index element={<Home />}></Route>
-        <Route path="/shop" element={<Shop />}></Route>
+        <Route path="/products" element={<Shop />}></Route>
         <Route path="/about" element={<About />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         {/* ==================== Header Navlink End here ===================== */}
         <Route path="/category/:category" element={<Offer />}></Route>
-        <Route path="/product/:_id" element={<ProductDetails />}></Route>
+        {/* <Route path="/product/:_id" element={<ProductDetails />}></Route> */}
+        <Route path="/product/:_id" element={<ProductDetails1 />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/paymentgateway" element={<Payment />}></Route>
       </Route>
@@ -73,11 +86,22 @@ const router = createBrowserRouter(
       <Route path="/reset" element={<Reset />}></Route>
       {/* Dashboard Routes */}
       <Route path="/dashboard/home" element={<DashboardHome />}></Route>
+
+      {/* User management routes */}
       <Route path="/dashboard/userManagement" element={<UserManagement />}></Route>
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<UserProfile />}></Route>
-      <Route path="/dashboard/products" element={<Products />}></Route>
+
+      {/* Categories management routes */}
       <Route path="/dashboard/categories" element={<Categories />}></Route>
+      <Route path="/dashboard/categories/addCategory" element={<AddCategory />}></Route>
+
+      {/* Products management routes */}
+      <Route path="/dashboard/products" element={<Products />}></Route>
+
+      {/* Orders management routes */}
       <Route path="/dashboard/orders" element={<Orders />}></Route>
+      
+      {/* Sales management routes */}
       <Route path="/dashboard/sales" element={<Sales />}></Route>
     </Route>
   )

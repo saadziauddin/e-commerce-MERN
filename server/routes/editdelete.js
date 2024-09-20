@@ -20,7 +20,7 @@ const upload = multer({ storage });
 // Edit Code:
 router.put('/UpdateUserData/:userId', upload.single('image'), async (req, res) => {
     const userId = new mongoose.Types.ObjectId(req.params.userId);
-    const userData = { ...req.body }; // use like this for [Object: null prototype]
+    const userData = { ...req.body };
 
     const fullName = userData.firstName + " " + userData.lastName;
     const userName = userData.email;

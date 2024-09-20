@@ -5,6 +5,7 @@ import { faLock, faExclamationCircle, faEnvelope } from "@fortawesome/free-solid
 import api from "../../../Api/api.js";
 import LottieAnimation from "../../../assets/animations/LottieAnimation";
 import animationData from "../../../assets/animations/LoginAnimation.json";
+import { ToastContainer, toast } from 'react-toastify';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -46,31 +47,42 @@ const SignIn = () => {
 
           const role = response.data.role;
 
-          if (role === "Admin") { navigate("/dashboard/home"); }
-          else if (role === "User") { navigate("/dashboard/home"); } else { window.alert("Invalid Role!"); }
+          if (role === "Admin") { 
+            navigate("/dashboard/home"); 
+          }
+          else if (role === "Client") { 
+            navigate("/dashboard/home");
+          }
+          else { 
+            toast.error("Invalid Role!"); 
+          }
 
-        } else if (response.data.resetPassword) {
-          window.alert(response.data.message);
-          navigate("/reset");
         } else {
-          window.alert(response.data.message);
+          toast.error(response.data.message);
         }
       } catch (err) {
-        if (err.response && err.response.data && err.response.data.error) {
-          window.alert(err.response.data.error);
-        } else {
-          window.alert("Request failed from Login");
+          if (err.response && err.response.data && err.response.data.error) {
+            toast.error(err.response.data.error);
+          } else {
+            toast.error("Request failed during login!");
+          }
         }
-      }
     }
-  };
-
-  const handleSignIn = () => {
-    handleSubmit();
   };
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {/* Animation Section */}
       <div className="w-0 lgl:w-[50%] h-full flex items-center justify-center p-10">
         <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
@@ -136,7 +148,7 @@ const SignIn = () => {
                   } text-white py-2 w-4/5 rounded-xl text-base font-medium duration-300`}
                 disabled={!filled}
               >
-                Sign up
+                Sign in
               </button>
 
               <p className="text-gray-700 text-sm text-center w-4/5">

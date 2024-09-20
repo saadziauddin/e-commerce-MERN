@@ -1,5 +1,17 @@
+// Nayab Images
 import logo1 from "./nayabLogo1.png";
 import logo2 from "./nayabLogo2.png";
+// Products
+import productImg1 from './products/nayab_dummy/productImg1.jpg';
+import productImg2 from './products/nayab_dummy/productImg2.jpg';
+import productImg3 from './products/nayab_dummy/productImg3.jpg';
+import productImg4 from './products/nayab_dummy/productImg4.jpg';
+import productImg5 from './products/nayab_dummy/productImg5.jpg';
+import productImg6 from './products/nayab_dummy/productImg6.jpg';
+import productImg7 from './products/nayab_dummy/productImg7.jpg';
+import productImg8 from './products/nayab_dummy/productImg8.jpg';
+import productImg9 from './products/nayab_dummy/productImg9.jpg';
+
 import bannerImgOne from "./banner/bannerImgOne.jpg";
 import bannerImgTwo from "./banner/bannerImgTwo.jpg";
 import saleImgOne from "./sale/saleImgOne.jpg";
@@ -76,6 +88,15 @@ import espson2 from "./products/imprimante/espson2.webp";
 export {
   logo1,
   logo2,
+  productImg1,
+  productImg2,
+  productImg3,
+  productImg4,
+  productImg5,
+  productImg6,
+  productImg7,
+  productImg8,
+  productImg9,
   bannerImgOne,
   bannerImgTwo,
   saleImgOne,

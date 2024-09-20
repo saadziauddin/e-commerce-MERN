@@ -6,6 +6,9 @@ const productSchema = new mongoose.Schema({
     description: { type: String, trim: true },
     price1: { type: Number, required: true },
     price2: { type: Number, required: true },
+    sku: { type: String, unique: true, trim: true },
+    discount: { type: Number, default: 0 },
+    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
     color: [
         { type: String, required: true }
     ],
@@ -17,8 +20,9 @@ const productSchema = new mongoose.Schema({
     ],
     category: { type: String, trim: true },
     stock: { type: Number, default: 0 },
-    imageName: { type: String, trim: true },
-    imagePath: { type: String, trim: true },
+    images: [
+        { imageName: String, imagePath: String }
+    ],
     dateAdded: { type: Date, default: Date.now }
 });
 

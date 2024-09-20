@@ -28,22 +28,23 @@ app.use((req, res, next) => {
     next();
 });
 
-// Login Router
-import loginRouter from './routes/login.js';
-app.post('/signin', loginRouter);
+// Sign in Router
+import signinRouter from './routes/signin.js';
+app.post('/signin', signinRouter);
 
 // Verifying user through JWT Token
 app.get('/signin', verifyToken, (req, res) => {
     return res.json({ Status: "Success", name: req.name, role: req.role });
 });
 
-// Register Router
-import registerRouter from './routes/register.js';
-app.post('/Register', registerRouter);
+// Sign up Router
+import signupRouter from './routes/signup.js';
+app.post('/Register', signupRouter);
 
 // Password Reset
 import resetRouter from './routes/reset.js';
-app.post('/ResetPassword', resetRouter);
+app.post('/verifyEmail', resetRouter);
+app.post('/resetPassword', resetRouter);
 
 // Logout
 import logoutRouter from './routes/logout.js';

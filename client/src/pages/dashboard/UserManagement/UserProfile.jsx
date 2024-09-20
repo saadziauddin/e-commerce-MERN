@@ -82,7 +82,7 @@ function UserProfile() {
     setEditing(true);
   };
 
-  const backToUserManagement = () => {
+  const goBack = () => {
     navigate('/dashboard/userManagement');
   };
 
@@ -161,8 +161,8 @@ function UserProfile() {
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
-        position="bottom-right"
-        autoClose={3000} // Closes after 3 seconds
+        position="top-right"
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -202,7 +202,7 @@ function UserProfile() {
                   ) : (
                     <div className="flex space-x-4">
                       <button onClick={handleEdit} className="text-sm font-bold bg-gradient-to-l from-[#843877a3] to-pink-600 text-white hover:bg-gradient-to-r hover:from-pink-700 hover:to-[#c558b398] rounded-full px-5 py-2 transition duration-300">Edit User</button>
-                      <button onClick={backToUserManagement} className="text-sm font-bold text-white bg-gray-600 rounded-full px-5 py-2 transition duration-300 hover:bg-gray-800">Go Back</button>
+                      <button onClick={goBack} className="text-sm font-bold text-white bg-gray-600 rounded-full px-5 py-2 transition duration-300 hover:bg-gray-800">Go Back</button>
                     </div>
                   )}
                 </div>

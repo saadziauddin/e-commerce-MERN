@@ -9,7 +9,20 @@ import animationData from "../../../assets/animations/SignUpAnimation2.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 function SignUp() {
-  const [values, setValues] = useState({ firstName: '', lastName: '', email: '', address: '', city: '', country: '', postalCode: '', password: '', confirmPassword: '', contactNo: '', userRole: '', profileImage: '' });
+  const [values, setValues] = useState({ 
+    firstName: '', 
+    lastName: '', 
+    email: '', 
+    address: '', 
+    city: '', 
+    country: '', 
+    postalCode: '', 
+    password: '', 
+    confirmPassword: '', 
+    contactNo: '', 
+    userRole: '', 
+    profileImage: '' 
+  });
   const [roles, setRoles] = useState([]);
   const [errors, setErrors] = useState({});
   const [checked, setChecked] = useState(false);
@@ -21,6 +34,7 @@ function SignUp() {
         const response = await api.get('/Roles');
         setRoles(response.data);
       } catch (error) {
+        toast.error("Error fetching roles in register form: " + error)
         console.error("Error fetching roles in register form: " + error);
       }
     };
@@ -48,6 +62,7 @@ function SignUp() {
     }
     try {
       await api.post('/Register', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      toast.success("Registration successful!");
       setValues({
         firstName: '',
         lastName: '',
@@ -62,14 +77,14 @@ function SignUp() {
         userRole: '',
         profileImage: ''
       });
-      window.alert('Registration successful!');
       navigate('/signin');
 
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
-        window.alert(err.response.data.error);
+        toast.error(err.response.data.error);
       } else {
         console.log(err);
+        toast.error(err);
       }
     }
   };
@@ -133,12 +148,19 @@ function SignUp() {
     return isValid;
   };
 
-  const handleSignUp = () => {
-    handleSubmit();
-  };
-
   return (
     <div className="w-full h-full mt-10 flex flex-col lgl:flex-row items-center justify-between">
+      <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
       {/* Form Section */}
       <div className="w-full lgl:w-[50%] px-6 lg:px-36 py-10 lgl:py-0 flex flex-col justify-center">
         <form onSubmit={handleSubmit} className="w-full max-w-[500px]">
@@ -376,7 +398,7 @@ function SignUp() {
           </div>
 
           <button
-            onClick={handleSignUp}
+            onClick={handleSubmit}
             className={`${checked
               ? "bg-[#7b246d] hover:bg-slate-500 hover:text-white hover:border-none cursor-pointer"
               : "bg-gray-500 hover:bg-gray-500 hover:text-white cursor-not-allowed"

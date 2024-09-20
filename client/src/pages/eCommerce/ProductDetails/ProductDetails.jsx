@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
-import { FaDownload } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/orebiSlice";
 

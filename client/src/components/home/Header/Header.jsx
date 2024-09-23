@@ -66,16 +66,16 @@ const Header = () => {
   return (
     <>
       {/* Top Notification Bar with Marquee */}
-      <div className="w-full bg-[#7b246d] text-white text-center sm:text-sm xs:text-xs py-2 overflow-hidden group">
+      <div className="w-full h-9 bg-[#7b246d] text-white text-center sm:text-sm xs:text-xs py-2 overflow-hidden group">
         <div className="flex space-x-4 min-w-[100%] animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center ">
           🎉 50% OFF SALE on selected items!&nbsp;
           <span className="cursor-pointer animate-blink font-bold">
-            <NavLink to="/shop" className="group-hover:text-white" >Shop now!</NavLink>
+            <NavLink to="/products" className="group-hover:text-white" >Shop now!</NavLink>
           </span>
         </div>
       </div>
 
-      <div className="w-full h-20 bg-white sticky top-0 z-50 border-b-[1px] border-b-gray-200">
+      <div className="w-full h-16 bg-white sticky top-0 z-50 border-b-[1px] border-b-gray-200">
         <nav className="h-full px-4 max-w-container mx-auto relative flex items-center justify-between">
           {/* Left Section (Phone Number) */}
           <div className="flex items-center flex-grow">
@@ -90,7 +90,7 @@ const Header = () => {
               <div className="fixed top-0 left-0 w-full h-screen bg-black text-gray-200 bg-opacity-80 z-50">
                 <motion.div initial={{ x: -300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="w-[80%] h-full relative">
                   <div className="w-full h-full bg-primeColor p-6">
-                    <img className="w-28 mb-6" src="" alt="main_logo" /> {/* logo1 */}
+                    <img className="w-28 mb-6" src={logo1} alt="main_logo" /> {/* logo1 */}
                     
                     {/* Search Bar (Mobile View) */}
                     <div className="relative mb-4">
@@ -193,7 +193,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
             <Link to="/">
-              <Image className="lg:w-16 md:w-14 sm:w-14 xs:w-14 object-cover" imgSrc="" alt="main_logo" /> {/* logo2 */}
+              <Image className="lg:w-16 md:w-14 sm:w-14 xs:w-14 object-cover" imgSrc={logo2} alt="main_logo" /> {/* logo2 */}
             </Link>
           </div>
 

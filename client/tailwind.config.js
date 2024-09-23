@@ -6,12 +6,12 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [
-    scrollbarPlugin({ nocompatible: true }), // Enable no-compatible mode for scrollbar plugin
+    scrollbarPlugin({ nocompatible: true }),
   ],
   theme: {
     extend: {
       maxWidth: {
-        container: "1440px",
+        container: "1500px",
       },
       screens: {
         xs: "320px",
@@ -41,7 +41,7 @@ module.exports = {
       },
       animation: {
         marquee: 'marquee 15s linear infinite',
-        blink: 'blink 0.5s steps(2, start) infinite',
+        blink: 'blink 3s steps(2, start) infinite',
       },
       keyframes: {
         marquee: {

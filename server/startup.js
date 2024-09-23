@@ -12,7 +12,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 const corsOptions = {
     origin: apiURL,
     methods: ["POST", "GET", "DELETE", "PUT"],
@@ -21,15 +20,14 @@ const corsOptions = {
     exposedHeaders: ['Authorization'],
 };
 app.use(cors(corsOptions));
-
 app.use((req, res, next) => {
     // console.log('Request Origin:', req.headers.origin);
-    // console.log("MIDDLEWARE!");
+    console.log("MIDDLEWARE!");
     next();
 });
 
 // Sign in Router
-import signinRouter from './routes/signin.js';
+import signinRouter from './routes/signinRouter.js';
 app.post('/signin', signinRouter);
 
 // Verifying user through JWT Token
@@ -38,20 +36,29 @@ app.get('/signin', verifyToken, (req, res) => {
 });
 
 // Sign up Router
-import signupRouter from './routes/signup.js';
+import signupRouter from './routes/signupRouter.js';
 app.post('/Register', signupRouter);
 
 // Password Reset
-import resetRouter from './routes/reset.js';
+import resetRouter from './routes/resetRouter.js';
 app.post('/verifyEmail', resetRouter);
 app.post('/resetPassword', resetRouter);
 
 // Logout
-import logoutRouter from './routes/logout.js';
+import logoutRouter from './routes/logoutRouter.js';
 app.get('/Logout', logoutRouter);
 
+// Add Category
+import addCategoryRouter from './routes/categoryRouter.js';
+// app.post('/categories', addCategoryRouter);
+app.post('/categories/addCategory', (req, res, next) => {
+    console.log('Request received at /categories/addCategory');
+    next(); // pass to your router
+}, addCategoryRouter);
+
+
 // Fetching /Roles, /GetUserData, /GetRecordingsData, /GetUserData/:userId, /GetUserRole/:userId
-import fetchdataRouter from './routes/fetchdata.js';
+import fetchdataRouter from './routes/fetchDataRouter.js';
 app.get('/Roles', fetchdataRouter);
 app.get('/GetUserData', fetchdataRouter);
 app.get('/GetRecordingsData', fetchdataRouter);
@@ -59,14 +66,13 @@ app.get('/GetUserData/:userId', fetchdataRouter);
 app.get('/GetUserRole/:userId', fetchdataRouter);
 
 // Edit/Delete User
-import editdeleteRouter from './routes/editdelete.js';
+import editdeleteRouter from './routes/editDeleteRouter.js';
 app.delete('/Delete', editdeleteRouter);
 app.put('/UpdateUserData/:userId', editdeleteRouter);
 
 // Search Recordings
-import searchDataRouter from './routes/searchData.js';
+import searchDataRouter from './routes/searchRouter.js';
 app.use('/Reports', searchDataRouter);
-
 
 // Defining PORT
 const port = process.env.PORT || 8090;

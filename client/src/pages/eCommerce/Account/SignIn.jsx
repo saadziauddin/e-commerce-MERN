@@ -47,31 +47,31 @@ const SignIn = () => {
 
           const role = response.data.role;
 
-          if (role === "Admin") { 
-            navigate("/dashboard/home"); 
-          }
-          else if (role === "Client") { 
+          if (role === "Admin") {
             navigate("/dashboard/home");
           }
-          else { 
-            toast.error("Invalid Role!"); 
+          else if (role === "Client") {
+            navigate("/dashboard/home");
+          }
+          else {
+            toast.error("Invalid Role!");
           }
 
         } else {
           toast.error(response.data.message);
         }
       } catch (err) {
-          if (err.response && err.response.data && err.response.data.error) {
-            toast.error(err.response.data.error);
-          } else {
-            toast.error("Request failed during login!");
-          }
+        if (err.response && err.response.data && err.response.data.error) {
+          toast.error(err.response.data.error);
+        } else {
+          toast.error("Request failed during login!");
         }
+      }
     }
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full h-screen flex items-center justify-center overflow-hidden">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -83,15 +83,16 @@ const SignIn = () => {
         draggable
         pauseOnHover
       />
+
       {/* Animation Section */}
-      <div className="w-0 lgl:w-[50%] h-full flex items-center justify-center p-10">
+      <div className="hidden lgl:flex w-1/2 h-full items-center justify-center p-10">
         <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
       </div>
 
       {/* Form Section */}
-      <div className="w-full lgl:w-1/2 h-full flex items-center justify-center">
-        <form onSubmit={handleSubmit} className="w-full lgl:w-[450px] h-screen flex items-center justify-center">
-          <div className="px-6 py-4 w-full h-[90%] flex flex-col justify-center overflow-y-scroll scrollbar-thin scrollbar-thumb-primeColor">
+      <div className="w-full lgl:w-1/2 h-full flex items-center justify-center px-4 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="w-full lgl:w-[450px] flex items-center justify-center">
+          <div className="px-6 py-4 w-full flex flex-col justify-center">
             <h1 className="font-titleFont font-semibold text-3xl mdl:text-4xl mb-4">
               Sign in
             </h1>
@@ -104,7 +105,7 @@ const SignIn = () => {
                   <input
                     onChange={handleEmail}
                     value={email}
-                    className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
+                    className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
                     type="email"
                     name="email"
                     placeholder="abc@example.com"
@@ -126,7 +127,7 @@ const SignIn = () => {
                   <input
                     onChange={handlePassword}
                     value={password}
-                    className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
+                    className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
                     type="password"
                     name="password"
                     placeholder="********"
@@ -145,20 +146,20 @@ const SignIn = () => {
                 className={`${filled
                   ? "bg-[#7b246d] hover:bg-slate-500 hover:text-white hover:border-none cursor-pointer"
                   : "bg-gray-500 hover:bg-gray-500 hover:text-white cursor-not-allowed"
-                  } text-white py-2 w-4/5 rounded-xl text-base font-medium duration-300`}
+                  } text-white py-2 w-full rounded-xl text-base font-medium duration-300`}
                 disabled={!filled}
               >
                 Sign in
               </button>
 
-              <p className="text-gray-700 text-sm text-center w-4/5">
+              <p className="text-gray-700 text-sm text-center w-full">
                 Forget password?{' '}
                 <Link to="/reset" className="text-primeColor font-medium hover:text-blue-600 duration-300">
                   Reset
                 </Link>
               </p>
 
-              <p className="text-gray-700 text-sm text-center w-4/5">
+              <p className="text-gray-700 text-sm text-center w-full">
                 Don't have an Account?{' '}
                 <Link to="/signup" className="text-primeColor font-medium hover:text-blue-600 duration-300">
                   Sign up

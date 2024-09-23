@@ -94,7 +94,7 @@ function Categories() {
                         selector: row => {
                           const image = `/uploads/user_images/${row.profileImageName}`;
                           return row.profileImageName ? (
-                            <div className="flex justify-center">
+                            <div className="">
                               <img src={image} alt="Profile" className="h-10 w-10 rounded-full" />
                             </div>
                           ) : (
@@ -102,7 +102,7 @@ function Categories() {
                           );
                         },
                         sortable: false,
-                        center: true,
+                        center: true.toString(),
                         wrap: true,
                       },
                       {
@@ -154,7 +154,7 @@ function Categories() {
                           </div>
                         ),
                         sortable: false,
-                        center: true,
+                        center: true.toString(),
                         wrap: true,
                       }
                     ]}

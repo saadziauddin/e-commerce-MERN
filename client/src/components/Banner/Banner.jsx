@@ -19,7 +19,7 @@ const PrevArrow = ({ onClick }) => (
 
 const CustomSlide = ({ imgSrc }) => (
   <div className="relative flex justify-center items-center">
-    <Image imgSrc={imgSrc} className="w-full h-[150px] md:h-[600px] lg:h-[600px] xl:h-[600px] 2xl:h-[600px] 3xl:h-[600px] 4xl:h-[600px] object-cover" />
+    <Image imgSrc={imgSrc} className="w-full h-[150px] md:h-[550px] lg:h-[550px] xl:h-[550px] object-cover" />
   </div>
 );
 

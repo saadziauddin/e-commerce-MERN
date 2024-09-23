@@ -51,7 +51,7 @@ function Sidebar({ isOpen, closeSidebar }) {
 
       <div className="flex justify-center items-center py-4">
         <NavLink to='/dashboard/home'>
-          <img src="" className="h-16 w-auto" alt="main_logo" />
+          <img src={logo} className="h-16 w-auto" alt="main_logo" />
         </NavLink>
       </div>
       <hr className="h-px mt-0 mb-3 bg-gray-200" />

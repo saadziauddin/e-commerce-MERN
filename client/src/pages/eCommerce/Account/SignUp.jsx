@@ -9,19 +9,19 @@ import animationData from "../../../assets/animations/SignUpAnimation2.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 function SignUp() {
-  const [values, setValues] = useState({ 
-    firstName: '', 
-    lastName: '', 
-    email: '', 
-    address: '', 
-    city: '', 
-    country: '', 
-    postalCode: '', 
-    password: '', 
-    confirmPassword: '', 
-    contactNo: '', 
-    userRole: '', 
-    profileImage: '' 
+  const [values, setValues] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    city: '',
+    country: '',
+    postalCode: '',
+    password: '',
+    confirmPassword: '',
+    contactNo: '',
+    userRole: '',
+    profileImage: ''
   });
   const [roles, setRoles] = useState([]);
   const [errors, setErrors] = useState({});
@@ -56,7 +56,7 @@ function SignUp() {
     if (!isValid) return;
 
     const formData = new FormData();
-    
+
     for (let key in values) {
       formData.append(key, values[key]);
     }
@@ -149,27 +149,17 @@ function SignUp() {
   };
 
   return (
-    <div className="w-full h-full mt-10 flex flex-col lgl:flex-row items-center justify-between">
-      <ToastContainer
-            position="top-right"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-        />
-      {/* Form Section */}
-      <div className="w-full lgl:w-[50%] px-6 lg:px-36 py-10 lgl:py-0 flex flex-col justify-center">
-        <form onSubmit={handleSubmit} className="w-full max-w-[500px]">
-          <h1 className="font-titleFont font-medium text-3xl mdl:text-3xl mb-6">
-            Create Your Account
-          </h1>
+    <div className="w-full h-full flex flex-col items-center justify-center lgl:flex-row mt-10">
+
+      {/* Signup Form */}
+      <div className="w-full sm:w-[90%] md:w-[80%] lgl:w-[50%] px-6 lg:px-36 py-10 lgl:py-0 flex flex-col justify-center">
+        <h1 className="font-titleFont font-medium text-2xl sm:text-3xl md:text-4xl mb-6 text-center">
+          Create Your Account
+        </h1>
+        <form onSubmit={handleSubmit} className="max-w-[500px] mx-auto">
 
           {/* First Name */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">First Name*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faUser} className="absolute left-3 top-3.5 text-gray-400" />
@@ -178,7 +168,7 @@ function SignUp() {
                 name="firstName"
                 value={values.firstName}
                 onChange={handleChange}
-                className="w-4/5 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor"
                 placeholder="Enter your first name"
               />
             </div>
@@ -186,7 +176,7 @@ function SignUp() {
           </div>
 
           {/* Last Name */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Last Name*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faUser} className="absolute left-3 top-3.5 text-gray-400" />
@@ -195,7 +185,7 @@ function SignUp() {
                 name="lastName"
                 value={values.lastName}
                 onChange={handleChange}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor"
                 placeholder="Enter your last name"
               />
             </div>
@@ -203,7 +193,7 @@ function SignUp() {
           </div>
 
           {/* Email */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Email*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3.5 text-gray-400" />
@@ -212,7 +202,7 @@ function SignUp() {
                 name="email"
                 value={values.email}
                 onChange={handleChange}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor"
                 placeholder="Enter your email"
               />
             </div>
@@ -220,7 +210,7 @@ function SignUp() {
           </div>
 
           {/* Phone Number */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Phone Number*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faPhone} className="absolute left-3 top-3.5 text-gray-400" />
@@ -229,7 +219,7 @@ function SignUp() {
                 name="contactNo"
                 value={values.contactNo}
                 onChange={handleChange}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
+                className="pl-10 pr-3 py-2 border border-gray-300 w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl  focus:outline-none focus:border-primeColor"
                 placeholder="eg. 123-456-7890"
               />
             </div>
@@ -237,7 +227,7 @@ function SignUp() {
           </div>
 
           {/* Address */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Address*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faAddressCard} className="absolute left-3 top-3.5 text-gray-400" />
@@ -246,7 +236,7 @@ function SignUp() {
                 name="address"
                 value={values.address}
                 onChange={handleChange}
-                className="w-4/5 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
                 placeholder="Enter your address"
               />
             </div>
@@ -254,7 +244,7 @@ function SignUp() {
           </div>
 
           {/* City */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">City*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faCity} className="absolute left-3 top-3.5 text-gray-400" />
@@ -263,7 +253,7 @@ function SignUp() {
                 name="city"
                 value={values.city}
                 onChange={handleChange}
-                className="w-4/5 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
                 placeholder="Enter your city"
               />
             </div>
@@ -271,7 +261,7 @@ function SignUp() {
           </div>
 
           {/* Country */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Country*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faEarth} className="absolute left-3 top-3.5 text-gray-400" />
@@ -280,7 +270,7 @@ function SignUp() {
                 name="country"
                 value={values.country}
                 onChange={handleChange}
-                className="w-4/5 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
                 placeholder="Enter your country"
               />
             </div>
@@ -288,7 +278,7 @@ function SignUp() {
           </div>
 
           {/* Zip/Postal Code */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Zip/Postal Code (Optional)</label>
             <div className="relative">
               <FontAwesomeIcon icon={faAddressCard} className="absolute left-3 top-3.5 text-gray-400" />
@@ -297,7 +287,7 @@ function SignUp() {
                 name="postalCode"
                 value={values.postalCode}
                 onChange={handleChange}
-                className="w-4/5 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
+                className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl pl-10 pr-3 py-2 border border-gray-300 focus:outline-none focus:border-primeColor "
                 placeholder="Enter your Zip/Postal Code"
               />
             </div>
@@ -305,14 +295,14 @@ function SignUp() {
           </div>
 
           {/* Password */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Password*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
               <input
                 onChange={handleChange}
                 value={values.password}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
+                className="pl-10 pr-3 py-2 border border-gray-300 w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl  focus:outline-none focus:border-primeColor"
                 type="password"
                 name="password"
                 placeholder="Enter password"
@@ -322,14 +312,14 @@ function SignUp() {
           </div>
 
           {/* Confirm Password */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Confirm Password*</label>
             <div className="relative">
               <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
               <input
                 onChange={handleChange}
                 value={values.confirmPassword}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
+                className="pl-10 pr-3 py-2 border border-gray-300 w-full lg:w-3/4 xl:w-3/4 md:w-3/4 rounded-xl  focus:outline-none focus:border-primeColor"
                 type="password"
                 name="confirmPassword"
                 placeholder="Re-enter password"
@@ -338,34 +328,12 @@ function SignUp() {
             {errors.confirmPassword && <p className="text-red-500 text-sm mt-1"><FontAwesomeIcon icon={faExclamationCircle} /> {errors.confirmPassword}</p>}
           </div>
 
-          {/* User Role */}
-          {/* <div className="mb-3">
-            <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">User Role (Optional)</label>
-            <div className="relative">
-              <FontAwesomeIcon icon={faUserTag} className="absolute left-3 top-3.5 text-gray-400" />
-              <select
-                onChange={handleChange}
-                value={values.userRole}
-                className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl  focus:outline-none focus:border-primeColor"
-                name="userRole"
-              >
-                <option value="">Select a role</option>
-                {roles.map((role) => (
-                  <option key={role.id} value={role.name}>
-                    {role.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {errors.userRole && <p className="text-red-500 text-sm mt-1"><FontAwesomeIcon icon={faExclamationCircle} /> {errors.userRole}</p>}
-          </div> */}
-
           {/* Profile Image */}
-          <div className="mb-3">
+          <div className="relative mb-3">
             <label className="text-gray-600 ml-2 mb-1 font-titleFont font-medium">Profile Image (Optional)</label>
             <div className="relative">
               <FontAwesomeIcon icon={faImage} className="absolute left-3 top-3.5 text-gray-400" />
-              <label className="w-4/5 py-2 border border-gray-300 rounded-xl flex items-center bg-white cursor-pointer pl-10 pr-3 focus:outline-none focus:border-primeColor">
+              <label className="w-full lg:w-3/4 xl:w-3/4 md:w-3/4 py-2 border border-gray-300 rounded-xl flex items-center bg-white cursor-pointer pl-10 pr-3 focus:outline-none focus:border-primeColor">
                 <input
                   onChange={handleFileChange}
                   type="file"
@@ -384,13 +352,13 @@ function SignUp() {
           </div>
 
           {/* Checkbox */}
-          <div className="flex items-start gap-2 mb-3">
+          <div className="flex flex-col sm:flex-row items-start gap-2 relative mb-3">
             <input
               onChange={() => setChecked(!checked)}
-              className="w-3 h-3 mt-1 text-md cursor-pointer rounded-3xl"
+              className="w-2 h-2 sm:w-4 sm:h-4 mt-1 text-md cursor-pointer rounded-3xl"
               type="checkbox"
             />
-            <p className="text-sm text-primeColor">
+            <p className="text-sm text-primeColor text-wrap">
               I agree to the Nayab Fashion{" "}
               <span className="text-blue-600 cursor-pointer">Terms of Service</span> and{" "}
               <span className="text-blue-600 cursor-pointer">Privacy Policy</span>.
@@ -399,37 +367,24 @@ function SignUp() {
 
           <button
             onClick={handleSubmit}
-            className={`${checked
-              ? "bg-[#7b246d] hover:bg-slate-500 hover:text-white hover:border-none cursor-pointer"
-              : "bg-gray-500 hover:bg-gray-500 hover:text-white cursor-not-allowed"
-              } text-white py-2 mt-4 mb-5 w-4/5 rounded-xl text-base font-medium duration-300`}
+            className={`${checked ? "bg-[#7b246d] hover:bg-[#5b184d]" : "bg-gray-300"
+              } w-full lg:w-3/4 xl:w-3/4 md:w-3/4 px-6 py-2 text-white rounded-md transition-all`}
             disabled={!checked}
           >
             Create Account
           </button>
 
-          <p className="text-gray-600 text-sm text-center mb-10 w-4/5">
-            Already have an account?{' '}
+          <p className="text-gray-600 text-sm text-center w-3/4 mt-5">
+            Already have an account?{" "}
             <Link to="/signin" className="text-primeColor font-medium hover:text-blue-600 duration-300">
               Sign in
             </Link>
           </p>
-
-          {/* Back Button */}
-          {/* <div className="text-center">
-            <button
-              onClick={backToHome}
-              className="flex items-center justify-center bg-gray-200 text-gray-600 py-2 px-4 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-primeColor"
-            >
-              <FontAwesomeIcon icon={faLongArrowAltLeft} className="mr-2" />
-              Back to Home
-            </button>
-          </div> */}
         </form>
       </div>
 
       {/* Animation Section */}
-      <div className="w-0 lgl:w-[50%] h-full flex items-center justify-center mb-[25%]">
+      <div className="hidden lgl:block w-0 lgl:w-[50%] h-full  items-center justify-center mb-[25%]">
         <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
       </div>
     </div>

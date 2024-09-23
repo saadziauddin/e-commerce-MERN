@@ -19,7 +19,7 @@ const upload = multer({ storage });
 
 // Register Route
 router.post('/register', upload.single('image'), async(req, res) => {
-    const userData = req.body;
+    const userData = { ...req.body };
     const fullName = userData.firstName + " " + userData.lastName;
     const userName = userData.email;
     const postalCode = userData.postalCode ? userData.postalCode : null;
@@ -36,14 +36,11 @@ router.post('/register', upload.single('image'), async(req, res) => {
         if(existingUser){
             return res.status(400).json({error: "User already exists!"});
         }
-
         const hashedPassword = await bcrypt.hash(userData.password, 10);
-
         // const role = await Role.findOne({name: userData.userRole});
         // if(!role){
         //     return res.status(400).json({error: "Invalid Role!"});
         // }
-
         const newUser = new User({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -60,8 +57,8 @@ router.post('/register', upload.single('image'), async(req, res) => {
             userName: userName,
             profileImageName: imageName,
             profileImagePath: imagePath,
+            role: userRole,
             // role: role.name
-            role: userRole
         });
         await newUser.save();
         res.status(200).json({message: "Registration succesful!"});

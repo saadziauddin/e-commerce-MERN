@@ -4,39 +4,52 @@ import 'react-toastify/dist/ReactToastify.css';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../Api/api.js';
 
 function AddProduct() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    name: '',
+  const [values, setValues] = useState({
+    categoryName: '',
     description: '',
-    price1: '',
-    price2: '',
-    color: '',
-    size: '',
-    tags: '',
-    category: '',
-    stock: '',
-    image: null,
+    image: '',
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setValues({ ...values, [name]: value });
   };
 
   const handleImageChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    setValues({ ...values, image: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to submit the form data
-    toast.success("Product added successfully!");
+    const formData = new FormData();
+    for (let key in values) {
+      formData.append(key, values[key]);
+    }
+    console.log("Form data: ", formData);
+    try {
+      // const uploadCategory = await api.post('/categories/addCategory', formData);
+      await api.post('/categories/addCategory', formData);
+
+      if (uploadCategory.data.message === "Category uploaded successfully!") {
+        toast.success("Category added successfully!");
+        setValues({
+          name: '',
+          description: '',
+          image: '',
+        })
+      }
+    }
+    catch (error) {
+      console.log("Internal server error: ", error);
+      toast.error("Internal server error, try chechking browser console.");
+    }
   };
 
   const goBack = () => {
@@ -71,49 +84,40 @@ function AddProduct() {
             <div className="border-b-2 flex flex-col bg-white shadow-lg rounded-lg overflow-hidden p-5">
               <form className="w-full grid grid-cols-1 md:grid-cols-3 gap-6" onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="flex flex-col">
-                  <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-700">Product Name:</label>
-                  <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
+                  <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-700">Category Name:</label>
+                  <input
+                    type="text" 
+                    id="categoryName" 
+                    name="categoryName"
+                    value={values.categoryName} 
+                    onChange={handleInputChange} 
+                    className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                  />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="color" className="mb-2 text-sm font-medium text-gray-700">Color:</label>
-                  <input type="text" id="color" name="color" value={formData.color} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="size" className="mb-2 text-sm font-medium text-gray-700">Size:</label>
-                  <input type="text" id="size" name="size" value={formData.size} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="category" className="mb-2 text-sm font-medium text-gray-700">Category:</label>
-                  <input type="text" id="category" name="category" value={formData.category} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="tags" className="mb-2 text-sm font-medium text-gray-700">Tags:</label>
-                  <input type="text" id="tags" name="tags" value={formData.tags} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="stock" className="mb-2 text-sm font-medium text-gray-700">Stock:</label>
-                  <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="price1" className="mb-2 text-sm font-medium text-gray-700">Price 1:</label>
-                  <input type="number" id="price1" name="price1" value={formData.price1} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="price2" className="mb-2 text-sm font-medium text-gray-700">Price 2:</label>
-                  <input type="number" id="price2" name="price2" value={formData.price2} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="image" className="mb-2 text-sm font-medium text-gray-700">Product Image:</label>
+                  <label htmlFor="image" className="mb-2 text-sm font-medium text-gray-700">Category Image:</label>
                   <div className="relative">
                     <label className="w-full py-2 border border-gray-300 rounded-lg flex items-center bg-white cursor-pointer pl-3 pr-5 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
-                      <input onChange={handleImageChange} type="file" id="image" name="image" className="hidden" />
-                      <span className="text-gray-400">{formData.image ? formData.image.name : 'Select Product Image'}</span>
+                      <input
+                        type="file" 
+                        id="image" 
+                        name="image"
+                        onChange={handleImageChange} 
+                        className="hidden" 
+                      />
+                      <span className="text-gray-400">{values.image ? values.image.name : 'Select Product Image'}</span>
                     </label>
                   </div>
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="description" className="mb-2 text-sm font-medium text-gray-700">Description:</label>
-                  <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={values.description}
+                    onChange={handleInputChange}
+                    className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                  />
                 </div>
 
                 {/* Buttons */}

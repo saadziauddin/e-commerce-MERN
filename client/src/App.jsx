@@ -31,6 +31,7 @@ import AddCategory from "./pages/dashboard/Categories/AddCategory";
 
 // Products management
 import Products from './pages/dashboard/Products/Products';
+import AddProduct from "./pages/dashboard/Products/AddProduct";
 
 // Orders management
 import Orders from './pages/dashboard/Orders/Orders';
@@ -97,6 +98,7 @@ const router = createBrowserRouter(
 
       {/* Products management routes */}
       <Route path="/dashboard/products" element={<Products />}></Route>
+      <Route path="/dashboard/products/addProduct" element={<AddProduct />}></Route>
 
       {/* Orders management routes */}
       <Route path="/dashboard/orders" element={<Orders />}></Route>

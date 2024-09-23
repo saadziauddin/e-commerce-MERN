@@ -1,7 +1,7 @@
 import express from 'express';
-import User from '../models/user.js';
-import Role from '../models/role.js';
 import mongoose from 'mongoose';
+import User from '../../models/user.js';
+import Role from '../../models/role.js';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get('/Roles', async (req, res) => {
     }
 });
 
-// Fetch User Data
+// Fetch Users
 router.get('/GetUserData', async (req, res) => {
     try{
         const users = await User.find();
@@ -29,7 +29,7 @@ router.get('/GetUserData', async (req, res) => {
     }
 });
 
-// Fetch User Data by UserId
+// Fetch User by ID
 router.get('/GetUserData/:userId', async (req, res) => {
     const userId = new mongoose.Types.ObjectId(req.params.userId);
     try {

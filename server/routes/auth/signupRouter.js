@@ -1,8 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
-import User from '../models/user.js';
-import Role from '../models/role.js';
+import User from '../../models/user.js';
+import Role from '../../models/role.js';
 
 const router = express.Router();
 

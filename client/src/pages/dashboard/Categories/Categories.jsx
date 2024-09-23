@@ -16,23 +16,27 @@ function Categories() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchCategories = async () => {
       try {
-        const result = await api.get('/GetUserData');
+        const result = await api.get('/fetchCategories');
+        console.log("Result: ", result);
         setFetchUsersData(result.data);
       } catch (error) {
-        console.log("Error fetching users: ", error);
+        console.log("Error fetching categories: ", error);
       }
     };
-    fetchUsers();
+    fetchCategories();
   }, []);
+
   const addCategory = async () => {
     navigate('/dashboard/categories/addCategory');
   };
+
   const handleEdit = (row) => {
     const userId = row._id;
     navigate(`/dashboard/userManagement/userProfile/${userId}`);
   };
+
   const handleDelete = async (UserId) => {
     try {
       const response = await api.delete('/Delete', {
@@ -49,7 +53,6 @@ function Categories() {
     }
   };
   return (
-    // const CategoriesPage = ({ isSidebarOpen, closeSidebar, toggleSidebar, addCategory, fetchUsersData, handleEdit, handleDelete }) => {
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
@@ -90,54 +93,58 @@ function Categories() {
                   <DataTable
                     columns={[
                       {
-                        name: 'Profile Image',
+                        name: 'Image',
                         selector: row => {
-                          const image = `/uploads/user_images/${row.profileImageName}`;
-                          return row.profileImageName ? (
-                            <div className="">
-                              <img src={image} alt="Profile" className="h-10 w-10 rounded-full" />
-                            </div>
-                          ) : (
+                          if(row.image && row.image.length > 0){
+                            const image = `/uploads/category_images/${row.image[0].imageName}`;
+                            return (
+                              <div><img src={image} alt="category_image" className="h-10 w-10 rounded-full" /></div>
+                            );
+                          } else {
                             "No Image"
-                          );
+                          }
                         },
                         sortable: false,
                         center: true.toString(),
                         wrap: true,
                       },
+                      // {
+                      //   name: 'Images',
+                      //   selector: row => {
+                      //     return row.image && row.image.length > 0 ? (
+                      //       <div className="flex space-x-2">
+                      //         {row.image.map((img, index) => (
+                      //           <img
+                      //             key={index}
+                      //             src={`/uploads/category_images/${img.imageName}`}
+                      //             alt="Category"
+                      //             className="h-10 w-10 rounded-full"
+                      //           />
+                      //         ))}
+                      //       </div>
+                      //     ) : (
+                      //       "No Image"
+                      //     );
+                      //   },
+                      //   sortable: false,
+                      //   center: true,
+                      //   wrap: true,
+                      // },
                       {
-                        name: 'Username',
-                        selector: row => row.fullName,
+                        name: 'Name',
+                        selector: row => row.name,
                         sortable: true,
                         wrap: true,
                       },
                       {
-                        name: 'Email',
-                        selector: row => row.email,
+                        name: 'Description',
+                        selector: row => row.description,
                         sortable: true,
                         wrap: true,
                       },
                       {
-                        name: 'First Name',
-                        selector: row => row.firstName,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Last Name',
-                        selector: row => row.lastName,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Contact No',
-                        selector: row => row.contactNo,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Date Created',
-                        selector: row => row.dateOfCreation,
+                        name: 'Date Added',
+                        selector: row => row.dateAdded,
                         sortable: true,
                         wrap: true,
                       },

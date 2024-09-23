@@ -2,11 +2,10 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
 import mongoose from 'mongoose';
-import User from '../models/user.js';
+import User from '../../models/user.js';
 
 const router = express.Router();
 
-// Multer setup for image upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, '../client/public/uploads/user_images/');
@@ -17,7 +16,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Edit Code:
 router.put('/UpdateUserData/:userId', upload.single('image'), async (req, res) => {
     const userId = new mongoose.Types.ObjectId(req.params.userId);
     const userData = { ...req.body };
@@ -56,30 +54,10 @@ router.put('/UpdateUserData/:userId', upload.single('image'), async (req, res) =
         if(!updateUser){
             return res.status(400).json({error: "User not found!"});
         }
-        
         res.status(200).json({message: "User updated successfully!", updatedUserData: updateUser});
     } catch (error) {
         console.log("Error during user updation: ", error);
         return res.status(500).json({error: "Internal server error!"});
-    }
-});
-
-// Delete Code:
-router.delete('/Delete', async (req, res) => {
-    const { UserId } = req.query;
-    if (!UserId) {
-        return res.status(400).json({ message: "UserId is required" });
-    }
-    try {
-        const deleteUser = await User.deleteOne({_id: UserId});
-        if (!deleteUser) {
-            res.status(400).json({ error: "User not deleted!" });
-        } else {
-            res.status(200).json({ message: "User deleted successfully!" });
-        }
-    } catch (error) {
-        console.error("Error during deletion: ", error);
-        res.status(500).json({ message: "Internal server error: ", error });
     }
 });
 

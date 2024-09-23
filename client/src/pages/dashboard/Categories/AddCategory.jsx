@@ -12,7 +12,7 @@ function AddProduct() {
   const closeSidebar = () => { setIsSidebarOpen(false); };
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    categoryName: '',
+    name: '',
     description: '',
     image: '',
   });
@@ -30,27 +30,24 @@ function AddProduct() {
     e.preventDefault();
     const formData = new FormData();
     for (let key in values) {
-      formData.append(key, values[key]);
+        formData.append(key, values[key]);
     }
-    console.log("Form data: ", formData);
-    try {
-      // const uploadCategory = await api.post('/categories/addCategory', formData);
-      await api.post('/categories/addCategory', formData);
 
-      if (uploadCategory.data.message === "Category uploaded successfully!") {
-        toast.success("Category added successfully!");
-        setValues({
-          name: '',
-          description: '',
-          image: '',
-        })
-      }
+    try {
+        const uploadCategory = await api.post('/categories/addCategory', formData);
+        if (uploadCategory.data.message === "Category uploaded successfully!") {
+            toast.success("Category added successfully!");
+            setValues({
+                name: '',
+                description: '',
+                image: '',
+            });
+        }
+    } catch (error) {
+        console.log("Internal server error: ", error);
+        toast.error("Internal server error, try checking browser console.");
     }
-    catch (error) {
-      console.log("Internal server error: ", error);
-      toast.error("Internal server error, try chechking browser console.");
-    }
-  };
+};
 
   const goBack = () => {
     navigate('/dashboard/categories');
@@ -87,9 +84,9 @@ function AddProduct() {
                   <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-700">Category Name:</label>
                   <input
                     type="text" 
-                    id="categoryName" 
-                    name="categoryName"
-                    value={values.categoryName} 
+                    id="name" 
+                    name="name"
+                    value={values.name} 
                     onChange={handleInputChange} 
                     className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                   />

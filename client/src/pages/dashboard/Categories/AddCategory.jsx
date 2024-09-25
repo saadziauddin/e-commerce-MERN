@@ -44,8 +44,9 @@ function AddProduct() {
             });
         }
     } catch (error) {
-        console.log("Internal server error: ", error);
-        toast.error("Internal server error, try checking browser console.");
+        const errorMessage = error.response?.data?.error || "Error updating category!";
+        toast.error(errorMessage);
+        console.error("Internal server error: ", errorMessage);
     }
   };
 

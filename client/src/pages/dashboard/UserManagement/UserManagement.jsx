@@ -92,15 +92,21 @@ function UserManagement() {
                     columns={[
                       {
                         name: 'Profile Image',
-                        selector: row => {
-                          if(row.profileImage && row.profileImage.length > 0){
-                            const ProfileImage = `/uploads/user_images/${row.profileImage[0].imageName}`;
-                            return (
-                              <div><img src={ProfileImage} alt="profile_image" className="h-10 w-10 rounded-full"/></div>
-                            );
-                          } else {
-                            "No Image"
-                          }
+                        cell: row => {
+                          const profileImage = row.profileImage && row.profileImage.length > 0
+                            ? `/uploads/user_images/${row.profileImage[0].imageName}`
+                            : '/uploads/user_images/defaultProfile.png';
+                            
+                          return (
+                            <div>
+                              <img 
+                                src={profileImage} 
+                                alt="profile_image" 
+                                className="h-10 w-10 rounded-full" 
+                                onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
+                              />
+                            </div>
+                          );
                         },
                         sortable: false,
                         center: true,

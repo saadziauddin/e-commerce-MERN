@@ -12,15 +12,14 @@ function Categories() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
-  const [fetchUsersData, setFetchUsersData] = useState([]);
+  const [fetchCategoriesData, setfetchCategoriesData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const result = await api.get('/fetchCategories');
-        console.log("Result: ", result);
-        setFetchUsersData(result.data);
+        const response = await api.get('/api/fetchCategories');
+        setfetchCategoriesData(response.data);
       } catch (error) {
         console.log("Error fetching categories: ", error);
       }
@@ -33,25 +32,24 @@ function Categories() {
   };
 
   const handleEdit = (row) => {
-    const userId = row._id;
-    navigate(`/dashboard/userManagement/userProfile/${userId}`);
+    const categoryId = row._id;
+    navigate(`/dashboard/categories/updateCategory/${categoryId}`);
   };
 
-  const handleDelete = async (UserId) => {
+  const handleDelete = async (CategoryId) => {
     try {
-      const response = await api.delete('/Delete', {
-        params: { UserId }
-      });
-      setFetchUsersData(fetchUsersData.filter(user => user.UserId !== UserId));
+      const response = await api.delete('/api/deleteCategory', { params: { CategoryId } });
+      setfetchCategoriesData(fetchCategoriesData.filter(category => category.categoryId !== CategoryId));
       toast.success(response.data.message);
 
-      const result = await api.get('/GetUserData');
-      setFetchUsersData(result.data);
+      const reFetchCategories = await api.get('/api/fetchCategories');
+      setfetchCategoriesData(reFetchCategories.data);
     } catch (error) {
-      console.error('Error deleting user:', error);
-      toast.error('Error deleting user:', error);
+      console.error('Error deleting category:', error);
+      toast.error('Error deleting category, try checking browser console.');
     }
   };
+  
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
@@ -72,7 +70,7 @@ function Categories() {
       </div>
 
       {/* Main */}
-      <main className="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-lg shadow-lg transition-all duration-200 bg-light">
+      <main className="ease-soft-in-out xl:ml-68.5 relative h-full transition-all duration-200 bg-light">
         {/* Topbar */}
         <Topbar toggleSidebar={toggleSidebar} />
 
@@ -196,7 +194,7 @@ function Categories() {
                       },
                     }}
                     fixedHeader
-                    data={fetchUsersData}
+                    data={fetchCategoriesData}
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

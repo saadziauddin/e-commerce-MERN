@@ -7,50 +7,49 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
-import AddProduct from './AddProduct.jsx';
 
 function Categories() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
-  const [fetchUsersData, setFetchUsersData] = useState([]);
+  const [fetchCategoriesData, setfetchCategoriesData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchCategories = async () => {
       try {
-        const result = await api.get('/GetUserData');
-        setFetchUsersData(result.data);
+        const response = await api.get('/fetchCategories');
+        setfetchCategoriesData(response.data);
       } catch (error) {
-        console.log("Error fetching users: ", error);
+        console.log("Error fetching categories: ", error);
       }
     };
-    fetchUsers();
+    fetchCategories();
   }, []);
-  const addProduct = async () => {
+
+  const addCategory = async () => {
     navigate('/dashboard/products/addProduct');
   };
+
   const handleEdit = (row) => {
-    const userId = row._id;
-    navigate(`/dashboard/userManagement/userProfile/${userId}`);
+    const productId = row._id;
+    navigate(`/dashboard/products/updateCategory/${productId}`);
   };
-  const handleDelete = async (UserId) => {
+
+  const handleDelete = async (ProductId) => {
     try {
-      const response = await api.delete('/Delete', {
-        params: { UserId }
-      });
-      setFetchUsersData(fetchUsersData.filter(user => user.UserId !== UserId));
+      const response = await api.delete('/deleteProduct', { params: { ProductId } });
+      setfetchCategoriesData(fetchCategoriesData.filter(product => product.productId !== ProductId));
       toast.success(response.data.message);
 
-      const result = await api.get('/GetUserData');
-      setFetchUsersData(result.data);
+      const reFetchCategories = await api.get('/fetchCategories');
+      setfetchCategoriesData(reFetchCategories.data);
     } catch (error) {
-      console.error('Error deleting user:', error);
-      toast.error('Error deleting user:', error);
+      console.error('Error deleting category:', error);
+      toast.error('Error deleting category, try checking browser console.');
     }
   };
   return (
-    // const CategoriesPage = ({ isSidebarOpen, closeSidebar, toggleSidebar, addCategory, fetchUsersData, handleEdit, handleDelete }) => {
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
@@ -70,7 +69,7 @@ function Categories() {
       </div>
 
       {/* Main */}
-      <main className="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-lg shadow-lg transition-all duration-200 bg-light">
+      <main className="ease-soft-in-out xl:ml-68.5 relative h-full transition-all duration-200 bg-light">
         {/* Topbar */}
         <Topbar toggleSidebar={toggleSidebar} />
 
@@ -81,7 +80,7 @@ function Categories() {
               <div className="flex justify-between items-center p-6 pb-0 mb-3 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                 <h6 className="text-xl font-semibold">Products</h6>
                 
-                <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addProduct}>
+                <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addCategory}>
                   Add Product
                 </button>
               </div>
@@ -91,54 +90,58 @@ function Categories() {
                   <DataTable
                     columns={[
                       {
-                        name: 'Profile Image',
+                        name: 'Image',
                         selector: row => {
-                          const image = `/uploads/user_images/${row.profileImageName}`;
-                          return row.profileImageName ? (
-                            <div className="flex justify-center">
-                              <img src={image} alt="Profile" className="h-10 w-10 rounded-full" />
-                            </div>
-                          ) : (
+                          if(row.image && row.image.length > 0){
+                            const image = `/uploads/category_images/${row.image[0].imageName}`;
+                            return (
+                              <div><img src={image} alt="category_image" className="h-10 w-10 rounded-full" /></div>
+                            );
+                          } else {
                             "No Image"
-                          );
+                          }
                         },
                         sortable: false,
-                        center: true,
+                        center: true.toString(),
                         wrap: true,
                       },
+                      // {
+                      //   name: 'Images',
+                      //   selector: row => {
+                      //     return row.image && row.image.length > 0 ? (
+                      //       <div className="flex space-x-2">
+                      //         {row.image.map((img, index) => (
+                      //           <img
+                      //             key={index}
+                      //             src={`/uploads/category_images/${img.imageName}`}
+                      //             alt="Category"
+                      //             className="h-10 w-10 rounded-full"
+                      //           />
+                      //         ))}
+                      //       </div>
+                      //     ) : (
+                      //       "No Image"
+                      //     );
+                      //   },
+                      //   sortable: false,
+                      //   center: true,
+                      //   wrap: true,
+                      // },
                       {
-                        name: 'Username',
-                        selector: row => row.fullName,
+                        name: 'Name',
+                        selector: row => row.name,
                         sortable: true,
                         wrap: true,
                       },
                       {
-                        name: 'Email',
-                        selector: row => row.email,
+                        name: 'Description',
+                        selector: row => row.description,
                         sortable: true,
                         wrap: true,
                       },
                       {
-                        name: 'First Name',
-                        selector: row => row.firstName,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Last Name',
-                        selector: row => row.lastName,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Contact No',
-                        selector: row => row.contactNo,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Date Created',
-                        selector: row => row.dateOfCreation,
+                        name: 'Date Added',
+                        selector: row => row.dateAdded,
                         sortable: true,
                         wrap: true,
                       },
@@ -155,7 +158,7 @@ function Categories() {
                           </div>
                         ),
                         sortable: false,
-                        center: true,
+                        center: true.toString(),
                         wrap: true,
                       }
                     ]}
@@ -190,7 +193,7 @@ function Categories() {
                       },
                     }}
                     fixedHeader
-                    data={fetchUsersData}
+                    data={fetchCategoriesData}
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

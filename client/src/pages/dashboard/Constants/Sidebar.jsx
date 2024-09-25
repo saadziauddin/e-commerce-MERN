@@ -13,7 +13,7 @@ function Sidebar({ isOpen, closeSidebar }) {
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        const result = await api.get('/signin');
+        const result = await api.get('/api/signin');
         if (result.data.Status === "Success") {
           setRole(result.data.role);
         } else {
@@ -39,7 +39,7 @@ function Sidebar({ isOpen, closeSidebar }) {
   }, [isOpen, closeSidebar]);
 
   const logout = () => {
-    api.get('/Logout')
+    api.get('/api/logout')
       .then(res => {
         navigate('/signin');
       })
@@ -51,7 +51,7 @@ function Sidebar({ isOpen, closeSidebar }) {
 
       <div className="flex justify-center items-center py-4">
         <NavLink to='/dashboard/home'>
-          <img src={logo} className="h-16 w-auto" alt="main_logo" />
+          <img src="" className="h-16 w-auto" alt="main_logo" />
         </NavLink>
       </div>
       <hr className="h-px mt-0 mb-3 bg-gray-200" />

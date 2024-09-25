@@ -34,7 +34,7 @@ function AddProduct() {
     }
 
     try {
-        const uploadCategory = await api.post('/categories/addCategory', formData);
+        const uploadCategory = await api.post('/api/categories/addCategory', formData);
         if (uploadCategory.data.message === "Category uploaded successfully!") {
             toast.success("Category added successfully!");
             setValues({
@@ -47,11 +47,12 @@ function AddProduct() {
         console.log("Internal server error: ", error);
         toast.error("Internal server error, try checking browser console.");
     }
-};
+  };
 
   const goBack = () => {
     navigate('/dashboard/categories');
   }
+
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
@@ -129,7 +130,7 @@ function AddProduct() {
                   <button
                     type="submit"
                     className="text-sm font-semibold text-white bg-[#7b246d] rounded-lg px-4 py-2 transition duration-300 hover:bg-[#692056] focus:outline-none focus:ring-2 focus:ring-[#7b246d]">
-                    Add Product
+                    Add Category
                   </button>
                 </div>
               </form>

@@ -28,10 +28,12 @@ import UserProfile from './pages/dashboard/UserManagement/UserProfile';
 // Categories management
 import Categories from './pages/dashboard/Categories/Categories';
 import AddCategory from "./pages/dashboard/Categories/AddCategory";
+import UpdateCategory from './pages/dashboard/Categories/UpdateCategory';
 
 // Products management
 import Products from './pages/dashboard/Products/Products';
 import AddProduct from "./pages/dashboard/Products/AddProduct";
+import UpdateProduct from './pages/dashboard/Products/UpdateProduct';
 
 // Orders management
 import Orders from './pages/dashboard/Orders/Orders';
@@ -95,10 +97,12 @@ const router = createBrowserRouter(
       {/* Categories management routes */}
       <Route path="/dashboard/categories" element={<Categories />}></Route>
       <Route path="/dashboard/categories/addCategory" element={<AddCategory />}></Route>
+      <Route path="/dashboard/categories/updateCategory/:categoryId" element={<UpdateCategory />}></Route>
 
       {/* Products management routes */}
       <Route path="/dashboard/products" element={<Products />}></Route>
       <Route path="/dashboard/products/addProduct" element={<AddProduct />}></Route>
+      <Route path="/dashboard/products/updateProduct/:productId" element={<UpdateProduct />}></Route>
 
       {/* Orders management routes */}
       <Route path="/dashboard/orders" element={<Orders />}></Route>

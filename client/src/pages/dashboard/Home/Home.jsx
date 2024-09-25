@@ -16,7 +16,7 @@ import { TEChart } from "tw-elements-react";
 import Topbar from '../Constants/Topbar';
 import Sidebar from '../Constants/Sidebar';
 
-function AdminDashboard() {
+function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
@@ -747,4 +747,4 @@ function AdminDashboard() {
   )
 }
 
-export default AdminDashboard
+export default Home;

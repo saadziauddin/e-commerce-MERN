@@ -7,7 +7,7 @@ import LottieAnimation from "../../../assets/animations/LottieAnimation";
 import animationData from "../../../assets/animations/LoginAnimation.json";
 import { ToastContainer, toast } from 'react-toastify';
 
-const Reset = () => {
+function Reset(){
     const [values, setValues] = useState({ email: '', currentPassword: '', newPassword: '', confirmNewPassword: '' });
     const [errors, setErrors] = useState({});
     const [filled, setFilled] = useState(false);
@@ -33,7 +33,7 @@ const Reset = () => {
         if (!isValid) return;
 
         try {
-            const result = await api.post("/verifyEmail", { email: values.email });
+            const result = await api.post("/api/verifyEmail", { email: values.email });
             if (result.data.message === "Email verified successfully!") {
                 setEmailVerified(true);  // Show password fields after successful email verification
             } else {
@@ -50,14 +50,14 @@ const Reset = () => {
         if (!isValid) return;
 
         try {
-            const result = await api.post("/resetPassword", values);
+            const result = await api.post("/api/resetPassword", values);
             if (result.data.message === "Password reset successfully!") {
-                toast.success("Password reset successfully!");
+                toast.success("Password reset successfully, Sign in now!");
                 setValues({
-                    email: '', 
-                    currentPassword: '', 
-                    newPassword: '', 
-                    confirmNewPassword: '' 
+                    email: '',
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmNewPassword: ''
                 });
                 // navigate('/signin');
             }
@@ -117,289 +117,146 @@ const Reset = () => {
     };
 
     return (
-        // <div className="w-full h-screen flex items-center justify-center">
-        //     <ToastContainer
-        //         position="top-right"
-        //         autoClose={3000}
-        //         hideProgressBar={false}
-        //         newestOnTop={false}
-        //         closeOnClick
-        //         rtl={false}
-        //         pauseOnFocusLoss
-        //         draggable
-        //         pauseOnHover
-        //     />
-        //     {/* Animation Section */}
-        //     <div className="w-0 lgl:w-[50%] h-full flex items-center justify-center p-10">
-        //         <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
-        //     </div>
-
-        //     {/* Form Section */}
-        //     <div className="w-full lgl:w-1/2 h-full flex items-center justify-center">
-        //         <form onSubmit={emailVerified ? handlePasswordReset : handleEmailVerification} className="w-full lgl:w-[450px] h-screen flex items-center justify-center">
-        //             <div className="px-6 py-4 w-full h-[90%] flex flex-col justify-center overflow-y-scroll scrollbar-thin scrollbar-thumb-primeColor">
-        //                 <h1 className="font-titleFont font-semibold text-3xl mdl:text-4xl mb-4">
-        //                     {emailVerified ? "Reset Password" : "Verify Email"}
-        //                 </h1>
-
-        //                 <div className="flex flex-col gap-3">
-        //                     {/* Email Input */}
-        //                     <div className="mb-0">
-        //                         <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Email*</label>
-        //                         <div className="relative">
-        //                             <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3.5 text-gray-400" />
-        //                             <input
-        //                                 onChange={handleChange}
-        //                                 value={values.email}
-        //                                 className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
-        //                                 type="email"
-        //                                 name="email"
-        //                                 placeholder="Enter your email"
-        //                                 disabled={emailVerified}  // Disable email field after verification
-        //                             />
-        //                         </div>
-        //                         {errors.email && (
-        //                             <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-        //                                 <FontAwesomeIcon icon={faExclamationCircle} />
-        //                                 {errors.email}
-        //                             </p>
-        //                         )}
-        //                     </div>
-
-        //                     {/* Show password fields only after email is verified */}
-        //                     {emailVerified && (
-        //                         <>
-        //                             {/* Current Password */}
-        //                             <div className="mb-0">
-        //                                 <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Current Password*</label>
-        //                                 <div className="relative">
-        //                                     <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-        //                                     <input
-        //                                         onChange={handleChange}
-        //                                         value={values.currentPassword}
-        //                                         className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
-        //                                         type="password"
-        //                                         name="currentPassword"
-        //                                         placeholder="********"
-        //                                     />
-        //                                 </div>
-        //                                 {errors.currentPassword &&
-        //                                     <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-        //                                         <FontAwesomeIcon icon={faExclamationCircle} />
-        //                                         {errors.currentPassword}
-        //                                     </p>
-        //                                 }
-        //                             </div>
-
-        //                             {/* New Password */}
-        //                             <div className="mb-0">
-        //                                 <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">New Password*</label>
-        //                                 <div className="relative">
-        //                                     <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-        //                                     <input
-        //                                         onChange={handleChange}
-        //                                         value={values.newPassword}
-        //                                         className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
-        //                                         type="password"
-        //                                         name="newPassword"
-        //                                         placeholder="********"
-        //                                     />
-        //                                 </div>
-        //                                 {errors.newPassword && (
-        //                                     <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-        //                                         <FontAwesomeIcon icon={faExclamationCircle} />
-        //                                         {errors.newPassword}
-        //                                     </p>
-        //                                 )}
-        //                             </div>
-
-        //                             {/* Confirm New Password */}
-        //                             <div className="mb-0">
-        //                                 <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Confirm New Password*</label>
-        //                                 <div className="relative">
-        //                                     <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-        //                                     <input
-        //                                         onChange={handleChange}
-        //                                         value={values.confirmNewPassword}
-        //                                         className="pl-10 pr-3 py-2 border border-gray-300 w-4/5 rounded-xl focus:outline-none focus:border-primeColor"
-        //                                         type="password"
-        //                                         name="confirmNewPassword"
-        //                                         placeholder="********"
-        //                                     />
-        //                                 </div>
-        //                                 {errors.confirmNewPassword && (
-        //                                     <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-        //                                         <FontAwesomeIcon icon={faExclamationCircle} />
-        //                                         {errors.confirmNewPassword}
-        //                                     </p>
-        //                                 )}
-        //                             </div>
-        //                         </>
-        //                     )}
-
-        //                     <button type="submit"
-        //                         className={`${filled
-        //                             ? "bg-[#7b246d] hover:bg-slate-500 hover:text-white hover:border-none cursor-pointer"
-        //                             : "bg-gray-500 hover:bg-gray-500 hover:text-white cursor-not-allowed"
-        //                             } text-white py-2 w-4/5 rounded-xl text-base font-medium duration-300`}
-        //                         disabled={!filled} >
-        //                         {emailVerified ? "Reset Password" : "Verify Email"}
-        //                     </button>
-
-        //                     <p className="text-gray-700 text-sm text-center w-4/5">
-        //                         Back to sign in?{' '}
-        //                         <Link to="/signin" className="text-primeColor font-medium hover:text-blue-600 duration-300">
-        //                             Sign in
-        //                         </Link>
-        //                     </p>
-
-        //                 </div>
-        //             </div>
-        //         </form>
-        //     </div>
-        // </div>
-
         <div className="w-full h-screen flex items-center justify-center">
-    <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-    />
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
 
-    {/* Animation Section */}
-    <div className="hidden lgl:flex w-0 lgl:w-[50%] h-full items-center justify-center p-10">
-        <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
-    </div>
-
-    {/* Form Section */}
-    <div className="w-full lgl:w-1/2 h-full flex items-center justify-center">
-        <form
-            onSubmit={emailVerified ? handlePasswordReset : handleEmailVerification}
-            className="w-full lgl:w-[450px] h-full flex items-center justify-center"
-        >
-            <div className="px-6 py-4 w-full h-[90%] flex flex-col justify-center overflow-hidden scrollbar-thin scrollbar-thumb-primeColor">
-                <h1 className="font-titleFont font-semibold text-3xl mdl:text-4xl mb-4 text-center lgl:text-left">
-                    {emailVerified ? "Reset Password" : "Verify Email"}
-                </h1>
-
-                <div className="flex flex-col gap-3">
-                    {/* Email Input */}
-                    <div className="mb-0">
-                        <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Email*</label>
-                        <div className="relative">
-                            <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3.5 text-gray-400" />
-                            <input
-                                onChange={handleChange}
-                                value={values.email}
-                                className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
-                                type="email"
-                                name="email"
-                                placeholder="Enter your email"
-                                disabled={emailVerified}  // Disable email field after verification
-                            />
-                        </div>
-                        {errors.email && (
-                            <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-                                <FontAwesomeIcon icon={faExclamationCircle} /> {errors.email}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Show password fields only after email is verified */}
-                    {emailVerified && (
-                        <>
-                            {/* Current Password */}
-                            <div className="mb-0">
-                                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Current Password*</label>
-                                <div className="relative">
-                                    <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-                                    <input
-                                        onChange={handleChange}
-                                        value={values.currentPassword}
-                                        className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
-                                        type="password"
-                                        name="currentPassword"
-                                        placeholder="********"
-                                    />
-                                </div>
-                                {errors.currentPassword && (
-                                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-                                        <FontAwesomeIcon icon={faExclamationCircle} /> {errors.currentPassword}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* New Password */}
-                            <div className="mb-0">
-                                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">New Password*</label>
-                                <div className="relative">
-                                    <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-                                    <input
-                                        onChange={handleChange}
-                                        value={values.newPassword}
-                                        className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
-                                        type="password"
-                                        name="newPassword"
-                                        placeholder="********"
-                                    />
-                                </div>
-                                {errors.newPassword && (
-                                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-                                        <FontAwesomeIcon icon={faExclamationCircle} /> {errors.newPassword}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Confirm New Password */}
-                            <div className="mb-0">
-                                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Confirm New Password*</label>
-                                <div className="relative">
-                                    <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-                                    <input
-                                        onChange={handleChange}
-                                        value={values.confirmNewPassword}
-                                        className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
-                                        type="password"
-                                        name="confirmNewPassword"
-                                        placeholder="********"
-                                    />
-                                </div>
-                                {errors.confirmNewPassword && (
-                                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-                                        <FontAwesomeIcon icon={faExclamationCircle} /> {errors.confirmNewPassword}
-                                    </p>
-                                )}
-                            </div>
-                        </>
-                    )}
-
-                    <button
-                        type="submit"
-                        className={`${filled ? "bg-[#7b246d] hover:bg-slate-500 cursor-pointer" : "bg-gray-500 cursor-not-allowed"
-                            } text-white py-2 w-full rounded-xl text-base font-medium duration-300`}
-                        disabled={!filled}
-                    >
-                        {emailVerified ? "Reset Password" : "Verify Email"}
-                    </button>
-
-                    <p className="text-gray-700 text-sm text-center w-full">
-                        Back to sign in?{' '}
-                        <Link to="/signin" className="text-primeColor font-medium hover:text-blue-600 duration-300">
-                            Sign in
-                        </Link>
-                    </p>
-                </div>
+            {/* Animation Section */}
+            <div className="hidden lgl:flex w-0 lgl:w-[50%] h-full items-center justify-center p-10">
+                <LottieAnimation animationData={animationData} loop={true} autoplay={true} />
             </div>
-        </form>
-    </div>
-</div>
 
+            {/* Form Section */}
+            <div className="w-full lgl:w-1/2 h-full flex items-center justify-center">
+                <form
+                    onSubmit={emailVerified ? handlePasswordReset : handleEmailVerification}
+                    className="w-full lgl:w-[450px] h-full flex items-center justify-center"
+                >
+                    <div className="px-6 py-4 w-full h-[90%] flex flex-col justify-center overflow-hidden scrollbar-thin scrollbar-thumb-primeColor">
+                        <h1 className="font-titleFont font-semibold text-3xl mdl:text-4xl mb-4 text-center lgl:text-left">
+                            {emailVerified ? "Reset Password" : "Verify Email"}
+                        </h1>
+
+                        <div className="flex flex-col gap-3">
+                            {/* Email Input */}
+                            <div className="mb-0">
+                                <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Email*</label>
+                                <div className="relative">
+                                    <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3.5 text-gray-400" />
+                                    <input
+                                        onChange={handleChange}
+                                        value={values.email}
+                                        className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
+                                        type="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        disabled={emailVerified}  // Disable email field after verification
+                                    />
+                                </div>
+                                {errors.email && (
+                                    <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                                        <FontAwesomeIcon icon={faExclamationCircle} /> {errors.email}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Show password fields only after email is verified */}
+                            {emailVerified && (
+                                <>
+                                    {/* Current Password */}
+                                    <div className="mb-0">
+                                        <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Current Password*</label>
+                                        <div className="relative">
+                                            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
+                                            <input
+                                                onChange={handleChange}
+                                                value={values.currentPassword}
+                                                className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
+                                                type="password"
+                                                name="currentPassword"
+                                                placeholder="********"
+                                            />
+                                        </div>
+                                        {errors.currentPassword && (
+                                            <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                                                <FontAwesomeIcon icon={faExclamationCircle} /> {errors.currentPassword}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* New Password */}
+                                    <div className="mb-0">
+                                        <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">New Password*</label>
+                                        <div className="relative">
+                                            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
+                                            <input
+                                                onChange={handleChange}
+                                                value={values.newPassword}
+                                                className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
+                                                type="password"
+                                                name="newPassword"
+                                                placeholder="********"
+                                            />
+                                        </div>
+                                        {errors.newPassword && (
+                                            <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                                                <FontAwesomeIcon icon={faExclamationCircle} /> {errors.newPassword}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* Confirm New Password */}
+                                    <div className="mb-0">
+                                        <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Confirm New Password*</label>
+                                        <div className="relative">
+                                            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
+                                            <input
+                                                onChange={handleChange}
+                                                value={values.confirmNewPassword}
+                                                className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
+                                                type="password"
+                                                name="confirmNewPassword"
+                                                placeholder="********"
+                                            />
+                                        </div>
+                                        {errors.confirmNewPassword && (
+                                            <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
+                                                <FontAwesomeIcon icon={faExclamationCircle} /> {errors.confirmNewPassword}
+                                            </p>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+
+                            <button
+                                type="submit"
+                                className={`${filled ? "bg-[#7b246d] hover:bg-slate-500 cursor-pointer" : "bg-gray-500 cursor-not-allowed"
+                                    } text-white py-2 w-full rounded-xl text-base font-medium duration-300`}
+                                disabled={!filled}
+                            >
+                                {emailVerified ? "Reset Password" : "Verify Email"}
+                            </button>
+
+                            <p className="text-gray-700 text-sm text-center w-full">
+                                Back to sign in?{' '}
+                                <Link to="/signin" className="text-primeColor font-medium hover:text-blue-600 duration-300">
+                                    Sign in
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 };
 

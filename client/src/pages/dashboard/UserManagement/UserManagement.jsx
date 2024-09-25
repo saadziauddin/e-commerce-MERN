@@ -18,7 +18,7 @@ function UserManagement() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const result = await api.get('/GetUserData');
+        const result = await api.get('/api/getUser');
         setFetchUsersData(result.data);
       } catch (error) {
         console.log("Error fetching users: ", error);
@@ -38,13 +38,15 @@ function UserManagement() {
 
   const handleDelete = async (UserId) => {
     try {
-      const response = await api.delete('/Delete', {
+      const response = await api.delete('/api/deleteUser', {
         params: { UserId }
       });
       setFetchUsersData(fetchUsersData.filter(user => user.UserId !== UserId));
       toast.success(response.data.message);
-      const result = await api.get('/GetUserData');
+
+      const result = await api.get('/api/getUser');
       setFetchUsersData(result.data);
+      
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -69,7 +71,7 @@ function UserManagement() {
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
       {/* Main */}
-      <main className="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 bg-light">
+      <main className="ease-soft-in-out xl:ml-68.5 relative h-full transition-all duration-200 bg-light">
         {/* Topbar */}
         <Topbar toggleSidebar={toggleSidebar} />
         {/* Table */}
@@ -91,14 +93,14 @@ function UserManagement() {
                       {
                         name: 'Profile Image',
                         selector: row => {
-                          const image = `/uploads/user_images/${row.profileImageName}`;
-                          return row.profileImageName ? (
-                            <div className="flex justify-center">
-                              <img src={image} alt="Profile" className="h-10 w-10 rounded-full" />
-                            </div>
-                          ) : (
+                          if(row.profileImage && row.profileImage.length > 0){
+                            const ProfileImage = `/uploads/user_images/${row.profileImage[0].imageName}`;
+                            return (
+                              <div><img src={ProfileImage} alt="profile_image" className="h-10 w-10 rounded-full"/></div>
+                            );
+                          } else {
                             "No Image"
-                          );
+                          }
                         },
                         sortable: false,
                         center: true,

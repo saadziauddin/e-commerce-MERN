@@ -1,0 +1,83 @@
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const isProduction = process.env.NODE_ENV === 'production';
+const apiURL = isProduction ? process.env.PRODUCTION_API_URL : process.env.VITE_API_URL;
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// CORS Configuration
+const corsOptions = {
+    origin: apiURL,
+    methods: ["POST", "GET", "DELETE", "PUT"],
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    exposedHeaders: ['Authorization'],
+};
+app.use(cors(corsOptions));
+
+// Middleware to allow next() calls
+app.use((req, res, next) => {
+    next();
+});
+
+// Server Initialization
+const port = process.env.PORT || 8090;
+app.listen(port, () => { 
+    console.log("Server is running at PORT: " + port); 
+});
+
+// ======================= Auth Routes ==============================
+import signinRouter from './routes/auth/signinRoute.js';
+app.post('/api/signin', signinRouter);
+import verifyToken from './verifyToken.js';
+app.get('/api/signin', verifyToken, (req, res) => { return res.json({ Status: "Success", name: req.name, role: req.role }); });
+
+import signupRouter from './routes/auth/signupRoute.js';
+app.post('/api/signup', signupRouter);
+
+import resetRouter from './routes/auth/resetRoute.js';
+app.post('/api/verifyEmail', resetRouter);
+app.post('/api/resetPassword', resetRouter);
+
+import logoutRouter from './routes/auth/logoutRoute.js';
+app.get('/api/logout', logoutRouter);
+
+// ======================= Category Routes =============================
+import addCategoryRouter from './routes/categories/addCategoryRoute.js';
+app.post('/api/categories/addCategory', addCategoryRouter);
+
+import updateCategoryRouter from './routes/categories/updateCategoryRoute.js';
+app.put('/api/updateCategory/:categoryId', updateCategoryRouter);
+
+import deleteCategoryRouter from './routes/categories/deleteCategoryRoute.js';
+app.delete('/api/deleteCategory', deleteCategoryRouter);
+
+import fetchCategoriesRouter from './routes/categories/fetchCategoriesRoute.js';
+app.get('/api/fetchCategories', fetchCategoriesRouter);
+app.get('/api/fetchCategoryById/:categoryId', fetchCategoriesRouter);
+
+// ======================= Product Routes ==============================
+import addProductRouter from './routes/products/addProductRoute.js';
+app.post('/api/products/addProduct', addProductRouter);
+
+import updateProductRouter from './routes/products/updateProductRoute.js';
+app.put('/api/updateProduct/:productId', updateProductRouter);
+
+// ======================= User Routes =================================
+import updateUserRouter from './routes/users/updateUserRoute.js';
+app.put('/api/updateUser/:userId', updateUserRouter);
+
+import deleteUserRouter from './routes/users/deleteUserRoute.js';
+app.delete('/api/deleteUser', deleteUserRouter);
+
+import fetchUsersRouter from './routes/users/fetchUsersRoute.js';
+app.get('/api/roles', fetchUsersRouter); // Fetch Roles
+app.get('/api/getUser', fetchUsersRouter); // Fetch Users
+app.get('/api/getUserById/:userId', fetchUsersRouter); // Fetch User by ID

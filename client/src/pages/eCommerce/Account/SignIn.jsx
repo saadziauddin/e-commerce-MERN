@@ -39,7 +39,7 @@ const SignIn = () => {
     }
     if (email && password) {
       try {
-        const response = await api.post("/signin", { email, password });
+        const response = await api.post("/api/signin", { email, password });
 
         if (response.data.message === "Login Successfull!") {
           setEmail("");
@@ -64,6 +64,7 @@ const SignIn = () => {
         if (err.response && err.response.data && err.response.data.error) {
           toast.error(err.response.data.error);
         } else {
+          console.log("Internal server error: ", err);
           toast.error("Request failed during login!");
         }
       }
@@ -170,7 +171,6 @@ const SignIn = () => {
         </form>
       </div>
     </div>
-
   );
 };
 

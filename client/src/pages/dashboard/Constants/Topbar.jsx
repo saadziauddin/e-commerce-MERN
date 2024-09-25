@@ -27,7 +27,7 @@ function Topbar({ toggleSidebar }) {
   }, [dropdownRef]);
 
   useEffect(() => {
-    api.get('/signin')
+    api.get('/api/signin')
       .then(res => {
         if (res.data.Status === "Success") {
           setName(res.data.name);
@@ -41,7 +41,7 @@ function Topbar({ toggleSidebar }) {
   }, [navigate]);
 
   const logout = () => {
-    api.get('/Logout')
+    api.get('/api/logout')
       .then(res => {
         navigate('/signin');
       })

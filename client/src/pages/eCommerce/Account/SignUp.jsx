@@ -31,7 +31,7 @@ function SignUp() {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await api.get('/Roles');
+        const response = await api.get('/api/roles');
         setRoles(response.data);
       } catch (error) {
         toast.error("Error fetching roles in register form: " + error)
@@ -47,7 +47,7 @@ function SignUp() {
   };
 
   const handleFileChange = (e) => {
-    setValues({ ...values, image: e.target.files[0] });
+    setValues({ ...values, profileImage: e.target.files[0] });
   };
 
   const handleSubmit = async (event) => {
@@ -56,12 +56,11 @@ function SignUp() {
     if (!isValid) return;
 
     const formData = new FormData();
-
     for (let key in values) {
       formData.append(key, values[key]);
     }
     try {
-      await api.post('/Register', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await api.post('/api/signup', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       toast.success("Registration successful!");
       setValues({
         firstName: '',
@@ -84,15 +83,13 @@ function SignUp() {
         toast.error(err.response.data.error);
       } else {
         console.log(err);
-        toast.error(err);
+        toast.error(err.response.data.error);
       }
     }
   };
-
   const backToHome = () => {
     navigate('/')
   };
-
   const validate = () => {
     let errors = {};
     let isValid = true;
@@ -150,7 +147,17 @@ function SignUp() {
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center lgl:flex-row mt-10">
-
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {/* Signup Form */}
       <div className="w-full sm:w-[90%] md:w-[80%] lgl:w-[50%] px-6 lg:px-36 py-10 lgl:py-0 flex flex-col justify-center">
         <h1 className="font-titleFont font-medium text-2xl sm:text-3xl md:text-4xl mb-6 text-center">
@@ -337,11 +344,11 @@ function SignUp() {
                 <input
                   onChange={handleFileChange}
                   type="file"
-                  id="image"
-                  name="image"
+                  id="profileImage"
+                  name="profileImage"
                   className="hidden"
                 />
-                <span className="text-gray-500">{values.image ? values.image.name : 'Select Profile Image'}</span>
+                <span className="text-gray-500">{values.profileImage ? values.profileImage.name : 'Select Profile Image'}</span>
               </label>
             </div>
             {errors.profileImage && (

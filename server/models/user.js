@@ -15,8 +15,9 @@ const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     userName: { type: String, required: true },
     hashedPassword: { type: String, required: true, unique: true },
-    profileImageName: { type: String },
-    profileImagePath: { type: String },
+    profileImage: [
+        { imageName: { type: String }, imagePath: { type: String } }
+    ],
     // roles: [{ type: mongoose.Schema.Types., ref: 'Role' }], // For _id of Roles
     role: { type: String },
     dateOfCreation: { type: Date, default: Date.now }

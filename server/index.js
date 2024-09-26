@@ -70,6 +70,13 @@ app.post('/api/products/addProduct', addProductRouter);
 import updateProductRouter from './routes/products/updateProductRoute.js';
 app.put('/api/updateProduct/:productId', updateProductRouter);
 
+import deleteProductRouter from './routes/products/deleteProductRoute.js';
+app.delete('/api/deleteProduct', deleteProductRouter);
+
+import fetchProductsRouter from './routes/products/fetchProductsRoute.js';
+app.get('/api/fetchProducts', fetchProductsRouter);
+app.get('/api/fetchProductById/:productId', fetchProductsRouter);
+
 // ======================= User Routes =================================
 import updateUserRouter from './routes/users/updateUserRoute.js';
 app.put('/api/updateUser/:userId', updateUserRouter);

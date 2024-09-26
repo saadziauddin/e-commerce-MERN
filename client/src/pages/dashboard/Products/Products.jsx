@@ -8,47 +8,49 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 
-function Categories() {
+function Products() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
-  const [fetchCategoriesData, setfetchCategoriesData] = useState([]);
+  const [fetchProductsData, setfetchProductsData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await api.get('/fetchCategories');
-        setfetchCategoriesData(response.data);
+        const response = await api.get('/api/fetchProducts');
+        console.log("Fetched products: ", response.data);
+        setfetchProductsData(response.data);
       } catch (error) {
-        console.log("Error fetching categories: ", error);
+        console.log("Error fetching products: ", error);
       }
     };
-    fetchCategories();
-  }, []);
+    fetchProducts();
+  }, []);  
 
-  const addCategory = async () => {
+  const addProduct = async () => {
     navigate('/dashboard/products/addProduct');
   };
 
   const handleEdit = (row) => {
     const productId = row._id;
-    navigate(`/dashboard/products/updateCategory/${productId}`);
+    navigate(`/dashboard/products/updateProduct/${productId}`);
   };
 
   const handleDelete = async (ProductId) => {
     try {
-      const response = await api.delete('/deleteProduct', { params: { ProductId } });
-      setfetchCategoriesData(fetchCategoriesData.filter(product => product.productId !== ProductId));
+      const response = await api.delete('/api/deleteProduct', { params: { ProductId } });
+      setfetchProductsData(fetchProductsData.filter(product => product.productId !== ProductId));
       toast.success(response.data.message);
 
-      const reFetchCategories = await api.get('/fetchCategories');
-      setfetchCategoriesData(reFetchCategories.data);
+      const reFetchProducts = await api.get('/api/fetchProducts');
+      setfetchProductsData(reFetchProducts.data);
     } catch (error) {
-      console.error('Error deleting category:', error);
-      toast.error('Error deleting category, try checking browser console.');
+      console.error('Error deleting product:', error);
+      toast.error('Error deleting product, try checking browser console.');
     }
   };
+
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
@@ -80,7 +82,7 @@ function Categories() {
               <div className="flex justify-between items-center p-6 pb-0 mb-3 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                 <h6 className="text-xl font-semibold">Products</h6>
                 
-                <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addCategory}>
+                <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addProduct}>
                   Add Product
                 </button>
               </div>
@@ -90,43 +92,19 @@ function Categories() {
                   <DataTable
                     columns={[
                       {
-                        name: 'Image',
+                        name: 'Images',
                         selector: row => {
-                          if(row.image && row.image.length > 0){
-                            const image = `/uploads/category_images/${row.image[0].imageName}`;
-                            return (
-                              <div><img src={image} alt="category_image" className="h-10 w-10 rounded-full" /></div>
-                            );
+                          if (Array.isArray(row.images) && row.images.length > 0) {
+                            const image = `/uploads/product_images/${row.images[0].imageName}`;
+                            return <div><img src={image} alt="product_image" className="h-10 w-10 rounded-full" /></div>;
                           } else {
-                            "No Image"
+                            return "No Image";
                           }
                         },
                         sortable: false,
-                        center: true.toString(),
+                        center: true,
                         wrap: true,
-                      },
-                      // {
-                      //   name: 'Images',
-                      //   selector: row => {
-                      //     return row.image && row.image.length > 0 ? (
-                      //       <div className="flex space-x-2">
-                      //         {row.image.map((img, index) => (
-                      //           <img
-                      //             key={index}
-                      //             src={`/uploads/category_images/${img.imageName}`}
-                      //             alt="Category"
-                      //             className="h-10 w-10 rounded-full"
-                      //           />
-                      //         ))}
-                      //       </div>
-                      //     ) : (
-                      //       "No Image"
-                      //     );
-                      //   },
-                      //   sortable: false,
-                      //   center: true,
-                      //   wrap: true,
-                      // },
+                      },                                           
                       {
                         name: 'Name',
                         selector: row => row.name,
@@ -140,11 +118,65 @@ function Categories() {
                         wrap: true,
                       },
                       {
-                        name: 'Date Added',
-                        selector: row => row.dateAdded,
+                        name: 'Price 1',
+                        selector: row => row.price1,
                         sortable: true,
                         wrap: true,
                       },
+                      {
+                        name: 'Price 2',
+                        selector: row => row.price2,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Discount',
+                        selector: row => row.discount,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Status',
+                        selector: row => row.status,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Color',
+                        selector: row => Array.isArray(row.color) && row.color.length > 0 ? row.color[0] : 'No Color',
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Size',
+                        selector: row => Array.isArray(row.size) && row.size.length > 0 ? row.size[0] : 'No Size',
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Tags',
+                        selector: row => Array.isArray(row.tags) && row.tags.length > 0 ? row.tags[0] : 'No Tags',
+                        sortable: true,
+                        wrap: true,
+                      },                      
+                      {
+                        name: 'Category',
+                        selector: row => row.category,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Stock',
+                        selector: row => row.stock,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Date Added',
+                        selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
+                        sortable: true,
+                        wrap: true,
+                      },                                           
                       {
                         name: 'Actions',
                         cell: row => (
@@ -193,7 +225,7 @@ function Categories() {
                       },
                     }}
                     fixedHeader
-                    data={fetchCategoriesData}
+                    data={fetchProductsData}
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}
@@ -205,7 +237,7 @@ function Categories() {
         </div>
       </main>
     </div>
-  )
+  );
 };
 
-export default Categories;
+export default Products;

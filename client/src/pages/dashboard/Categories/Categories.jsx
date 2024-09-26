@@ -106,28 +106,6 @@ function Categories() {
                         center: true.toString(),
                         wrap: true,
                       },
-                      // {
-                      //   name: 'Images',
-                      //   selector: row => {
-                      //     return row.image && row.image.length > 0 ? (
-                      //       <div className="flex space-x-2">
-                      //         {row.image.map((img, index) => (
-                      //           <img
-                      //             key={index}
-                      //             src={`/uploads/category_images/${img.imageName}`}
-                      //             alt="Category"
-                      //             className="h-10 w-10 rounded-full"
-                      //           />
-                      //         ))}
-                      //       </div>
-                      //     ) : (
-                      //       "No Image"
-                      //     );
-                      //   },
-                      //   sortable: false,
-                      //   center: true,
-                      //   wrap: true,
-                      // },
                       {
                         name: 'Name',
                         selector: row => row.name,

@@ -24,44 +24,18 @@ function AddProduct() {
     images: []
   });
   const navigate = useNavigate();
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  // const handleImageChange = (e) => {
-  //   setFormData({ ...formData, images: [...formData.images, ...e.target.files] });
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  //   for (let key in values) {
-  //       formData.append(key, values[key]);
-  //   }
-  //   try {
-  //       const uploadCategory = await api.post('/addProduct', formData);
-  //       if (uploadCategory.data.message === "Product added successfully!") {
-  //           toast.success("Product added successfully!");
-  //           setValues({
-  //             name: '',
-  //             description: '',
-  //             price1: '',
-  //             price2: '',
-  //             color: '',
-  //             size: '',
-  //             tags: '',
-  //             category: '',
-  //             stock: '',
-  //             images: []
-  //           });
-  //       }
-  //   } catch (error) {
-  //       console.log("Internal server error: ", error);
-  //       toast.error("Internal server error, try checking browser console.");
-  //   }
-  // };
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/api/fetchCategories');
+        setCategories(response.data);
+      } catch (error) {
+        console.log("Error fetching categories: ", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -74,7 +48,6 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     const formDataToSend = new FormData();
     for (let key in formData) {
       if (key === 'images') {
@@ -86,15 +59,10 @@ function AddProduct() {
         formDataToSend.append(key, formData[key]);
       }
     }
-    console.log("Form data to send: ", formDataToSend);
-
     try {
-      const uploadProduct = await api.post('/addProduct', formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const uploadProduct = await api.post('/api/products/addProduct', formDataToSend, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
-      
       if (uploadProduct.data.message === "Product added successfully!") {
         toast.success("Product added successfully!");
         setFormData({
@@ -111,25 +79,15 @@ function AddProduct() {
         });
       }
     } catch (error) {
-      console.log("Internal server error: ", error);
-      toast.error("Internal server error, check the browser console for details.");
+      const errorMessage = error.response?.data?.error || "Error updating category!";
+      toast.error(errorMessage);
+      console.error("Internal server error: ", errorMessage);
     }
   };
 
   const goBack = () => {
     navigate('/dashboard/products');
   };
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await api.get('/fetchCategories');
-        setCategories(response.data);
-      } catch (error) {
-        console.log("Error fetching categories: ", error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   return(
     <div className="absolute top-0 left-0 w-full h-full">
@@ -184,10 +142,6 @@ function AddProduct() {
                     ))}
                   </select>
                 </div>
-                {/* <div className="flex flex-col">
-                  <label htmlFor="category" className="mb-2 text-sm font-medium text-gray-700">Category:</label>
-                  <input type="text" id="category" name="category" value={formData.category} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />
-                </div> */}
                 <div className="flex flex-col">
                   <label htmlFor="tags" className="mb-2 text-sm font-medium text-gray-700">Tags:</label>
                   <input type="text" id="tags" name="tags" value={formData.tags} onChange={handleInputChange} className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white" />

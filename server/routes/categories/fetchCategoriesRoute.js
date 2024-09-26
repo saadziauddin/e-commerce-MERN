@@ -12,7 +12,7 @@ router.get('/api/fetchCategories', async (req, res) => {
     } catch (error) {
         console.log("Error fetching categories: ", error);
     }
-})
+});
 
 // Fetch Category by Id
 router.get('/api/fetchCategoryById/:categoryId', async (req, res) => {

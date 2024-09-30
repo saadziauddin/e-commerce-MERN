@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
 import api from '../../../Api/api.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function AddProduct() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,7 +29,6 @@ function AddProduct() {
   });
   const navigate = useNavigate();
 
-  // Fetch Categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -63,9 +64,9 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formDataToSend = new FormData();
-  
+
     for (let key in formData) {
       if (key === 'images') {
         formData.images.forEach((image) => {
@@ -77,17 +78,17 @@ function AddProduct() {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     // Debugging FormData
     // for (let pair of formDataToSend.entries()) {
     //   console.log(pair[0], pair[1]);
     // }
-  
+
     try {
       const uploadProduct = await api.post('/api/products/addProduct', formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-  
+
       if (uploadProduct.data.message === 'Product added successfully!') {
         toast.success('Product added successfully!');
         setFormData({
@@ -111,7 +112,7 @@ function AddProduct() {
       console.error('Internal server error:', errorMessage);
     }
   };
-  
+
   const addColorField = () => {
     setFormData(prevState => ({
       ...prevState,
@@ -128,6 +129,16 @@ function AddProduct() {
 
   const goBack = () => {
     navigate('/dashboard/products');
+  };
+
+  const removeColor = (index) => {
+    const updatedColors = formData.color.filter((_, i) => i !== index);
+    setFormData((prevState) => ({ ...prevState, color: updatedColors }));
+  };
+
+  const removeSize = (index) => {
+    const updatedSizes = formData.size.filter((_, i) => i !== index);
+    setFormData((prevState) => ({ ...prevState, size: updatedSizes }));
   };
 
   return (
@@ -194,22 +205,30 @@ function AddProduct() {
                 <div className="flex flex-col">
                   <label className="mb-2 text-sm font-semibold text-gray-700">Colors:</label>
                   {formData.color.map((color, index) => (
-                    <div key={index} className="relative flex items-center">
+                    <div key={index} className="relative flex items-center mb-2">
                       <input
                         type="text"
                         value={color}
                         onChange={(e) => handleInputChange(e, index, 'color')}
-                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                       />
                       {index === formData.color.length - 1 && (
                         <button
                           type="button"
                           onClick={addColorField}
-                          className="absolute right-2 text-slate-700 hover:bg-gray-200 font-semibold px-2 ml-2 mb-2 rounded-lg"
+                          className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs"
                         >
-                          +
+                          <FontAwesomeIcon icon={faPlus} />
                         </button>
+
                       )}
+                      <button
+                        type="button"
+                        onClick={() => removeColor(index)}
+                        className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -218,22 +237,29 @@ function AddProduct() {
                 <div className="flex flex-col">
                   <label className="mb-2 text-sm font-semibold text-gray-700">Sizes:</label>
                   {formData.size.map((size, index) => (
-                    <div key={index} className="relative flex items-center">
+                    <div key={index} className="relative flex items-center mb-2">
                       <input
                         type="text"
                         value={size}
                         onChange={(e) => handleInputChange(e, index, 'size')}
-                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                       />
                       {index === formData.size.length - 1 && (
                         <button
                           type="button"
                           onClick={addSizeField}
-                          className="absolute right-2 text-slate-700 hover:bg-gray-200 font-semibold px-2 ml-2 mb-2 rounded-lg"
+                          className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs"
                         >
-                          +
+                          <FontAwesomeIcon icon={faPlus} />
                         </button>
                       )}
+                      <button
+                        type="button"
+                        onClick={() => removeSize(index)}
+                        className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     </div>
                   ))}
                 </div>

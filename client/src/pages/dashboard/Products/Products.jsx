@@ -155,7 +155,8 @@ function Products() {
                       },
                       {
                         name: 'Tags',
-                        selector: row => Array.isArray(row.tags) && row.tags.length > 0 ? row.tags[0] : 'No Tags',
+                        // selector: row => Array.isArray(row.tags) && row.tags.length > 0 ? row.tags[0] : 'No Tags',
+                        selector: row => row.tags,
                         sortable: true,
                         wrap: true,
                       },                      

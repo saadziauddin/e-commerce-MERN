@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       maxWidth: {
-        container: "1500px",
+        container: "1440px",
       },
       screens: {
         xs: "320px",

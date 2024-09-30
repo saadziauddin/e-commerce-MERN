@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
 import api from '../../../Api/api.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function UpdateProduct() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,24 +15,23 @@ function UpdateProduct() {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
-    price1: '',
-    price2: '',
+    color: [''],
+    size: [''],
+    tags: '',
+    stock: '',
+    category: '',
     discount: '',
     status: '',
-    color: '',
-    size: '',
-    tags: '',
-    category: '',
-    stock: '',
-    images: []
+    price1: '',
+    price2: '',
+    description: '',
+    images: [],
   });
   const [editing, setEditing] = useState(false);
   const [newImages, setNewImages] = useState([]);
   const { productId } = useParams();
   const navigate = useNavigate();
 
-  // Fetch categories and product data
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -69,101 +70,70 @@ function UpdateProduct() {
     fetchProductById();
   }, [productId]);
 
-  // Handle input field changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleInputChange = (e, index, field) => {
+    const { value } = e.target;
+  
+    // Handle updates for color or size arrays
+    if (field === 'color' || field === 'size') {
+      const updatedArray = [...formData[field]];
+      updatedArray[index] = value;
+      setFormData({
+        ...formData,
+        [field]: updatedArray,
+      });
+    } else {
+      // Handle other fields
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    }
   };
-
-  // Handle new image changes
+  
   const handleImageChange = (e) => {
     setNewImages([...newImages, ...e.target.files]);
   };
 
-  // Remove existing image (client-side)
-  const removeExistingImage = (index) => {
-    const updatedImages = formData.images.filter((_, i) => i !== index);
-    setFormData({ ...formData, images: updatedImages });
-  };
-
-  // Remove newly selected image
-  const removeNewImage = (index) => {
-    const updatedNewImages = newImages.filter((_, i) => i !== index);
-    setNewImages(updatedNewImages);
-  };
-
-  // Handle form submission for updating product
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formDataToSend = new FormData();
-  //   console.log([...formDataToSend.entries()]);  // Log the FormData contents
-  //   // Append all fields except images
-  //   for (let key in formData) {
-  //     if (key !== 'images') {
-  //       formDataToSend.append(key, formData[key]);
-  //     }
-  //   }
-  //   // Append new images if any
-  //   newImages.forEach((image) => {
-  //     formDataToSend.append('images', image);
-  //   });
-  //   // Send only remaining existing images
-  //   formData.images.forEach((image) => {
-  //     formDataToSend.append('existingImages', image); // Server should handle these
-  //   });
-  //   console.log("Submitting form data:", formData);
-  //   try {
-  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
-  //       headers: { 'Content-Type': 'multipart/form-data' }
-  //     });
-  //     console.log("API Response:", updateProduct);
-  //     if (updateProduct.data.message === "Product updated successfully!") {
-  //       toast.success("Product updated successfully!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating product: ", error);  // Add this log to check what's happening
-  //     const errorMessage = error.response?.data?.error || "Error updating product!";
-  //     toast.error(errorMessage);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Form submit triggered");  // Log to check if this runs
-
+  
     const formDataToSend = new FormData();
-
-    // Append all fields except images
+  
+    // Append all fields except images, color, and size
     for (let key in formData) {
-      if (key !== 'images') {
+      if (key !== 'images' && key !== 'color' && key !== 'size') {
         formDataToSend.append(key, formData[key]);
       }
     }
-
+  
+    // Append color array
+    formData.color.forEach((color) => {
+      formDataToSend.append('color[]', color);
+    });
+  
+    // Append size array
+    formData.size.forEach((size) => {
+      formDataToSend.append('size[]', size);
+    });
+  
     // Append new images if any
     newImages.forEach((image) => {
       formDataToSend.append('images', image);
     });
-
+  
     // Send only remaining existing images
     formData.images.forEach((image) => {
       formDataToSend.append('existingImages', image);
     });
-
-    console.log([...formDataToSend.entries()]);  // Log to see the actual form data
-
+  
     try {
       const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      console.log("API Response:", updateProduct);  // Log API response
+  
       if (updateProduct.data.message === "Product updated successfully!") {
         toast.success("Product updated successfully!");
+        await fetchProductById();
       }
     } catch (error) {
-      console.error("Error updating product:", error);
       const errorMessage = error.response?.data?.error || "Error updating product!";
       toast.error(errorMessage);
     }
@@ -174,10 +144,42 @@ function UpdateProduct() {
     setEditing(true);
   };
 
-
-  // Back to products page
   const goBack = () => {
     navigate('/dashboard/products');
+  };
+
+  const removeExistingImage = (index) => {
+    const updatedImages = formData.images.filter((_, i) => i !== index);
+    setFormData({ ...formData, images: updatedImages });
+  };
+
+  const removeNewImage = (index) => {
+    const updatedNewImages = newImages.filter((_, i) => i !== index);
+    setNewImages(updatedNewImages);
+  };
+
+  const addColor = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      color: [...prevState.color, '']
+    }));
+  };
+
+  const removeColor = (index) => {
+    const updatedColors = formData.color.filter((_, i) => i !== index);
+    setFormData((prevState) => ({ ...prevState, color: updatedColors }));
+  };
+
+  const addSize = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      size: [...prevState.size, '']
+    }));
+  };
+
+  const removeSize = (index) => {
+    const updatedSizes = formData.size.filter((_, i) => i !== index);
+    setFormData((prevState) => ({ ...prevState, size: updatedSizes }));
   };
 
   return (
@@ -261,32 +263,85 @@ function UpdateProduct() {
                   />
                 </div>
 
-                {/* Color */}
+                {/* Colors */}
                 <div className="flex flex-col">
-                  <label htmlFor="color" className="mb-2 text-sm font-semibold text-gray-700">Color:</label>
-                  <input
-                    type="text"
-                    id="color"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
-                    disabled={!editing}
-                  />
+                  <label htmlFor="color" className="mb-2 text-sm font-semibold text-gray-700">Colors:</label>
+                  {formData.color.map((color, index) => (
+                    <div key={index} className="relative flex items-center mb-2">
+                      <input
+                        type="text"
+                        id={`color-${index}`}
+                        name="color"
+                        value={color}
+                        onChange={(e) => handleInputChange(e, index, 'color')}
+                        className={`text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                        disabled={!editing}
+                      />
+                      {editing && (
+                        <>
+                          {/* Add color button */}
+                          {index === formData.color.length - 1 && (
+                            <button
+                              type="button"
+                              className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs"
+                              onClick={addColor}
+                            >
+                              <FontAwesomeIcon icon={faPlus} />
+                            </button>
+                          )}
+                          {/* Remove color button */}
+                          <button
+                            type="button"
+                            className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm"
+                            onClick={() => removeColor(index)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
-                {/* Size */}
+                {/* Sizes */}
                 <div className="flex flex-col">
-                  <label htmlFor="size" className="mb-2 text-sm font-semibold text-gray-700">Size:</label>
-                  <input
-                    type="text"
-                    id="size"
-                    name="size"
-                    value={formData.size}
-                    onChange={handleInputChange}
-                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
-                    disabled={!editing}
-                  />
+                  <label htmlFor="size" className="mb-2 text-sm font-semibold text-gray-700">Sizes:</label>
+                  {formData.size.map((size, index) => (
+                    <div key={index} className="relative flex items-center mb-2">
+                      <input
+                        type="text"
+                        id={`size-${index}`}
+                        name="size"
+                        value={size}
+                        onChange={(e) => handleInputChange(e, index, 'size')}
+                        className={`text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                        disabled={!editing}
+                      />
+                      {editing && (
+                        <>
+                          {/* Add size button */}
+                          {index === formData.size.length - 1 && (
+                            <button
+                              type="button"
+                              className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs"
+                              onClick={addSize}
+                            >
+                              <FontAwesomeIcon icon={faPlus} />
+                            </button>
+                          )}
+                          {/* Remove size button */}
+                          <button
+                            type="button"
+                            className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm"
+                            onClick={() => removeSize(index)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
                 {/* Tags */}
@@ -354,15 +409,18 @@ function UpdateProduct() {
                 {/* Status */}
                 <div className="flex flex-col">
                   <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Status:</label>
-                  <input
-                    type="text"
+                  <select
                     id="status"
                     name="status"
                     value={formData.status}
                     onChange={handleInputChange}
                     className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                     disabled={!editing}
-                  />
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Available">Available</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                  </select>
                 </div>
 
                 {/* Price 1 */}
@@ -418,7 +476,7 @@ function UpdateProduct() {
 
                   {/* Preview New Images */}
                   <div className="mt-5 mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-                  {newImages.map((image, index) => (
+                    {newImages.map((image, index) => (
                       <div key={index} className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
                         <img src={URL.createObjectURL(image)} alt="New Product" className="flex object-fit w-full h-full" />
                         <button
@@ -464,6 +522,6 @@ function UpdateProduct() {
       </main>
     </div>
   );
-}
+};
 
 export default UpdateProduct;

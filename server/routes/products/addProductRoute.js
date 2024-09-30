@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import Product from '../../models/productModel.js';
+import moment from 'moment';
 
 const router = express.Router();
 
@@ -9,16 +10,22 @@ const storage = multer.diskStorage({
     cb(null, '../client/public/uploads/product_images/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
+    // Generate a readable timestamp: YYYY-MM-DD_HH-mm-ss
+    const timestamp = moment().format('YYYY-MM-DD');
+    const fileName = `${timestamp}-${file.originalname}`;
+    cb(null, fileName);
   },
 });
 
-// const upload = multer({
-//   storage: multer.memoryStorage(),
-// }).fields([
-//   { name: 'images', maxCount: 6 },
-//   { name: 'status' },  // Add 'status' as a field here
-// ]);
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, '../client/public/uploads/product_images/');
+//   },
+//   filename: (req, file, cb) => {
+//     // cb(null, Date.now() + '-' + file.originalname);
+//     cb(null, file.originalname);
+//   },
+// });
 
 const upload = multer({
   storage,

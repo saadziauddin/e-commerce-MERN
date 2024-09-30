@@ -3,17 +3,31 @@ import bcrypt from 'bcrypt';
 import multer from 'multer';
 import User from '../../models/userModel.js';
 import Role from '../../models/roleModel.js';
+import moment from 'moment';
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, '../client/public/uploads/user_images/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    }
+  destination: (req, file, cb) => {
+    cb(null, '../client/public/uploads/user_images/');
+  },
+  filename: (req, file, cb) => {
+    // Generate a readable timestamp: YYYY-MM-DD_HH-mm-ss
+    const timestamp = moment().format('YYYY-MM-DD');
+    const fileName = `${timestamp}-${file.originalname}`;
+    cb(null, fileName);
+  },
 });
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, '../client/public/uploads/user_images/');
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.originalname);
+//     }
+// });
+
 const upload = multer({
     storage,
     limits: { fileSize: 1024 * 1024 * 5 },

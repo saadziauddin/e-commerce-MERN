@@ -3,22 +3,20 @@ import './config.js';
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
-    description: { type: String, trim: true },
-    price1: { type: Number, required: true },
-    price2: { type: Number },
-    discount: { type: Number, default: 0 },
-    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
     color: [
         { type: String, required: true }
     ],
     size: [
         { type: String, required: true }
     ],
-    tags: [
-        { type: String, trim: true }
-    ],
-    category: { type: String, trim: true },
-    stock: { type: Number, default: 0 },
+    tags: { type: String, trim: true },
+    stock: { type: Number, required: true },
+    category: { type: String, required: true, trim: true },
+    discount: { type: Number },
+    status: { type: String, required: true, enum: ['Available', 'Out of Stock'] },
+    description: { type: String, required: true, trim: true },
+    price1: { type: Number, required: true },
+    price2: { type: Number },
     images: [
         { imageName: String, imagePath: String }
     ],

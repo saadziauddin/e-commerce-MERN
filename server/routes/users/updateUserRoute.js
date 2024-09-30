@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
 import mongoose from 'mongoose';
-import User from '../../models/user.js';
+import User from '../../models/userModel.js';
 import fs from 'fs';
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../../models/user.js';
+import User from '../../models/userModel.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';

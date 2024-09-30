@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import Category from '../../models/category.js';
+import Category from '../../models/categoryModel.js';
 
 const router = express.Router();
 

@@ -49,7 +49,7 @@ function Categories() {
       toast.error('Error deleting category, try checking browser console.');
     }
   };
-  
+
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
@@ -80,7 +80,7 @@ function Categories() {
             <div className="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
               <div className="flex justify-between items-center p-6 pb-0 mb-3 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                 <h6 className="text-xl font-semibold">Categories</h6>
-                
+
                 <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addCategory}>
                   Add Category
                 </button>
@@ -93,14 +93,14 @@ function Categories() {
                       {
                         name: 'Image',
                         selector: row => {
-                          if(row.image && row.image.length > 0){
-                            const image = `/uploads/category_images/${row.image[0].imageName}`;
-                            return (
-                              <div><img src={image} alt="category_image" className="h-10 w-10 rounded-full" /></div>
-                            );
-                          } else {
+                          const hasImage = Array.isArray(row.image) && row.image.length > 0 && row.image[0].imageName;
+                          return hasImage ? (
+                            <div className="h-10 w-10 rounded-full">
+                              <img src={`/uploads/category_images/${row.image[0].imageName}`} alt="" />
+                            </div>
+                          ) : (
                             "No Image"
-                          }
+                          );
                         },
                         sortable: false,
                         center: true.toString(),
@@ -116,11 +116,11 @@ function Categories() {
                         name: 'Description',
                         selector: row => row.description,
                         sortable: true,
-                        wrap: true,
+                        // wrap: true,
                       },
                       {
                         name: 'Date Added',
-                        selector: row => row.dateAdded,
+                        selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
                         sortable: true,
                         wrap: true,
                       },
@@ -136,7 +136,7 @@ function Categories() {
                             </button>
                           </div>
                         ),
-                        sortable: false,
+                        sortable: true,
                         center: true.toString(),
                         wrap: true,
                       }

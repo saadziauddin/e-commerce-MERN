@@ -72,8 +72,7 @@ function UpdateProduct() {
 
   const handleInputChange = (e, index, field) => {
     const { value } = e.target;
-  
-    // Handle updates for color or size arrays
+
     if (field === 'color' || field === 'size') {
       const updatedArray = [...formData[field]];
       updatedArray[index] = value;
@@ -82,53 +81,52 @@ function UpdateProduct() {
         [field]: updatedArray,
       });
     } else {
-      // Handle other fields
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     }
   };
-  
+
   const handleImageChange = (e) => {
     setNewImages([...newImages, ...e.target.files]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formDataToSend = new FormData();
-  
+
     // Append all fields except images, color, and size
     for (let key in formData) {
       if (key !== 'images' && key !== 'color' && key !== 'size') {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     // Append color array
     formData.color.forEach((color) => {
       formDataToSend.append('color[]', color);
     });
-  
+
     // Append size array
     formData.size.forEach((size) => {
       formDataToSend.append('size[]', size);
     });
-  
+
     // Append new images if any
     newImages.forEach((image) => {
       formDataToSend.append('images', image);
     });
-  
+
     // Send only remaining existing images
     formData.images.forEach((image) => {
       formDataToSend.append('existingImages', image);
     });
-  
+
     try {
       const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-  
+
       if (updateProduct.data.message === "Product updated successfully!") {
         toast.success("Product updated successfully!");
         await fetchProductById();
@@ -494,13 +492,49 @@ function UpdateProduct() {
               </form>
 
               {/* Existing Images Section */}
-              <div className="bg-white">
+              {/* <div className="bg-white">
                 <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                   {formData.images.length > 0 ? (
                     formData.images.map((image, index) => (
                       <div key={index} className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
                         <img src={`/uploads/product_images/${image.imagePath.split('\\').pop()}`} alt="product_image" className="flex object-fit w-full h-full" />
+                        <img
+                          src={`/uploads/product_images/${image.imageName}`}
+                          alt="product_image"
+                          className="flex object-fit w-full h-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeExistingImage(index)}
+                          className={`absolute top-1 right-1 bg-gray-300 text-slate-700 p-0.5 rounded-lg w-4 sm:w-5 h-4 sm:h-5 text-xs sm:text-sm hover:font-semibold flex items-center justify-center hover:bg-gray-200 ease-in-out ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal' : ''}`}
+                          disabled={!editing}
+                        >
+                          x
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No images available.</p>
+                  )}
+                </div>
+              </div> */}
+
+              {/* Existing Images Section */}
+              {/* <div className="bg-white">
+                <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+                  {formData.images.length > 0 ? (
+                    formData.images.map((image, index) => (
+                      <div
+                        key={index}
+                        className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out"
+                      >
+                        <img
+                          src={`/uploads/product_images/${image.imageName}`}
+                          alt={`product_image_${index}`}
+                          className="flex object-cover w-full h-full"
+                        />
                         <button
                           type="button"
                           onClick={() => removeExistingImage(index)}
@@ -515,7 +549,45 @@ function UpdateProduct() {
                     <p className="text-gray-500">No images available.</p>
                   )}
                 </div>
+              </div> */}
+
+              {/* Existing Images Section */}
+              <div className="bg-white">
+                <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+                  {formData.images.length > 0 ? (
+                    formData.images.map((image, index) => {
+                      const imagePath = `/uploads/product_images/${image.imageName}`;
+                      console.log(imagePath);
+
+                      return (
+                        <div
+                          key={index}
+                          className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out"
+                        >
+                          <img
+                            src={imagePath}
+                            alt={`product_image_${index}`}
+                            className="flex object-cover w-full h-full"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className={`w-[30px] h-[30px] flex items-center justify-center absolute top-1 right-1 bg-gray-300 text-slate-700 p-1 rounded hover:bg-gray-200 hover:font-semibold transition-colors duration-200 ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal disabled:' : ''}`}
+                            disabled={!editing}
+                          >
+                            x
+                          </button>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-gray-500">No images available.</p>
+                  )}
+                </div>
               </div>
+
+
             </div>
           </div>
         </div>

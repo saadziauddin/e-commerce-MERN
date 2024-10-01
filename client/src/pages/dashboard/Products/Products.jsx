@@ -81,7 +81,6 @@ function Products() {
             <div className="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
               <div className="flex justify-between items-center p-6 pb-0 mb-3 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                 <h6 className="text-xl font-semibold">Products</h6>
-                
                 <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addProduct}>
                   Add Product
                 </button>
@@ -91,53 +90,25 @@ function Products() {
                 <div className="p-0 overflow-x-auto">
                   <DataTable
                     columns={[
-                      {
-                        name: 'Images',
-                        selector: row => {
-                          if (Array.isArray(row.images) && row.images.length > 0) {
-                            const image = `/uploads/product_images/${row.images[0].imageName}`;
-                            return <div><img src={image} alt="product_image" className="h-10 w-10 rounded-full" /></div>;
-                          } else {
-                            return "No Image";
-                          }
-                        },
-                        sortable: false,
-                        center: true,
-                        wrap: true,
-                      },                                           
+                      // {
+                      //   name: 'Images',
+                      //   selector: row => {
+                      //     const hasImage = Array.isArray(row.images) && row.images.length > 0 && row.images[0].imageName;
+                      //     return hasImage ? (
+                      //       <div className="h-10 w-10 rounded-full">
+                      //         <img src={`/uploads/product_images/${row.images[0].imageName}`}/>
+                      //       </div>
+                      //     ) : (
+                      //       "No Image"
+                      //     );
+                      //   },
+                      //   sortable: false,
+                      //   center: true.toString(),
+                      //   wrap: true,
+                      // },                                      
                       {
                         name: 'Name',
                         selector: row => row.name,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Description',
-                        selector: row => row.description,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Price 1',
-                        selector: row => row.price1,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Price 2',
-                        selector: row => row.price2,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Discount',
-                        selector: row => row.discount,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Status',
-                        selector: row => row.status,
                         sortable: true,
                         wrap: true,
                       },
@@ -159,7 +130,13 @@ function Products() {
                         selector: row => row.tags,
                         sortable: true,
                         wrap: true,
-                      },                      
+                      },
+                      {
+                        name: 'Stock',
+                        selector: row => row.stock,
+                        sortable: true,
+                        wrap: true,
+                      },                     
                       {
                         name: 'Category',
                         selector: row => row.category,
@@ -167,10 +144,34 @@ function Products() {
                         wrap: true,
                       },
                       {
-                        name: 'Stock',
-                        selector: row => row.stock,
+                        name: 'Discount',
+                        selector: row => row.discount,
                         sortable: true,
                         wrap: true,
+                      },
+                      {
+                        name: 'Status',
+                        selector: row => row.status,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Price 1',
+                        selector: row => row.price1,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Price 2',
+                        selector: row => row.price2,
+                        sortable: true,
+                        wrap: true,
+                      },
+                      {
+                        name: 'Description',
+                        selector: row => row.description,
+                        sortable: true,
+                        // wrap: true,
                       },
                       {
                         name: 'Date Added',

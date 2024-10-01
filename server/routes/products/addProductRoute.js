@@ -1,31 +1,39 @@
 import express from 'express';
 import multer from 'multer';
 import Product from '../../models/productModel.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import moment from 'moment';
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '../client/public/uploads/product_images/');
-  },
-  filename: (req, file, cb) => {
-    // Generate a readable timestamp: YYYY-MM-DD_HH-mm-ss
-    const timestamp = moment().format('YYYY-MM-DD');
-    const fileName = `${timestamp}-${file.originalname}`;
-    cb(null, fileName);
-  },
-});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
 //     cb(null, '../client/public/uploads/product_images/');
 //   },
 //   filename: (req, file, cb) => {
-//     // cb(null, Date.now() + '-' + file.originalname);
-//     cb(null, file.originalname);
+//     const timestamp = moment().format('DD-MM-YYYY');
+//     const fileName = `${timestamp}-${file.originalname}`;
+//     cb(null, fileName);
 //   },
 // });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '../../../client/public/uploads/product_images/');
+    cb(null, uploadPath); // This is an absolute path, ensuring correct file saving.
+  },
+  filename: (req, file, cb) => {
+    const timestamp = moment().format('YYYY-MM-DD'); // Adding date in human-readable format
+    const fileName = `${timestamp}-${file.originalname}`;
+    cb(null, fileName);
+  },
+});
+
 
 const upload = multer({
   storage,

@@ -26,4 +26,24 @@ router.get('/api/fetchProductById/:productId', async (req, res) => {
     }
 });
 
+// Fetch products whose category = New Arrivals
+router.get('/api/fetchProductsByCategory/newArrivals', async (req, res) => {
+    try {
+        const products = await Product.find({category: 'New Arrivals'});
+        return res.status(200).json({products});
+    } catch (error) {
+        console.log("Error fetching products whose category = New Arrivals: ", error);
+    }
+});
+
+// Fetch products whose category = Best Sellers
+router.get('/api/fetchProductsByCategory/bestSellers', async (req, res) => {
+    try {
+        const products = await Product.find({category: 'Best Sellers'});
+        return res.status(200).json({products});
+    } catch (error) {
+        console.log("Error fetching products whose category = Best Sellers: ", error);
+    }
+});
+
 export default router;

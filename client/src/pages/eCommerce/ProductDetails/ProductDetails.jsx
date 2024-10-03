@@ -1,218 +1,259 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
+// import { Carousel } from 'react-responsive-carousel';
+// import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../../redux/orebiSlice";
+import { addToCart } from "../../../redux/reduxSlice";
+import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { productImg1, productImg2, productImg3, productImg4, productImg5, productImg6, productImg7, productImg8, productImg9 } from '../../../assets/images/website_images/index';
+import { FaExpand, FaTimes, FaChevronUp, FaChevronDown, FaTruckMonster, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 
-const ProductDetails = () => {
-  const tabs = [
-    {
-      id: "productOptions",
-      label: "Product Options",
-    },
-    {
-      id: "Description",
-      label: "Description",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis.",
-    },
-    {
-      id: "Video",
-      label: "Video",
-      content: (
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/watch?v=6e0yIRDVPlA&list=RD6e0yIRDVPlA&start_radio=1"
-          title="YouTube Video"
-          frameBorder="0"
-          allowFullScreen
-        ></iframe>
-      ),
-    },
-    // Add more tabs as needed
-  ];
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const [prevLocation, setPrevLocation] = useState("");
-  const [productInfo, setProductInfo] = useState([]);
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-  };
-  const highlightStyle = {
-    color: "#d0121a", // Change this to the desired color
-    fontWeight: "bold", // Change this to the desired font weight
-  };
-  const renderDescription = () => {
-    if (!productInfo.des) {
-      return null; // or handle accordingly if product.des is not defined
-    }
+function ProductDetails() {
+    const [quantity, setQuantity] = useState(1);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const [prevLocation, setPrevLocation] = useState("");
+    const [productInfo, setProductInfo] = useState([]);
+    const [scrollPosition, setScrollPosition] = useState(0);
 
-    const description = productInfo.des.split(/:(.*?)-/).map((part, index) => {
-      return (
-        <span key={index} style={index % 2 === 1 ? highlightStyle : {}}>
-          {part}
-        </span>
-      );
-    });
+    const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5, productImg6, productImg7, productImg8, productImg9];
 
-    return <>{description}</>;
-  };
-  useEffect(() => {
-    setProductInfo(location.state.item);
-    setPrevLocation(location.pathname);
-  }, [location, productInfo.ficheTech]);
+    useEffect(() => {
+        setProductInfo(location.state.item);
+        setPrevLocation(location.pathname);
+    }, [location]);
 
-  return (
-    <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
-      <div className="max-w-container mx-auto px-4">
-        <div className="xl:-mt-10 -mt-7">
-          <Breadcrumbs title="" prevLocation={prevLocation} />
-        </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full -mt-5 xl:-mt-8 pb-10 bg-gray-100 p-4 card">
-          <div className="h-full xl:col-span-2">
-            <img
-              className="w-full h-full object-cover rounded-lg shadow-md"
-              src={productInfo.img}
-              alt={productInfo.img}
-            />
-          </div>
-          <div className="h-full w-full md:col-span-2 xl:col-span-4 xl:px-4 flex flex-col gap-6 justify-center">
-            <div className="flex flex-col gap-5">
-              <h2 className="text-4xl font-semibold">
-                {productInfo.productName}
-              </h2>
-              <p className="text-2xl font-semibold">
-                {productInfo.price} Dt
-                <span className="text-xl font-semibold line-through ml-2">
-                  540
-                </span>
-                <span className="text-xs ml-2 inline-flex items-center px-3 py-1 rounded-full bg-green-600 text-white">
-                  Save 100
-                </span>
-              </p>
-              <hr />
-              <p className="text-base text-gray-600">{renderDescription()}</p>
+    const handleQuantityChange = (event) => {
+        const value = parseInt(event.target.value, 10);
+        setQuantity(value > 0 ? value : 1);
+    };
 
-              <div className="flex items-center">
-                <p className="text-sm mr-2"> leave a review </p>
+    const handleAddCart = () => {
+        dispatch(addToCart({ ...productInfo, quantity }));
+        setIsModalOpen(false);
+    };
 
-                {/* Rating stars */}
-                {Array(4)
-                  .fill(0)
-                  .map((_, i) => (
-                    <svg
-                      key={i}
-                      className="w-4 h-4 text-yellow-300 ms-1"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 22 20"
-                    >
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                    </svg>
-                  ))}
-                <svg
-                  className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 20"
-                >
-                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
-              </div>
+    const handleImageClick = (index) => {
+        setSelectedImageIndex(index);
+        setIsModalOpen(true);
+    };
 
-              <p className="text-base text-green-600 font-medium">En Stock</p>
-              <p className="font-medium text-lg">
-                <span className="font-normal">Colors:</span> {productInfo.color}
-              </p>
-              <button
-                onClick={() =>
-                  dispatch(
-                    addToCart({
-                      _id: productInfo.id,
-                      name: productInfo.productName,
-                      quantity: 1,
-                      image: productInfo.img,
-                      badge: productInfo.badge,
-                      price: productInfo.price,
-                      colors: productInfo.color,
-                    })
-                  )
-                }
-                className="w-full py-4 bg-blue-500 hover:bg-blue-600 duration-300 text-white text-lg font-titleFont"
-              >
-                Add to Cart
-              </button>
-              <p className="font-normal text-sm">
-                <span className="text-base font-medium"> Categories:</span>{" "}
-                Spring collection, Streetwear, Women Tags: featured SKU: N/A
-              </p>
+    const handleScrollThumbnails = (direction) => {
+        const maxScrollPosition = (productImages.length - 3) * 60; // Height of 3 visible thumbnails
+        const step = 60; // Scroll by 60px (height of each thumbnail)
+
+        if (direction === 'up') {
+            setScrollPosition((prev) => Math.max(prev - step, 0));
+        } else if (direction === 'down') {
+            setScrollPosition((prev) => Math.min(prev + step, maxScrollPosition));
+        }
+    };
+
+    return (
+        <div className="max-w-container px-4 md:overflow-hidden sm:overflow-hidden">
+            {/* Breadcrumb */}
+            <div className="xl:mt-0 -mt-0 pl-5">
+                <Breadcrumbs title="" prevLocation={prevLocation} />
             </div>
-          </div>
-        </div>
 
-        <div>
-          <div className="space-x-4 pt-4">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`py-2 px-4 rounded-t-lg ${activeTab === tab.id
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
-                  }`}
-                onClick={() => handleTabClick(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="my-4 card">
-            {tabs.map((tab) => (
-              <div
-                key={tab.id}
-                className={activeTab === tab.id ? "" : "hidden"}
-              >
-                {tab.id === "productOptions" && productInfo.ficheTech ? (
-                  <div>
-                    <table className="table-auto w-full">
-                      <tbody>
-                        {productInfo.ficheTech.map((row) => (
-                          <tr key={row.label} className="bg-gray-100">
-                            <td className="border px-4 py-2 font-semibold">
-                              {row.label}
-                            </td>
-                            <td className="border px-4 py-2">{row.value}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    {/* <div className="my-4 flex justify-end">
-                      <button className="inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-500 hover:bg-blue-600 text-white font-bodyFont">
-                        <FaDownload className="h-5 w-5 mr-2 text-white" />
-                        <a
-                          href={productInfo.pdf}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white"
+            {/* Columns */}
+            <div className="max-w-container grid grid-cols-1 md:grid-cols-2">
+
+                {/* Image section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 cursor-pointer">
+
+                    {/* Vertical Thumbnails */}
+                    <div className="flex flex-col w-[35%] h-[35%] overflow-hidden overflow-y-scroll scrollbar-hide">
+                        <div
+                            className="space-y-2 transition-transform duration-300"
+                            style={{ transform: `translateY(-${scrollPosition}px)` }}
                         >
-                          Download PDF
-                        </a>{" "}
-                      </button>
-                    </div> */}
-                  </div>
-                ) : (
-                  <p>{tab.content}</p>
-                )}
-              </div>
-            ))}
-          </div>
+                            {productImages.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Thumbnail ${index + 1}`}
+                                    className={`w-24 h-36 object-cover cursor-pointer rounded-lg border-2 transition-all duration-300 hover:border-[#7b246d] ${selectedImageIndex === index ? 'border-[#7b246d]' : 'border-transparent'}`}
+                                    onClick={() => setSelectedImageIndex(index)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Main Image */}
+                    <div className="flex flex-col relative rounded-lg overflow-hidden mr-10 ">
+                        <div className="group">
+                            <img
+                                src={productImages[selectedImageIndex]}
+                                alt={`Product Image ${selectedImageIndex + 1}`}
+                                className="rounded-lg object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-2"
+                                onClick={() => setIsModalOpen(true)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Image Viewer Modal with Zoom */}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-lg flex items-center justify-center z-50">
+                            <div className="relative">
+                                {/* Zoomable Image */}
+                                <div className="relative group">
+                                    <img
+                                        src={productImages[selectedImageIndex]}
+                                        alt="Large View"
+                                        className="w-full h-full max-w-3xl max-h-[95vh] object-contain transition-transform duration-300"
+                                    />
+                                </div>
+
+                                {/* Close Button */}
+                                <button
+                                    className="fixed top-4 right-4 bg-white text-black rounded-full p-4 shadow-lg z-50 hover:bg-gray-200 transition"
+                                    onClick={() => setIsModalOpen(false)}
+                                >
+                                    <FontAwesomeIcon icon={FaTimes} size="2x" />
+                                </button>
+
+                                {/* Side Navigators */}
+                                <button
+                                    className="fixed left-2 top-1/2 transform -translate-y-1/2 text-white bg-white bg-opacity-25 rounded-full p-3 hover:text-black hover:bg-opacity-75 transition focus:ring-2 focus:ring-blue-500"
+                                    onClick={() => handleImageClick((selectedImageIndex - 1 + productImages.length) % productImages.length)}
+                                >
+                                    &lt;
+                                </button>
+                                <button
+                                    className="fixed right-2 top-1/2 transform -translate-y-1/2 text-white bg-white bg-opacity-25 rounded-full p-3 hover:text-black hover:bg-opacity-75 transition focus:ring-2 focus:ring-blue-500"
+                                    onClick={() => handleImageClick((selectedImageIndex + 1) % productImages.length)}
+                                >
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Product Info Section */}
+                <div className="flex flex-col justify-normal">
+                    {/* Product Name */}
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">3 Piece Embroidered Linen Suit</h1>
+                        <p className="text-sm uppercase text-gray-500 font-semibold mb-2">DW-W24-20-GREEN-EX SMALL | IN STOCK</p>
+                        <p className="text-2xl font-bold text-gray-900 mb-2">PKR 21,590</p>
+                        <p className="text-red-600 text-xs">GST Inclusive</p>
+                    </div>
+
+                    {/* Color & Size Options */}
+                    <div className="my-4">
+                        <div className="flex items-center gap-4 mb-4">
+                            <p className="text-lg font-semibold text-gray-800">Color:</p>
+                            <div className="flex gap-2">
+                                <div className="w-6 h-6 rounded-full bg-purple-500 cursor-pointer border-2 border-gray-200 hover:border-gray-400"></div>
+                                <div className="w-6 h-6 rounded-full bg-green-500 cursor-pointer border-2 border-gray-200 hover:border-gray-400"></div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <p className="text-lg font-semibold text-gray-800">Size:</p>
+                            <div className="flex gap-2">
+                                {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
+                                    <button key={size} className="bg-gray-100 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-md">
+                                        {size}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quantity Selector */}
+                    <div className="flex items-center gap-4 mb-6">
+                        <p className="text-lg font-semibold text-gray-800">Qty</p>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
+                            >
+                                -
+                            </button>
+                            <input
+                                type="number"
+                                value={quantity}
+                                onChange={handleQuantityChange}
+                                className="w-16 text-center bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded-md"
+                            />
+                            <button
+                                onClick={() => setQuantity(quantity + 1)}
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-4 mb-4">
+                        <button
+                            onClick={handleAddCart}
+                            className="w-full bg-[#7b246d] text-white hover:bg-gray-500 py-2 px-6 rounded-lg font-semibold transition-all"
+                        >
+                            Add to Cart
+                        </button>
+                        <button className="w-full bg-gray-200 hover:bg-gray-300 text-[#7b246d] py-2 px-6 rounded-lg font-semibold transition-all">
+                            Buy Now
+                        </button>
+                    </div>
+
+                    <p className="text-gray-500 mt-3">Weight: 1.25 Kg</p>
+                    <p className="text-red-500">Disclaimer: Product color may vary slightly due to photographic lighting sources or monitor settings.</p>
+                </div>
+            </div>
+
+            {/* Product Description */}
+            <div className="mb-10 mt-4">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {/* Angrakha */}
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <h3 className="text-md text-gray-900 font-semibold">Angrakha</h3>
+                        <ul className="text-gray-700 text-sm mt-1">
+                            <li>Embroidered Neckline With Tassel Detailing</li>
+                            <li>Digital Printed Front With Embroidery</li>
+                            <li>Full Sleeves With Embroidery & Pearl Drops</li>
+                            <li>Embroidered Organza Border</li>
+                            <li>Digital Printed Back</li>
+                            <li>Fit: Relaxed</li>
+                            <li>Color: Pink</li>
+                            <li>Fabric: Linen</li>
+                        </ul>
+                    </div>
+
+                    {/* Trousers */}
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <h3 className="text-md text-gray-900 font-semibold">Trousers</h3>
+                        <ul className="text-gray-700 text-sm mt-1">
+                            <li>Dyed Dhaka Trousers</li>
+                            <li>Elasticated Waistband</li>
+                            <li>Fit: Relaxed</li>
+                            <li>Color: Pink</li>
+                            <li>Fabric: Linen</li>
+                        </ul>
+                    </div>
+
+                    {/* Dupatta */}
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <h3 className="text-md text-gray-900 font-semibold">Dupatta</h3>
+                        <ul className="text-gray-700 text-sm mt-1">
+                            <li>Digital Printed Organza Dupatta</li>
+                            <li>Embroidered Borders</li>
+                            <li>Fit: Relaxed</li>
+                            <li>Color: Pink</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
 
 export default ProductDetails;

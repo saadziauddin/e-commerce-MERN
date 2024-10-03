@@ -210,7 +210,7 @@ function AddProduct() {
                         type="text"
                         value={color}
                         onChange={(e) => handleInputChange(e, index, 'color')}
-                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                        className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                       />
                       {index === formData.color.length - 1 && (
                         <button
@@ -242,7 +242,7 @@ function AddProduct() {
                         type="text"
                         value={size}
                         onChange={(e) => handleInputChange(e, index, 'size')}
-                        className="text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                        className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                       />
                       {index === formData.size.length - 1 && (
                         <button

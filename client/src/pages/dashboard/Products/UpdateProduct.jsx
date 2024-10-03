@@ -86,9 +86,22 @@ function UpdateProduct() {
     }
   };
 
+  // const handleImageChange = (e) => {
+  //   setNewImages([...newImages, ...e.target.files]);
+  // };
+
   const handleImageChange = (e) => {
-    setNewImages([...newImages, ...e.target.files]);
+    const selectedFiles = Array.from(e.target.files);
+    const totalImages = formData.images.length + newImages.length + selectedFiles.length;
+  
+    if (totalImages > 5) {
+      toast.error('You can only upload up to 5 images!');
+      return;
+    }
+  
+    setNewImages([...newImages, ...selectedFiles]);
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,22 +114,18 @@ function UpdateProduct() {
         formDataToSend.append(key, formData[key]);
       }
     }
-
     // Append color array
     formData.color.forEach((color) => {
       formDataToSend.append('color[]', color);
     });
-
     // Append size array
     formData.size.forEach((size) => {
       formDataToSend.append('size[]', size);
     });
-
     // Append new images if any
     newImages.forEach((image) => {
       formDataToSend.append('images', image);
     });
-
     // Send only remaining existing images
     formData.images.forEach((image) => {
       formDataToSend.append('existingImages', image);
@@ -129,7 +138,25 @@ function UpdateProduct() {
 
       if (updateProduct.data.message === "Product updated successfully!") {
         toast.success("Product updated successfully!");
-        await fetchProductById();
+        setNewImages([]);
+        setEditing(false);
+
+        const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
+        const product = refetchProductsData.data.product[0];
+        setFormData({
+          name: product.name,
+          description: product.description,
+          price1: product.price1,
+          price2: product.price2,
+          color: product.color,
+          size: product.size,
+          tags: product.tags,
+          discount: product.discount,
+          status: product.status,
+          category: product.category,
+          stock: product.stock,
+          images: product.images
+        });
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Error updating product!";
@@ -146,9 +173,30 @@ function UpdateProduct() {
     navigate('/dashboard/products');
   };
 
-  const removeExistingImage = (index) => {
-    const updatedImages = formData.images.filter((_, i) => i !== index);
-    setFormData({ ...formData, images: updatedImages });
+  // const removeExistingImage = (index) => {
+  //   const updatedImages = formData.images.filter((_, i) => i !== index);
+  //   setFormData({ ...formData, images: updatedImages });
+  // };
+
+  const removeExistingImage = async (index) => {
+    const imageToRemove = formData.images[index];
+
+    try {
+      const response = await api.delete(`/api/deleteProductImage/${productId}`, {
+        data: { imageId: imageToRemove._id }
+      });
+
+      if (response.data.success) {
+        const updatedImages = formData.images.filter((_, i) => i !== index);
+        setFormData({ ...formData, images: updatedImages });
+        toast.success("Image removed successfully!");
+      } else {
+        toast.error("Failed to remove image.");
+      }
+    } catch (error) {
+      console.error("Error removing image:", error);
+      toast.error("Error removing image.");
+    }
   };
 
   const removeNewImage = (index) => {
@@ -216,14 +264,12 @@ function UpdateProduct() {
                       type="button"
                       onClick={() => setEditing(false)}
                       className="text-sm font-semibold text-gray-600 bg-gray-200 rounded-lg px-4 py-2 transition duration-300 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    // className="text-sm w-full max-w-[120px] font-semibold text-gray-600 bg-gray-200 rounded-lg px-4 py-2 transition duration-300 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       className="text-sm font-semibold text-white bg-[#7b246d] rounded-lg px-4 py-2 transition duration-300 hover:bg-[#692056] focus:outline-none focus:ring-2 focus:ring-[#7b246d]"
-                    // className="text-sm w-full max-w-[120px] font-semibold text-white bg-[#7b246d] rounded-lg px-4 py-2 transition duration-300 hover:bg-[#692056] focus:outline-none focus:ring-2 focus:ring-[#7b246d]"
                     >
                       Update Product
                     </button>
@@ -272,7 +318,7 @@ function UpdateProduct() {
                         name="color"
                         value={color}
                         onChange={(e) => handleInputChange(e, index, 'color')}
-                        className={`text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                        className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                         disabled={!editing}
                       />
                       {editing && (
@@ -313,7 +359,7 @@ function UpdateProduct() {
                         name="size"
                         value={size}
                         onChange={(e) => handleInputChange(e, index, 'size')}
-                        className={`text-sm text-gray-500 pl-3 pr-10 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                        className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                         disabled={!editing}
                       />
                       {editing && (
@@ -463,8 +509,8 @@ function UpdateProduct() {
                 </div>
 
                 {/* New Image Upload */}
-                <div className="flex flex-col md:col-span-2 lg:col-span-3">
-                  <label htmlFor="images" className="mb-1 sm:mb-2 text-xs sm:text-sm font-semibold text-gray-700">New Product Images:</label>
+                <div className="flex flex-col md:col-span-3">
+                  <label htmlFor="images" className="mb-3 text-sm font-semibold text-gray-700">New Product Images:</label>
                   <div className="relative">
                     <label className="w-full py-2 rounded-lg border border-gray-300 rounded-lg-lg flex items-center bg-white cursor-pointer pl-3 pr-5 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
                       <input onChange={handleImageChange} type="file" id="images" name="images" className="hidden" multiple disabled={!editing} />
@@ -492,8 +538,8 @@ function UpdateProduct() {
               </form>
 
               {/* Existing Images Section */}
-              {/* <div className="bg-white">
-                <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
+              <div className="">
+              <label htmlFor="images" className="mb-3 text-[15px] font-semibold text-gray-700">Existing Product Images:</label>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                   {formData.images.length > 0 ? (
                     formData.images.map((image, index) => (
@@ -518,76 +564,7 @@ function UpdateProduct() {
                     <p className="text-gray-500">No images available.</p>
                   )}
                 </div>
-              </div> */}
-
-              {/* Existing Images Section */}
-              {/* <div className="bg-white">
-                <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-                  {formData.images.length > 0 ? (
-                    formData.images.map((image, index) => (
-                      <div
-                        key={index}
-                        className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out"
-                      >
-                        <img
-                          src={`/uploads/product_images/${image.imageName}`}
-                          alt={`product_image_${index}`}
-                          className="flex object-cover w-full h-full"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeExistingImage(index)}
-                          className={`w-[30px] h-[30px] flex items-center justify-center absolute top-1 right-1 bg-gray-300 text-slate-700 p-1 rounded hover:bg-gray-200 hover:font-semibold transition-colors duration-200 ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal' : ''}`}
-                          disabled={!editing}
-                        >
-                          x
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500">No images available.</p>
-                  )}
-                </div>
-              </div> */}
-
-              {/* Existing Images Section */}
-              <div className="bg-white">
-                <h3 className="mb-2 text-sm font-semibold text-gray-700">Product Images:</h3>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-                  {formData.images.length > 0 ? (
-                    formData.images.map((image, index) => {
-                      const imagePath = `/uploads/product_images/${image.imageName}`;
-                      console.log(imagePath);
-
-                      return (
-                        <div
-                          key={index}
-                          className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out"
-                        >
-                          <img
-                            src={imagePath}
-                            alt={`product_image_${index}`}
-                            className="flex object-cover w-full h-full"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeExistingImage(index)}
-                            className={`w-[30px] h-[30px] flex items-center justify-center absolute top-1 right-1 bg-gray-300 text-slate-700 p-1 rounded hover:bg-gray-200 hover:font-semibold transition-colors duration-200 ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal disabled:' : ''}`}
-                            disabled={!editing}
-                          >
-                            x
-                          </button>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className="text-gray-500">No images available.</p>
-                  )}
-                </div>
               </div>
-
-
             </div>
           </div>
         </div>

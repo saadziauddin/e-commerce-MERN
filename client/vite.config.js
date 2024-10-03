@@ -13,6 +13,8 @@ export default defineConfig({
     loader: 'jsx',
   },
   assetsInclude: ['**/*.JPG'],
+  publicDir: 'public',
+  
   // define: {
   //   'process.env': {
   //     VITE_API_URL: JSON.stringify(env.VITE_API_URL),

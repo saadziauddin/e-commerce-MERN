@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Heading from "../Products/Heading";
-import Product from "../Products/Product";
+import Product from "../Products/ProductCard";
 import { SplOfferData } from "../../../constants";
 import { useParams } from "react-router-dom";
 
@@ -15,7 +14,7 @@ const SpecialOffers = () => {
   const catData = data.filter((item) => item.cat === category);
   return (
     <div className="w-full pb-20">
-      <Heading heading="Special Offers" />
+      <div className="text-3xl font-semibold pb-6">Special Offers</div>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lgl:grid-cols-3 xl:grid-cols-3 gap-10">
         {catData.map((data) => (
           <Product

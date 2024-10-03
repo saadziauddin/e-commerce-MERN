@@ -26,7 +26,7 @@ router.delete('/api/deleteProduct', async (req, res) => {
         if (product.images && product.images.length > 0) {
             product.images.forEach((imageObj) => {
                 if (imageObj && imageObj.imagePath) {
-                    const fullImagePath = path.join(__dirname, '../../../public', imageObj.imagePath);
+                    const fullImagePath = path.join(__dirname, '../../', imageObj.imagePath);
                     if (fs.existsSync(fullImagePath)) {
                         fs.unlink(fullImagePath, (err) => {
                             if (err) {
@@ -55,4 +55,3 @@ router.delete('/api/deleteProduct', async (req, res) => {
 });
 
 export default router;
-

@@ -13,8 +13,7 @@ import Home from "./pages/ecommerce/Home/Home";
 import Offer from "./pages/ecommerce/Offer/Offer";
 import Payment from "./pages/ecommerce/payment/Payment";
 import ProductDetails from "./pages/ecommerce/ProductDetails/ProductDetails";
-import ProductDetails1 from "./pages/ecommerce/ProductDetails/ProductDetails1";
-import Shop from "./pages/ecommerce/Shop/Shop";
+import Product from "./pages/ecommerce/Products/Products";
 import SignIn from "./pages/ecommerce/Account/SignIn";
 import SignUp from "./pages/ecommerce/Account/SignUp";
 import Reset from "./pages/ecommerce/Account/Reset";
@@ -71,15 +70,15 @@ const router = createBrowserRouter(
     <Route>
       {/* Website Routes */}
       <Route path="/" element={<Layout />}>
-        {/* ==================== Header Navlink Start here =================== */}
+        {/* Header Navlink Start */}
         <Route index element={<Home />}></Route>
-        <Route path="/products" element={<Shop />}></Route>
+        <Route path="/products" element={<Product />}></Route>
         <Route path="/about" element={<About />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
-        {/* ==================== Header Navlink End here ===================== */}
+        {/* Header Navlink End */}
+        
         <Route path="/category/:category" element={<Offer />}></Route>
-        {/* <Route path="/product/:_id" element={<ProductDetails />}></Route> */}
-        <Route path="/product/:_id" element={<ProductDetails1 />}></Route>
+        <Route path="/product/:_id" element={<ProductDetails />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/paymentgateway" element={<Payment />}></Route>
       </Route>
@@ -89,24 +88,19 @@ const router = createBrowserRouter(
       <Route path="/reset" element={<Reset />}></Route>
       {/* Dashboard Routes */}
       <Route path="/dashboard/home" element={<DashboardHome />}></Route>
-
       {/* User management routes */}
       <Route path="/dashboard/userManagement" element={<UserManagement />}></Route>
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<UserProfile />}></Route>
-
       {/* Categories management routes */}
       <Route path="/dashboard/categories" element={<Categories />}></Route>
       <Route path="/dashboard/categories/addCategory" element={<AddCategory />}></Route>
       <Route path="/dashboard/categories/updateCategory/:categoryId" element={<UpdateCategory />}></Route>
-
       {/* Products management routes */}
       <Route path="/dashboard/products" element={<Products />}></Route>
       <Route path="/dashboard/products/addProduct" element={<AddProduct />}></Route>
       <Route path="/dashboard/products/updateProduct/:productId" element={<UpdateProduct />}></Route>
-
       {/* Orders management routes */}
       <Route path="/dashboard/orders" element={<Orders />}></Route>
-      
       {/* Sales management routes */}
       <Route path="/dashboard/sales" element={<Sales />}></Route>
     </Route>

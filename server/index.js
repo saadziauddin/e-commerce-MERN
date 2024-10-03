@@ -73,9 +73,14 @@ app.put('/api/updateProduct/:productId', updateProductRouter);
 import deleteProductRouter from './routes/products/deleteProductRoute.js';
 app.delete('/api/deleteProduct', deleteProductRouter);
 
+import deleteProductImageRouter from './routes/products/deleteProductImageRoute.js';
+app.delete('/api/deleteProductImage/:ProductId', deleteProductImageRouter);
+
 import fetchProductsRouter from './routes/products/fetchProductsRoute.js';
 app.get('/api/fetchProducts', fetchProductsRouter);
 app.get('/api/fetchProductById/:productId', fetchProductsRouter);
+app.get('/api/fetchProductsByCategory/newArrivals', fetchProductsRouter);
+app.get('/api/fetchProductsByCategory/bestSellers', fetchProductsRouter);
 
 // ======================= User Routes =================================
 import updateUserRouter from './routes/users/updateUserRoute.js';

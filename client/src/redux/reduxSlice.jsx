@@ -8,8 +8,8 @@ const initialState = {
   checkedCategorys: [],
 };
 
-export const orebiSlice = createSlice({
-  name: "orebi",
+export const reduxSlice = createSlice({
+  name: "redux",
   initialState,
   reducers: {
     addToCart: (state, action) => {
@@ -96,5 +96,5 @@ export const {
   resetCart,
   toggleBrand,
   toggleCategory,
-} = orebiSlice.actions;
-export default orebiSlice.reducer;
+} = reduxSlice.actions;
+export default reduxSlice.reducer;

@@ -19,7 +19,6 @@ function Products() {
     const fetchProducts = async () => {
       try {
         const response = await api.get('/api/fetchProducts');
-        console.log("Fetched products: ", response.data);
         setfetchProductsData(response.data);
       } catch (error) {
         console.log("Error fetching products: ", error);

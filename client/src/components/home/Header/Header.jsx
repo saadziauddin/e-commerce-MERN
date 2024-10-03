@@ -23,7 +23,7 @@ const Header = () => {
   const ref = useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  const products = useSelector((state) => state.orebiReducer.products);
+  const products = useSelector((state) => state.reduxReducer.products);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

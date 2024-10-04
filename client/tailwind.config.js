@@ -41,7 +41,7 @@ module.exports = {
       },
       animation: {
         marquee: 'marquee 15s linear infinite',
-        blink: 'blink 3s steps(2, start) infinite',
+        blink: 'blink 1s steps(2, start) infinite',
       },
       keyframes: {
         marquee: {
@@ -49,7 +49,7 @@ module.exports = {
           '100%': { transform: 'translateX(-100%)' },
         },
         blink: {
-          '0%, 100%': { opacity: 1 },
+          '0%, 100%': { opacity: 3 },
           '0%': { opacity: 0 },
         },
       },

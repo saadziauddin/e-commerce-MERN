@@ -5,95 +5,119 @@ import { motion } from "framer-motion";
 import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../../redux/reduxSlice";
 import { emptyCart } from "../../../assets/images/website_images/index";
-import ItemCard from "./ItemCard";
+import { ImCross } from "react-icons/im";
+import { deleteItem, drecreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
 
-const Cart = () => {
+function Cart() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.reduxReducer.products);
-  const [totalAmt, setTotalAmt] = useState("");
-  const [shippingCharge, setShippingCharge] = useState("");
+  const [shippingCharge, setShippingCharge] = useState(0);
+
+  const totalAmt = products.reduce((total, item) => total + item.price * item.quantity, 0);
+
   useEffect(() => {
-    let price = 0;
-    products.map((item) => {
-      price += item.price * item.quantity;
-      return price;
-    });
-    setTotalAmt(price);
-  }, [products]);
-  useEffect(() => {
-    if (totalAmt <= 200) {
-      setShippingCharge(30);
-    } else if (totalAmt <= 400) {
-      setShippingCharge(25);
-    } else if (totalAmt > 401) {
-      setShippingCharge(20);
-    }
+    // if (totalAmt <= 200) {
+    //   setShippingCharge(30);
+    // } else if (totalAmt <= 400) {
+    //   setShippingCharge(25);
+    // } else {
+    //   setShippingCharge(20);
+    // }
+    setShippingCharge(200);
   }, [totalAmt]);
+
   return (
     <div className="max-w-container mx-auto px-4">
       <Breadcrumbs title="Cart" />
       {products.length > 0 ? (
         <div className="pb-20">
-          <div className="w-full h-20 bg-[#F5F7F7] text-primeColor hidden lgl:grid grid-cols-5 place-content-center px-6 text-lg font-titleFont font-semibold">
-            <h2 className="col-span-2">Product</h2>
-            <h2>Price</h2>
-            <h2>Quantity</h2>
-            <h2>Sub Total</h2>
-          </div>
-          <div className="mt-5">
-            {products.map((item) => (
-              <div key={item._id}>
-                <ItemCard item={item} />
-              </div>
-            ))}
+          {/* Cart Table */}
+          <div className="overflow-x-auto mb-5 rounded-lg shadow-md">
+            <table className="min-w-full bg-white border border-gray-200">
+              <thead>
+                <tr className="w-full bg-[#F5F7F7] text-[#7b246d] text-left text-sm uppercase border-b border-gray-200">
+                  <th className="py-3 px-6 text-center">Image</th>
+                  <th className="py-3 px-6">Name</th>
+                  <th className="py-3 px-6">Size</th>
+                  <th className="py-3 px-6">Color</th>
+                  <th className="py-3 px-6">Category</th>
+                  <th className="py-3 px-6">Price</th>
+                  <th className="py-3 px-6">Quantity</th>
+                  <th className="py-3 px-6">Sub Total</th>
+                  <th className="py-3 px-6">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((item) => (
+                  // key={`${item._id}-${item.size}-${item.color}`}
+                  <tr key={item._id} className="border-b border-gray-200">
+                    <td className="py-4 px-6 text-center">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                    </td>
+                    <td className="py-4 px-6">{item.name || "N/A"}</td>
+                    <td className="py-4 px-6">{item.size || "N/A"}</td>
+                    <td className="py-4 px-6">{item.color || "N/A"}</td>
+                    <td className="py-4 px-6">{item.category || "N/A"}</td>
+                    <td className="py-4 px-6">PKR {item.price.toLocaleString()}</td>
+                    <td className="py-4 px-6">
+                      <div className="">
+                        <button
+                          onClick={() => dispatch(drecreaseQuantity({ _id: item._id }))}
+                          className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300"
+                        >
+                          -
+                        </button>
+                        <span className="mx-2">{item.quantity}</span>
+                        <button
+                          onClick={() => dispatch(increaseQuantity({ _id: item._id }))}
+                          className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">PKR {(item.price * item.quantity).toLocaleString()}</td>
+                    <td className="py-4 px-12">
+                      <button onClick={() => dispatch(deleteItem(item._id))}>
+                        <ImCross className="text-red-500 cursor-pointer hover:text-red-700" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
+          {/* Reset Button */}
           <button
             onClick={() => dispatch(resetCart())}
-            className="py-2 px-10 bg-red-500 text-white font-semibold uppercase mb-4 hover:bg-red-700 duration-300"
+            className="py-2 px-10 bg-red-500 text-white font-semibold uppercase mb-4 rounded-md hover:bg-red-600 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg"
           >
-            Reset cart
+            Reset Cart
           </button>
 
-          <div className="flex flex-col mdl:flex-row justify-between border py-4 px-4 items-center gap-2 mdl:gap-0">
-            <div className="flex items-center gap-4">
-              <input
-                className="w-44 mdl:w-52 h-8 px-4 border text-primeColor text-sm outline-none border-gray-400"
-                type="text"
-                placeholder="Coupon Number"
-              />
-              <p className="text-sm mdl:text-base font-semibold">
-                Apply Coupon
-              </p>
-            </div>
-            <p className="text-lg font-semibold">Update Cart</p>
-          </div>
+          {/* Cart Totals */}
           <div className="max-w-7xl gap-4 flex justify-end mt-4">
-            <div className="w-96 flex flex-col gap-4">
-              <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
-              <div>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Subtotal
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${totalAmt}
-                  </span>
+            <div className="w-96 flex flex-col gap-4 border-[1px] border-gray-200 p-4 rounded-md shadow-md">
+              <h1 className="text-2xl font-semibold text-left mb-2">Cart totals</h1>
+              <div className="space-y-2">
+                <p className="flex justify-between border-b py-2 text-md font-medium">
+                  Subtotal <span className="font-semibold">PKR {totalAmt.toLocaleString()}</span>
                 </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Shipping Charge
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${shippingCharge}
-                  </span>
+                <p className="flex justify-between border-b py-2 text-md font-medium">
+                  Shipping Charge <span className="font-semibold">PKR {shippingCharge}</span>
                 </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
-                  Total
-                  <span className="font-bold tracking-wide text-lg font-titleFont">
-                    ${totalAmt + shippingCharge}
-                  </span>
+                <p className="flex justify-between py-2 text-md font-medium">
+                  Total <span className="font-semibold text-lg">PKR {(totalAmt + shippingCharge).toLocaleString()}</span>
                 </p>
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-start">
                 <Link to="/paymentgateway">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
+                  <button className="w-52 h-10 bg-primeColor text-white font-semibold rounded-md hover:bg-black duration-300 transition-all ease-in-out shadow-md hover:shadow-lg">
                     Proceed to Checkout
                   </button>
                 </Link>
@@ -108,23 +132,18 @@ const Cart = () => {
           transition={{ duration: 0.4 }}
           className="flex flex-col mdl:flex-row justify-center items-center gap-4 pb-20"
         >
-          <div>
-            <img
-              className="w-80 rounded-lg p-4 mx-auto"
-              src={emptyCart}
-              alt="emptyCart"
-            />
+          <div className="p-4">
+            <img className="w-80 mx-auto" src={emptyCart} alt="emptyCart" />
           </div>
-          <div className="max-w-[500px] p-4 py-8 bg-white flex gap-4 flex-col items-center rounded-md shadow-lg">
+          <div className="max-w-[500px] p-6 bg-white flex gap-4 flex-col items-center rounded-lg shadow-lg">
             <h1 className="font-titleFont text-xl font-bold uppercase">
               Your Cart feels lonely.
             </h1>
-            <p className="text-sm text-center px-10 -mt-2">
-              Your Shopping cart lives to serve. Give it purpose - fill it with
-              books, electronics, videos, etc. and make it happy.
+            <p className="text-sm text-center px-8 -mt-2 text-gray-600">
+              Your Shopping cart lives to serve. Give it purpose - fill it with products to make it happy.
             </p>
             <Link to="/products">
-              <button className="bg-[#7b246d] text-white rounded-md cursor-pointer hover:bg-gray-700 active:bg-gray-900 px-8 py-2 font-titleFont font-semibold text-md hover:text-white duration-300">
+              <button className="bg-[#7b246d] text-white rounded-md px-8 py-2 font-titleFont font-semibold text-md hover:bg-black duration-300">
                 Continue Shopping
               </button>
             </Link>

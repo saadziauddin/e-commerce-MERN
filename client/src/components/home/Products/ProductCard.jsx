@@ -38,7 +38,6 @@ function ProductCard(props) {
     setCurrentImageIndex(0); // Reset to the first image on mouse leave
   };
 
-
   return (
     <div className="w-full p-4 relative rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
       {/* Product Image */}
@@ -69,27 +68,23 @@ function ProductCard(props) {
         </div>
 
         {/* Buy Now and Favorite Button */}
+        {/* onClick={() =>
+          dispatch(
+            addToCart({
+              _id: rootId,
+              name: props.productName,
+              quantity: 1,
+              image: images[0],
+              badge: props.tags,
+              price: props.price,
+              colors: props.color,
+              sizes: props.size,
+            })
+          )} */}
         <div className="flex items-center gap-2">
-          <Link
-            to=""
-            className="flex items-center gap-1 bg-gray-100 text-[#7b246d] font-semibold py-2 px-4 rounded-lg transition duration-300 hover:bg-[#7b246d] hover:text-gray-100"
-            onClick={() =>
-              dispatch(
-                addToCart({
-                  _id: rootId,
-                  name: props.productName,
-                  quantity: 1,
-                  image: images[0],
-                  badge: props.tags,
-                  price: props.price,
-                  colors: props.color,
-                  sizes: props.size,
-                })
-              )
-            }
-          >
+          <button className="flex items-center gap-1 bg-gray-100 text-[#7b246d] font-semibold py-2 px-4 rounded-lg transition duration-300 hover:bg-[#7b246d] hover:text-gray-100" onClick={handleProductDetails}>
             <FaShoppingCart />
-          </Link>
+          </button>
           <button className="flex items-center gap-1 bg-gray-100 text-[#7b246d] font-semibold py-2 px-4 rounded-lg transition duration-300 hover:bg-[#7b246d] hover:text-gray-100">
             <FaHeart />
           </button>

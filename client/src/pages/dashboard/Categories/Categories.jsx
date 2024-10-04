@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';

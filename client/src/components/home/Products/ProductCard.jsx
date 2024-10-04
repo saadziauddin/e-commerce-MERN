@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import Image from "../../designLayouts/Image";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/reduxSlice";
 
@@ -14,35 +14,38 @@ function ProductCard(props) {
   const rootId = idString(_id);
   const navigate = useNavigate();
   const productItem = props;
+  const location = useLocation();
 
   // Check if img is an array or a single string
   const images = Array.isArray(props.img) ? props.img : [props.img];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleProductDetails = () => {
-    navigate(`/product/${rootId}`, {
+    navigate(`/product/${props._id}`, {
       state: {
         item: productItem,
       },
     });
+    console.log("Navigating to product details with:", productItem);
   };
 
   const handleMouseEnter = () => {
     const nextImageIndex = currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1;
-    setCurrentImageIndex(nextImageIndex);
+    setCurrentImageIndex(nextImageIndex); // Update the image index on hover
   };
 
   const handleMouseLeave = () => {
-    setCurrentImageIndex(0); // Reset to the first image when not hovering
+    setCurrentImageIndex(0); // Reset to the first image on mouse leave
   };
+
 
   return (
     <div className="w-full p-4 relative rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
-      {/* Adjust the image container to take full width */}
-      <div
-        className="relative w-full h-[500px] overflow-hidden rounded-lg group transition-all duration-500 hover:scale-105 cursor-pointer"
+      {/* Product Image */}
+      <div className="relative w-full h-[500px] overflow-hidden rounded-lg group transition-all duration-500 hover:scale-105 cursor-pointer"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleProductDetails}
       >
         <Image
           className="w-full h-full object-cover"
@@ -53,6 +56,7 @@ function ProductCard(props) {
           {props.tags}
         </div>
       </div>
+
       {/* Product Info */}
       <div className="mt-4 flex justify-between items-center">
         <div className="flex flex-col">
@@ -63,6 +67,7 @@ function ProductCard(props) {
             PKR {props.price.toLocaleString()}
           </p>
         </div>
+
         {/* Buy Now and Favorite Button */}
         <div className="flex items-center gap-2">
           <Link

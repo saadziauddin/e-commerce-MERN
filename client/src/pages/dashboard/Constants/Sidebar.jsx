@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUsers, faBox, faPercent, faCartPlus, faSignOutAlt, faTimes, faList } from '@fortawesome/free-solid-svg-icons';
 import logo from '../../../assets/images/website_images/nayabLogo1.png';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 
 function Sidebar({ isOpen, closeSidebar }) {
   const [role, setRole] = useState('');

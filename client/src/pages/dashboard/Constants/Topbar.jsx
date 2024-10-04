@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 
 function Topbar({ toggleSidebar }) {
   const [name, setName] = useState('');

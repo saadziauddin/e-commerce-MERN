@@ -1,30 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-// import { Carousel } from 'react-responsive-carousel';
-// import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/reduxSlice";
 import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { productImg1, productImg2, productImg3, productImg4, productImg5, productImg6, productImg7, productImg8, productImg9 } from '../../../assets/images/website_images/index';
-import { FaExpand, FaTimes, FaChevronUp, FaChevronDown, FaTruckMonster, FaSearchPlus, FaSearchMinus } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import api from '../../../api/api.js';
+import { toast } from "react-toastify";
+
+import Lightbox from "yet-another-react-lightbox";
+import { Counter, Fullscreen, Slideshow, Thumbnails, Zoom } from "yet-another-react-lightbox/plugins";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/counter.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
 
 function ProductDetails() {
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const location = useLocation();
+    const { id } = useParams();
     const dispatch = useDispatch();
-    const [prevLocation, setPrevLocation] = useState("");
-    const [productInfo, setProductInfo] = useState([]);
+    const [productInfo, setProductInfo] = useState(null);
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const [open, setOpen] = useState(false);
 
-    const productImages = [productImg1, productImg2, productImg3, productImg4, productImg5, productImg6, productImg7, productImg8, productImg9];
+    const fetchProductById = async () => {
+        try {
+            const response = await api.get(`/api/fetchProductById/${id}`);
+            const product = response.data.product[0];
+            // const product = response.data.product;
+            console.log("Product Data: ", product);
+            setProductInfo(product);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching product data: ", error);
+            toast.error("Error fetching product data.");
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        setProductInfo(location.state.item);
-        setPrevLocation(location.pathname);
-    }, [location]);
+        fetchProductById();
+    }, [id]);
 
     const handleQuantityChange = (event) => {
         const value = parseInt(event.target.value, 10);
@@ -33,132 +51,105 @@ function ProductDetails() {
 
     const handleAddCart = () => {
         dispatch(addToCart({ ...productInfo, quantity }));
-        setIsModalOpen(false);
-    };
-
-    const handleImageClick = (index) => {
-        setSelectedImageIndex(index);
         setIsModalOpen(true);
     };
 
-    const handleScrollThumbnails = (direction) => {
-        const maxScrollPosition = (productImages.length - 3) * 60; // Height of 3 visible thumbnails
-        const step = 60; // Scroll by 60px (height of each thumbnail)
+    // const handleScrollThumbnails = (direction) => {
+    //     const maxScrollPosition = (productInfo?.images?.length - 3) * 60; // Adjust thumbnail height
+    //     const step = 60; // Scroll by 60px (height of each thumbnail)
 
-        if (direction === 'up') {
-            setScrollPosition((prev) => Math.max(prev - step, 0));
-        } else if (direction === 'down') {
-            setScrollPosition((prev) => Math.min(prev + step, maxScrollPosition));
-        }
-    };
+    //     if (direction === 'up') {
+    //         setScrollPosition((prev) => Math.max(prev - step, 0));
+    //     } else if (direction === 'down') {
+    //         setScrollPosition((prev) => Math.min(prev + step, maxScrollPosition));
+    //     }
+    // };
+
+    // Ensure product images are available before using them
+
+    const productImages = productInfo?.images?.map(image => image.imagePath.replace("..\\client\\public", "")) || [];
+
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (!productInfo) {
+        return <p>Product not found!</p>;
+    }
 
     return (
-        <div className="max-w-container px-4 md:overflow-hidden sm:overflow-hidden">
+        <div className="max-w-container px-4">
             {/* Breadcrumb */}
             <div className="xl:mt-0 -mt-0 pl-5">
-                <Breadcrumbs title="" prevLocation={prevLocation} />
+                <Breadcrumbs title={productInfo.name} />
             </div>
 
             {/* Columns */}
-            <div className="max-w-container grid grid-cols-1 md:grid-cols-2">
-
-                {/* Image section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 cursor-pointer">
-
+            <div className="max-w-container grid grid-cols-1 md:grid-cols-2 gap-10">
+                {/* Image Section */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr,6fr] gap-3">
                     {/* Vertical Thumbnails */}
-                    <div className="flex flex-col w-[35%] h-[35%] overflow-hidden overflow-y-scroll scrollbar-hide">
-                        <div
-                            className="space-y-2 transition-transform duration-300"
-                            style={{ transform: `translateY(-${scrollPosition}px)` }}
-                        >
-                            {productImages.map((image, index) => (
-                                <img
-                                    key={index}
-                                    src={image}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    className={`w-24 h-36 object-cover cursor-pointer rounded-lg border-2 transition-all duration-300 hover:border-[#7b246d] ${selectedImageIndex === index ? 'border-[#7b246d]' : 'border-transparent'}`}
-                                    onClick={() => setSelectedImageIndex(index)}
-                                />
-                            ))}
-                        </div>
+                    <div className="flex flex-col overflow-hidden overflow-y-auto scrollbar-none max-h-[400px]">
+                        {productImages.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                alt={`Thumbnail ${index + 1}`}
+                                className={`w-20 h-20 object-cover cursor-pointer rounded-lg border-2 transition-all duration-300 hover:border-[#7b246d] my-2 ${selectedImageIndex === index ? 'border-[#7b246d]' : 'border-transparent'}`}
+                                onClick={() => setSelectedImageIndex(index)}
+                            />
+                        ))}
                     </div>
 
                     {/* Main Image */}
-                    <div className="flex flex-col relative rounded-lg overflow-hidden mr-10 ">
-                        <div className="group">
-                            <img
-                                src={productImages[selectedImageIndex]}
-                                alt={`Product Image ${selectedImageIndex + 1}`}
-                                className="rounded-lg object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-2"
-                                onClick={() => setIsModalOpen(true)}
-                            />
-                        </div>
+                    <div className="relative rounded-lg overflow-hidden mb-10">
+                        <img
+                            src={productImages[selectedImageIndex]}
+                            alt={`Product Image ${selectedImageIndex + 1}`}
+                            className="rounded-lg object-cover w-full h-full transition-transform duration-300 ease-in-out cursor-pointer hover:scale-105"
+                            onClick={() => setOpen(true)}
+                        />
                     </div>
-
-                    {/* Image Viewer Modal with Zoom */}
-                    {isModalOpen && (
-                        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-lg flex items-center justify-center z-50">
-                            <div className="relative">
-                                {/* Zoomable Image */}
-                                <div className="relative group">
-                                    <img
-                                        src={productImages[selectedImageIndex]}
-                                        alt="Large View"
-                                        className="w-full h-full max-w-3xl max-h-[95vh] object-contain transition-transform duration-300"
-                                    />
-                                </div>
-
-                                {/* Close Button */}
-                                <button
-                                    className="fixed top-4 right-4 bg-white text-black rounded-full p-4 shadow-lg z-50 hover:bg-gray-200 transition"
-                                    onClick={() => setIsModalOpen(false)}
-                                >
-                                    <FontAwesomeIcon icon={FaTimes} size="2x" />
-                                </button>
-
-                                {/* Side Navigators */}
-                                <button
-                                    className="fixed left-2 top-1/2 transform -translate-y-1/2 text-white bg-white bg-opacity-25 rounded-full p-3 hover:text-black hover:bg-opacity-75 transition focus:ring-2 focus:ring-blue-500"
-                                    onClick={() => handleImageClick((selectedImageIndex - 1 + productImages.length) % productImages.length)}
-                                >
-                                    &lt;
-                                </button>
-                                <button
-                                    className="fixed right-2 top-1/2 transform -translate-y-1/2 text-white bg-white bg-opacity-25 rounded-full p-3 hover:text-black hover:bg-opacity-75 transition focus:ring-2 focus:ring-blue-500"
-                                    onClick={() => handleImageClick((selectedImageIndex + 1) % productImages.length)}
-                                >
-                                    &gt;
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    <Lightbox
+                        open={open}
+                        close={() => setOpen(false)}
+                        slides={productImages.map((image) => ({ src: image }))}
+                        plugins={[Counter, Slideshow, Fullscreen, Thumbnails, Zoom]}
+                    />
                 </div>
 
                 {/* Product Info Section */}
-                <div className="flex flex-col justify-normal">
-                    {/* Product Name */}
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">3 Piece Embroidered Linen Suit</h1>
-                        <p className="text-sm uppercase text-gray-500 font-semibold mb-2">DW-W24-20-GREEN-EX SMALL | IN STOCK</p>
-                        <p className="text-2xl font-bold text-gray-900 mb-2">PKR 21,590</p>
-                        <p className="text-red-600 text-xs">GST Inclusive</p>
-                    </div>
+                <div className="flex flex-col">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{productInfo.name}</h1>
+                    <p className="text-sm uppercase text-gray-500 font-semibold mb-2">{productInfo.status}</p>
+                    <p className="text-2xl font-bold text-gray-900 mb-2">
+                        PKR {productInfo?.price1 ? productInfo.price1.toLocaleString() : "N/A"}
+                    </p>
+                    {/* <p className="text-2xl font-bold text-gray-900 mb-2">PKR {productInfo.price1.toLocaleString()}</p> */}
+                    <p className="text-red-600 text-xs">GST Inclusive</p>
 
                     {/* Color & Size Options */}
                     <div className="my-4">
                         <div className="flex items-center gap-4 mb-4">
                             <p className="text-lg font-semibold text-gray-800">Color:</p>
                             <div className="flex gap-2">
-                                <div className="w-6 h-6 rounded-full bg-purple-500 cursor-pointer border-2 border-gray-200 hover:border-gray-400"></div>
-                                <div className="w-6 h-6 rounded-full bg-green-500 cursor-pointer border-2 border-gray-200 hover:border-gray-400"></div>
+                                {productInfo?.color?.map((color, index) => (
+                                    <div
+                                        key={index}
+                                        className={`w-6 h-6 rounded-full bg-${color.toLowerCase()} cursor-pointer border-2 border-gray-200 hover:border-gray-400`}
+                                    />
+                                ))}
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2">
                             <p className="text-lg font-semibold text-gray-800">Size:</p>
                             <div className="flex gap-2">
-                                {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
-                                    <button key={size} className="bg-gray-100 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-md">
+                                {productInfo?.size?.map((size) => (
+                                    <button
+                                        key={size}
+                                        className="bg-gray-100 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-md"
+                                    >
                                         {size}
                                     </button>
                                 ))}
@@ -170,22 +161,16 @@ function ProductDetails() {
                     <div className="flex items-center gap-4 mb-6">
                         <p className="text-lg font-semibold text-gray-800">Qty</p>
                         <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)}
-                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
-                            >
+                            <button onClick={() => setQuantity(quantity > 1 ? quantity - 1 : quantity)} className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md">
                                 -
                             </button>
                             <input
-                                type="number"
+                                type=""
                                 value={quantity}
                                 onChange={handleQuantityChange}
                                 className="w-16 text-center bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded-md"
                             />
-                            <button
-                                onClick={() => setQuantity(quantity + 1)}
-                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md"
-                            >
+                            <button onClick={() => setQuantity(quantity + 1)} className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md">
                                 +
                             </button>
                         </div>
@@ -204,56 +189,52 @@ function ProductDetails() {
                         </button>
                     </div>
 
-                    <p className="text-gray-500 mt-3">Weight: 1.25 Kg</p>
-                    <p className="text-red-500">Disclaimer: Product color may vary slightly due to photographic lighting sources or monitor settings.</p>
-                </div>
-            </div>
+                    <p className="text-gray-800 mt-2 "><b className="text-lg font-semibold">Stock:</b> {productInfo.stock}</p>
+                    <p className="text-red-500 text-sm mt-2">Disclaimer: Product color may vary slightly due to photographic lighting sources or monitor settings.</p>
 
-            {/* Product Description */}
-            <div className="mb-10 mt-4">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Angrakha */}
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-md text-gray-900 font-semibold">Angrakha</h3>
-                        <ul className="text-gray-700 text-sm mt-1">
-                            <li>Embroidered Neckline With Tassel Detailing</li>
-                            <li>Digital Printed Front With Embroidery</li>
-                            <li>Full Sleeves With Embroidery & Pearl Drops</li>
-                            <li>Embroidered Organza Border</li>
-                            <li>Digital Printed Back</li>
-                            <li>Fit: Relaxed</li>
-                            <li>Color: Pink</li>
-                            <li>Fabric: Linen</li>
-                        </ul>
-                    </div>
-
-                    {/* Trousers */}
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-md text-gray-900 font-semibold">Trousers</h3>
-                        <ul className="text-gray-700 text-sm mt-1">
-                            <li>Dyed Dhaka Trousers</li>
-                            <li>Elasticated Waistband</li>
-                            <li>Fit: Relaxed</li>
-                            <li>Color: Pink</li>
-                            <li>Fabric: Linen</li>
-                        </ul>
-                    </div>
-
-                    {/* Dupatta */}
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-md text-gray-900 font-semibold">Dupatta</h3>
-                        <ul className="text-gray-700 text-sm mt-1">
-                            <li>Digital Printed Organza Dupatta</li>
-                            <li>Embroidered Borders</li>
-                            <li>Fit: Relaxed</li>
-                            <li>Color: Pink</li>
-                        </ul>
+                    {/* Product Description */}
+                    <div className="mb-10 mt-4">
+                        <h2 className="text-lg font-bold text-gray-900 mb-4">Description</h2>
+                        <p className="text-gray-700">{productInfo.description}</p>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {/* Modal for Cart Confirmation */}
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto relative">
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+                        >
+                            <FaTimes />
+                        </button>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Added to Cart!</h3>
+                        <p className="text-gray-700 mb-6 text-center">
+                            You have added {quantity} unit(s) of {productInfo.name} to your cart.
+                        </p>
+                        <div className="flex items-center justify-center space-x-4">
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg focus:outline-none transition duration-200 ease-in-out"
+                            >
+                                Continue Shopping
+                            </button>
+                            <Link to='/cart'>
+                                <button
+                                    className="bg-[#7b246d] hover:bg-[#5c1a4e] text-white font-semibold py-2 px-6 rounded-lg focus:outline-none transition duration-200 ease-in-out"
+                                >
+                                    View Cart
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div >
     );
 }
 
 export default ProductDetails;
+

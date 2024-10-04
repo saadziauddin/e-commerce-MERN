@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 

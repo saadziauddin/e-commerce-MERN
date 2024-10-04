@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Topbar from '../Constants/Topbar.jsx';
 import Sidebar from '../Constants/Sidebar.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 
 function UpdateCategory() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

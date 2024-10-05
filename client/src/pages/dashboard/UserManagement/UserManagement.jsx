@@ -95,7 +95,7 @@ function UserManagement() {
                         cell: row => {
                           const profileImage = row.profileImage && row.profileImage.length > 0
                             ? `/uploads/user_images/${row.profileImage[0].imageName}`
-                            : '/uploads/user_images/defaultProfile.png';
+                            : '/default_images/default_profile.png';
                             
                           return (
                             <div>

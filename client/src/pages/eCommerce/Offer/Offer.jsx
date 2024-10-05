@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import SpecialOffers from "../../../components/home/SpecialOffers/SpecialOffers";
 import Breadcrumbs from "../../../components/pageProps/Breadcrumbs";
 import { useParams } from "react-router-dom";
-import ShopSideNav from "../../../components/pageProps/shopPage/ShopSideNav";
+// import ShopSideNav from "../Products/ProductsSideBar";
 
 const Offer = () => {
-  const [prevLocation] = useState("");
-  const { category } = useParams();
+//   const [prevLocation] = useState("");
+//   const { category } = useParams();
 
   return (
-    // <div className="max-w-container mx-auto">
-    //   <Breadcrumbs title={category} prevLocation={prevLocation} />
-    //   <div className="pb-10">
-    //     <SpecialOffers />
-    //   </div>
-    // </div>
+//     // <div className="max-w-container mx-auto">
+//     //   <Breadcrumbs title={category} prevLocation={prevLocation} />
+//     //   <div className="pb-10">
+//     //     <SpecialOffers />
+//     //   </div>
+//     // </div>
 
     <div className="max-w-container mx-auto px-4">
       <Breadcrumbs title={category} prevLocation={prevLocation} />

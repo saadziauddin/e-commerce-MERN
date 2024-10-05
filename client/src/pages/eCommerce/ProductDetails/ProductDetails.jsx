@@ -11,7 +11,6 @@ import { Counter, Fullscreen, Slideshow, Thumbnails, Zoom } from "yet-another-re
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import tinycolor from 'tinycolor2';
 
 function ProductDetails() {
     const [quantity, setQuantity] = useState(1);
@@ -56,7 +55,6 @@ function ProductDetails() {
         const cartItem = {
             id: productInfo._id,
             name: productInfo.name,
-            // description: productInfo.description,
             image: productImages[selectedImageIndex],
             color: selectedColor,
             size: selectedSize,
@@ -69,7 +67,9 @@ function ProductDetails() {
         setIsModalOpen(true);
     };
 
-    const productImages = productInfo?.images?.map(image => image.imagePath.replace("..\\client\\public", "")) || [];
+    const productImages = productInfo?.images?.length > 0
+        ? productInfo.images.map(image => image.imagePath.replace(/..[\\/]+client[\\/]+public/, ''))
+        : ['/default_images/image-not-available.png'];
 
     if (isLoading) {
         return <p>Loading...</p>;
@@ -79,10 +79,6 @@ function ProductDetails() {
         return <p>Product not found!</p>;
     }
 
-    const getTextColor = (bgColor) => {
-        const color = tinycolor(bgColor);
-        return color.isLight() ? 'black' : 'white';
-    };
     return (
         <div className="max-w-container px-4">
             {/* Breadcrumb */}
@@ -135,22 +131,18 @@ function ProductDetails() {
                         )}
                     </div>
                     <p className="text-red-600 text-xs">GST Inclusive</p>
-
+                    
+                    {/* Color & Size selector */}
                     <div className="my-4">
-                        {/* Color Selection with Text Inside Buttons */}
+                        {/* Color Selection */}
                         <div className="flex flex-col gap-2 mb-4">
                             <p className="text-lg font-semibold text-gray-800">Color:</p>
                             <div className="flex flex-wrap gap-4">
                                 {productInfo?.color?.map((color, index) => (
                                     <button
                                         key={index}
-                                        className={`w-20 h-10 md:w-24 md:h-10 rounded-lg cursor-pointer border transition-all duration-300 font-semibold capitalize flex items-center justify-center hover:shadow-lg transform hover:scale-105 
-                                                ${selectedColor === color ? 'border-[#7b246d] bg-opacity-80' : 'border-gray-200 bg-opacity-50'}
-                                                bg-${color.toLowerCase()}`}
-                                        style={{
-                                            backgroundColor: color.toLowerCase(),
-                                            color: getTextColor(color.toLowerCase()),
-                                        }}
+                                        className={`py-1 px-2 md:py-1 md:px-3 rounded-lg cursor-pointer transition-all duration-300 font-semibold capitalize hover:shadow-lg transform hover:scale-105
+                                                ${selectedColor === color ? 'bg-[#7b246d] text-white border-[#7b246d] border-2' : 'bg-gray-100 text-gray-800 border-2 border-gray-200'}`}
                                         onClick={() => setSelectedColor(color)}
                                         title={color}
                                     >

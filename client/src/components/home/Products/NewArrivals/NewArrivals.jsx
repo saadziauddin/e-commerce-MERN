@@ -89,7 +89,11 @@ function NewArrivals() {
             <div className="px-2" key={product._id}>
               <Product
                 _id={product._id}
-                img={product.images.length > 0 ? product.images[0].imagePath.replace("..\\client\\public", "") : ''}
+                img={
+                  product.images.length > 0
+                    ? product.images[0].imagePath.replace(/..[\\/]+client[\\/]+public/, "")
+                    : '/default_images/image-not-available.png'
+                } 
                 productName={product.name}
                 price={product.price1}
                 color={product.color.join(", ")}

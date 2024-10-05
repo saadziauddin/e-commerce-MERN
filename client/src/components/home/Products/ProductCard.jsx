@@ -63,7 +63,8 @@ function ProductCard(props) {
             {props.productName}
           </h2>
           <p className="text-gray-600 mt-1 text-left">
-            PKR {props.price.toLocaleString()}
+            {/* PKR {props.price.toLocaleString()} */}
+            PKR {props.price ? props.price.toLocaleString() : "Price not available"}
           </p>
         </div>
 

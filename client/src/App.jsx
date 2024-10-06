@@ -1,44 +1,52 @@
+import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet, createRoutesFromElements, Route, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// Website 
-import Footer from "./components/home/Footer/Footer";
-import FooterBottom from "./components/home/Footer/FooterBottom";
-import Header from "./components/home/Header/Header";
-import HeaderBottom from "./components/home/Header/HeaderBottom";
-import About from "./pages/ecommerce/About/About";
-import Cart from "./pages/ecommerce/Cart/Cart";
-import Contact from "./pages/ecommerce/Contact/Contact";
-import Home from "./pages/ecommerce/Home/Home";
-import Offer from "./pages/ecommerce/Offer/Offer";
-import Payment from "./pages/ecommerce/payment/Payment";
-import ProductDetails from "./pages/ecommerce/ProductDetails/ProductDetails";
-import Product from "./pages/ecommerce/Products/Products";
-import SignIn from "./pages/ecommerce/Account/SignIn";
-import SignUp from "./pages/ecommerce/Account/SignUp";
-import Reset from "./pages/ecommerce/Account/Reset";
-// Dashboard
-import DashboardHome from './pages/dashboard/Home/Home';
 
-// User management
-import UserManagement from "./pages/dashboard/UserManagement/UserManagement";
-import UserProfile from './pages/dashboard/UserManagement/UserProfile';
+// ================= Website =====================
+import Home from "./components/ecommerce/Home/Home";
+// ================= Footer =====================
+import Footer from "./components/ecommerce/Home/Footer/Footer";
+import FooterBottom from "./components/ecommerce/Home/Footer/FooterBottom";
+// ================= Header =====================
+import Header from "./components/ecommerce/Home/Header/Header";
+import HeaderBottom from "./components/ecommerce/Home/Header/HeaderBottom";
+// ================= About =====================
+import About from "./components/ecommerce/About/About";
+// ================= Cart =====================
+import Cart from "./components/ecommerce/Cart/Cart";
+// ================= Contact =====================
+import Contact from "./components/ecommerce/Contact/Contact";
+// ================= Offer =====================
+import Offer from "./components/ecommerce/Products/Offer/Offer";
+// ================= Payment =====================
+import Payment from "./components/ecommerce/payment/Payment";
+// ================= Products =====================
+import Product from "./components/ecommerce/Products/Products";
+import ProductDetails from "./components/ecommerce/Products/ProductDetails";
+// ================= Account =====================
+import SignIn from "./components/ecommerce/Account/SignIn";
+import SignUp from "./components/ecommerce/Account/SignUp";
+import Reset from "./components/ecommerce/Account/Reset";
 
-// Categories management
-import Categories from './pages/dashboard/Categories/Categories';
-import AddCategory from "./pages/dashboard/Categories/AddCategory";
-import UpdateCategory from './pages/dashboard/Categories/UpdateCategory';
 
-// Products management
-import Products from './pages/dashboard/Products/Products';
-import AddProduct from "./pages/dashboard/Products/AddProduct";
-import UpdateProduct from './pages/dashboard/Products/UpdateProduct';
-
-// Orders management
-import Orders from './pages/dashboard/Orders/Orders';
-
-// Sales management
-import Sales from './pages/dashboard/Sales/Sales';
+// ================= Dashboard =====================
+import DashboardHome from './components/dashboard/Home/Home';
+// ================= User management =====================
+import UserManagement from "./components/dashboard/UserManagement/UserManagement";
+import UserProfile from './components/dashboard/UserManagement/UserProfile';
+// ================= Categories management =====================
+import Categories from './components/dashboard/Categories/Categories';
+import AddCategory from "./components/dashboard/Categories/AddCategory";
+import UpdateCategory from './components/dashboard/Categories/UpdateCategory';
+// ================= Products management =====================
+import Products from './components/dashboard/Products/Products';
+import AddProduct from "./components/dashboard/Products/AddProduct";
+import UpdateProduct from './components/dashboard/Products/UpdateProduct';
+// ================= Orders management =====================
+import Orders from './components/dashboard/Orders/Orders';
+// ================= Sales management =====================
+import Sales from './components/dashboard/Sales/Sales';
 
 const Layout = () => {
   return (
@@ -65,108 +73,60 @@ const Layout = () => {
     </div>
   );
 };
+
+const PageTitle = ({ title }) => {
+  React.useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return null;
+};
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       {/* Website Routes */}
       <Route path="/" element={<Layout />}>
-        {/* Header Navlink Start */}
-        <Route index element={<Home />}></Route>
-        <Route path="/products" element={<Product />}></Route>
-        <Route path="/about" element={<About />}></Route>
-        <Route path="/contact" element={<Contact />}></Route>
-        {/* Header Navlink End */}
+        <Route index element={<><PageTitle title="" /><Home /></>} />
+        <Route path="/products" element={<><PageTitle title="" /><Product /></>} />
+        <Route path="/about" element={<><PageTitle title="" /><About /></>} />
+        <Route path="/contact" element={<><PageTitle title="" /><Contact /></>} />
         
-        <Route path="/category/:category" element={<Offer />}></Route>
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/paymentgateway" element={<Payment />}></Route>
+        <Route path="/category/:category" element={<><PageTitle title="" /><Offer /></>} />
+        <Route path="/product/:id" element={<><PageTitle title="" /><ProductDetails /></>} />
+        <Route path="/cart" element={<><PageTitle title="" /><Cart /></>} />
+        <Route path="/paymentgateway" element={<><PageTitle title="" /><Payment /></>} />
       </Route>
       {/* Auth Routes */}
-      <Route path="/signin" element={<SignIn />}></Route>
-      <Route path="/signup" element={<SignUp />}></Route>
-      <Route path="/reset" element={<Reset />}></Route>
+      <Route path="/signin" element={<><PageTitle title="" /><SignIn /></>} />
+      <Route path="/signup" element={<><PageTitle title="" /><SignUp /></>} />
+      <Route path="/reset" element={<><PageTitle title="" /><Reset /></>} />
       {/* Dashboard Routes */}
-      <Route path="/dashboard/home" element={<DashboardHome />}></Route>
+      <Route path="/dashboard/home" element={<><PageTitle title="" /><DashboardHome /></>} />
       {/* User management routes */}
-      <Route path="/dashboard/userManagement" element={<UserManagement />}></Route>
-      <Route path="/dashboard/userManagement/userProfile/:userId" element={<UserProfile />}></Route>
+      <Route path="/dashboard/userManagement" element={<><PageTitle title="" /><UserManagement /></>} />
+      <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="" /><UserProfile /></>} />
       {/* Categories management routes */}
-      <Route path="/dashboard/categories" element={<Categories />}></Route>
-      <Route path="/dashboard/categories/addCategory" element={<AddCategory />}></Route>
-      <Route path="/dashboard/categories/updateCategory/:categoryId" element={<UpdateCategory />}></Route>
+      <Route path="/dashboard/categories" element={<><PageTitle title="" /><Categories /></>} />
+      <Route path="/dashboard/categories/addCategory" element={<><PageTitle title="" /><AddCategory /></>} />
+      <Route path="/dashboard/categories/updateCategory/:categoryId" element={<><PageTitle title="" /><UpdateCategory /></>} />
       {/* Products management routes */}
-      <Route path="/dashboard/products" element={<Products />}></Route>
-      <Route path="/dashboard/products/addProduct" element={<AddProduct />}></Route>
-      <Route path="/dashboard/products/updateProduct/:productId" element={<UpdateProduct />}></Route>
+      <Route path="/dashboard/products" element={<><PageTitle title="" /><Products /></>} />
+      <Route path="/dashboard/products/addProduct" element={<><PageTitle title="" /><AddProduct /></>} />
+      <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="" /><UpdateProduct /></>} />
       {/* Orders management routes */}
-      <Route path="/dashboard/orders" element={<Orders />}></Route>
+      <Route path="/dashboard/orders" element={<><PageTitle title="" /><Orders /></>} />
       {/* Sales management routes */}
-      <Route path="/dashboard/sales" element={<Sales />}></Route>
+      <Route path="/dashboard/sales" element={<><PageTitle title="" /><Sales /></>} />
     </Route>
   )
 );
 
 function App() {
-  // const PageTitle = ({ title }) => {
-  //     React.useEffect(() => {
-  //       document.title = title;
-  //     }, [title]);
-  //     return null;
-  //   };
   return (
     <div className="font-bodyFont">
       <RouterProvider router={router} />
     </div>
   );
-}
+};
 
 export default App;
-
-// import React from 'react';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import Register from './Components/Auth/Register';
-// import Login from './Components/Auth/Login';
-// import ResetPassword from './Components/Auth/Reset';
-// import AdminDashboard from './Components/Dashboard/AdminDashboard/AdminDashboard';
-// import Reports from './Components/Dashboard/AdminDashboard/Reports';
-// import UserManagement from './Components/Dashboard/AdminDashboard/UserManagement';
-// import UserDashboard from './Components/Dashboard/UserDashboard/UserDashboard';
-// import UserProfile from './Components/Dashboard/AdminDashboard/UserProfile';
-// // import api from './utils/api';
-// // import tokenExpiryCheck from './utils/tokenExpiryCheck';
-
-// function App() {
-//   const PageTitle = ({ title }) => {
-//     React.useEffect(() => {
-//       document.title = title;
-//     }, [title]);
-//     return null;
-//   };
-//   // tokenExpiryCheck();
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path='/' element={<><PageTitle title="Login | Pronet" /><Login /></>}/>
-
-//         <Route path='/Register'element={<><PageTitle title="Register | Pronet" /><Register /></>}/>
-
-//         <Route path='/ResetPassword' element={<><PageTitle title="Reset Password | Pronet" /><ResetPassword /></>}/>
-
-//         <Route path='/Admin'element={<><PageTitle title="Admin Dashboard | Pronet" /><AdminDashboard /></>}/>
-
-//         <Route path='/User' element={<><PageTitle title="User Dashboard | Pronet" /><UserDashboard /></>}/>
-
-//         <Route path='/UserManagement' element={<><PageTitle title="User Management | Pronet" /><UserManagement /></>}/>
-        
-//         <Route path='/UserManagement/CreateNew' element={<> <PageTitle title="Create New User | Pronet" /><Register /></>}/>
-
-//         <Route path='/UserManagement/UserProfile/:userId' element={<><PageTitle title="User Profile | Pronet" /><UserProfile /></>}/>
-
-//         <Route path='/Reports' element={<><PageTitle title="Reports | Pronet" /><Reports /></>}/>
-//       </Routes>
-//     </Router>
-//   );
-// };
-
-// export default App;

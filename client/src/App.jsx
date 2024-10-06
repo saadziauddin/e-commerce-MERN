@@ -86,37 +86,37 @@ const router = createBrowserRouter(
     <Route>
       {/* Website Routes */}
       <Route path="/" element={<Layout />}>
-        <Route index element={<><PageTitle title="" /><Home /></>} />
-        <Route path="/products" element={<><PageTitle title="" /><Product /></>} />
-        <Route path="/about" element={<><PageTitle title="" /><About /></>} />
-        <Route path="/contact" element={<><PageTitle title="" /><Contact /></>} />
+        <Route index element={<><PageTitle title="Nayab Fashion - Best Ecommerce Store in Pakistan" /><Home /></>} />
+        <Route path="/products" element={<><PageTitle title="Nayab Fashion - Products" /><Product /></>} />
+        <Route path="/about" element={<><PageTitle title="Nayab Fashion - About" /><About /></>} />
+        <Route path="/contact" element={<><PageTitle title="Nayab Fashion - Contact" /><Contact /></>} />
         
-        <Route path="/category/:category" element={<><PageTitle title="" /><Offer /></>} />
-        <Route path="/product/:id" element={<><PageTitle title="" /><ProductDetails /></>} />
-        <Route path="/cart" element={<><PageTitle title="" /><Cart /></>} />
-        <Route path="/paymentgateway" element={<><PageTitle title="" /><Payment /></>} />
+        <Route path="/category/:category" element={<><PageTitle title="Nayab Fashion - Offer" /><Offer /></>} />
+        <Route path="/product/:id" element={<><PageTitle title="Nayab Fashion - Product Details" /><ProductDetails /></>} />
+        <Route path="/cart" element={<><PageTitle title="Nayab Fashion - Cart" /><Cart /></>} />
+        <Route path="/paymentgateway" element={<><PageTitle title="Nayab Fashion - Payment" /><Payment /></>} />
       </Route>
       {/* Auth Routes */}
-      <Route path="/signin" element={<><PageTitle title="" /><SignIn /></>} />
-      <Route path="/signup" element={<><PageTitle title="" /><SignUp /></>} />
-      <Route path="/reset" element={<><PageTitle title="" /><Reset /></>} />
+      <Route path="/signin" element={<><PageTitle title="Nayab Fashion - Sign In" /><SignIn /></>} />
+      <Route path="/signup" element={<><PageTitle title="Nayab Fashion - Sign Up" /><SignUp /></>} />
+      <Route path="/reset" element={<><PageTitle title="Nayab Fashion - Reset Password" /><Reset /></>} />
       {/* Dashboard Routes */}
-      <Route path="/dashboard/home" element={<><PageTitle title="" /><DashboardHome /></>} />
+      <Route path="/dashboard/home" element={<><PageTitle title="Nayab Fashion - Dashboard" /><DashboardHome /></>} />
       {/* User management routes */}
-      <Route path="/dashboard/userManagement" element={<><PageTitle title="" /><UserManagement /></>} />
-      <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="" /><UserProfile /></>} />
+      <Route path="/dashboard/userManagement" element={<><PageTitle title="Nayab Fashion - User Management" /><UserManagement /></>} />
+      <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="Nayab Fashion - Edit User" /><UserProfile /></>} />
       {/* Categories management routes */}
-      <Route path="/dashboard/categories" element={<><PageTitle title="" /><Categories /></>} />
-      <Route path="/dashboard/categories/addCategory" element={<><PageTitle title="" /><AddCategory /></>} />
-      <Route path="/dashboard/categories/updateCategory/:categoryId" element={<><PageTitle title="" /><UpdateCategory /></>} />
+      <Route path="/dashboard/categories" element={<><PageTitle title="Nayab Fashion - Categories" /><Categories /></>} />
+      <Route path="/dashboard/categories/addCategory" element={<><PageTitle title="Nayab Fashion - Add Category" /><AddCategory /></>} />
+      <Route path="/dashboard/categories/updateCategory/:categoryId" element={<><PageTitle title="Nayab Fashion - Update Category" /><UpdateCategory /></>} />
       {/* Products management routes */}
-      <Route path="/dashboard/products" element={<><PageTitle title="" /><Products /></>} />
-      <Route path="/dashboard/products/addProduct" element={<><PageTitle title="" /><AddProduct /></>} />
-      <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="" /><UpdateProduct /></>} />
+      <Route path="/dashboard/products" element={<><PageTitle title="Nayab Fashion - Products" /><Products /></>} />
+      <Route path="/dashboard/products/addProduct" element={<><PageTitle title="Nayab Fashion - Add Product" /><AddProduct /></>} />
+      <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="Nayab Fashion - Update Product" /><UpdateProduct /></>} />
       {/* Orders management routes */}
-      <Route path="/dashboard/orders" element={<><PageTitle title="" /><Orders /></>} />
+      <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Orders /></>} />
       {/* Sales management routes */}
-      <Route path="/dashboard/sales" element={<><PageTitle title="" /><Sales /></>} />
+      <Route path="/dashboard/sales" element={<><PageTitle title="Nayab Fashion - Sales" /><Sales /></>} />
     </Route>
   )
 );

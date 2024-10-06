@@ -46,7 +46,7 @@ function UserManagement() {
 
       const result = await api.get('/api/getUser');
       setFetchUsersData(result.data);
-      
+
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -86,8 +86,8 @@ function UserManagement() {
                 </button>
               </div>
               <div className="flex-auto px-0 pt-0 pb-2">
-                {/* <div className="p-0 overflow-x-auto"> */}
-                <div className="p-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 hover:scrollbar-thumb-gray-500">
+                <div className="p-0 overflow-x-auto">
+                  {/* <div className="p-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 hover:scrollbar-thumb-gray-500"> */}
                   <DataTable
                     columns={[
                       {
@@ -96,13 +96,13 @@ function UserManagement() {
                           const profileImage = row.profileImage && row.profileImage.length > 0
                             ? `/uploads/user_images/${row.profileImage[0].imageName}`
                             : '/default_images/default_profile.png';
-                            
+
                           return (
                             <div>
-                              <img 
-                                src={profileImage} 
-                                alt="profile_image" 
-                                className="h-10 w-10 rounded-full" 
+                              <img
+                                src={profileImage}
+                                alt="profile_image"
+                                className="h-10 w-10 rounded-full"
                                 onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
                               />
                             </div>
@@ -131,40 +131,40 @@ function UserManagement() {
                         wrap: true,
                       },
                       {
-                          name: 'Address',
-                          selector: row => row.address,
-                          sortable: true,
-                          wrap: true,
+                        name: 'Address',
+                        selector: row => row.address,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
-                          name: 'City',
-                          selector: row => row.city,
-                          sortable: true,
-                          wrap: true,
+                        name: 'City',
+                        selector: row => row.city,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
-                          name: 'Country',
-                          selector: row => row.country,
-                          sortable: true,
-                          wrap: true,
+                        name: 'Country',
+                        selector: row => row.country,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
-                          name: 'Zip/Postal Code',
-                          selector: row => row.postalCode,
-                          sortable: true,
-                          wrap: true,
+                        name: 'Zip/Postal Code',
+                        selector: row => row.postalCode,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
-                          name: 'Role',
-                          selector: row => row.role,
-                          sortable: true,
-                          wrap: true,
+                        name: 'Role',
+                        selector: row => row.role,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
-                          name: 'Date Created',
-                          selector: row => row.dateOfCreation,
-                          sortable: true,
-                          wrap: true,
+                        name: 'Date Created',
+                        selector: row => row.dateOfCreation,
+                        sortable: true,
+                        wrap: true,
                       },
                       {
                         name: 'Actions',
@@ -179,41 +179,42 @@ function UserManagement() {
                         wrap: true,
                       }
                     ]}
-                    customStyles={{
-                      headCells: {
-                        style: {
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          textTransform: 'uppercase',
-                          backgroundColor: '#e8e8e8',
+                  customStyles={{
+                    headCells: {
+                      style: {
+                        fontWeight: 'bold',
+                        fontSize: '12px',
+                        textTransform: 'uppercase',
+                        backgroundColor: '#e8e8e8',
+                      },
+                    },
+                    rows: {
+                      style: {
+                        minHeight: '50px',
+                        '&:not(:last-of-type)': {
+                          borderBottomStyle: 'solid',
+                          borderBottomWidth: '1px',
+                          borderBottomColor: '#d1d1d1',
+                        },
+                        '&:hover': {
+                          backgroundColor: '#f1f1f1',
                         },
                       },
-                      rows: {
-                        style: {
-                          minHeight: '50px',
-                          '&:not(:last-of-type)': {
-                            borderBottomStyle: 'solid',
-                            borderBottomWidth: '1px',
-                            borderBottomColor: '#d1d1d1',
-                          },
-                          '&:hover': {
-                            backgroundColor: '#f1f1f1',
-                          },
-                        },
+                    },
+                    pagination: {
+                      style: {
+                        borderTopStyle: 'solid',
+                        borderTopWidth: '1px',
+                        borderTopColor: '#d1d1d1',
                       },
-                      pagination: {
-                        style: {
-                          borderTopStyle: 'solid',
-                          borderTopWidth: '1px',
-                          borderTopColor: '#d1d1d1',
-                        },
-                      },
-                    }}
-                    fixedHeader
-                    data={fetchUsersData}
-                    pagination
-                    paginationPerPage={10}
-                    paginationRowsPerPageOptions={[10, 30, 50, 100]}
+                    },
+                  }}
+                  data={fetchUsersData}
+                  fixedHeader
+                  fixedHeaderScrollHeight="400px"
+                  pagination
+                  paginationPerPage={10}
+                  paginationRowsPerPageOptions={[10, 20, 50, 100]}
                   />
                 </div>
               </div>

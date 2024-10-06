@@ -359,7 +359,7 @@ function Products() {
 
         {/* Product Grid/List */}
         <div className={`${gridViewActive
-          ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"
+          ? "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"
           : "list"
           } px-6`}
         >

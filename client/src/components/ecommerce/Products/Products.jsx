@@ -6,7 +6,6 @@ import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
 import Product from "./ProductCard.jsx";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
-// import ProductsSideBar from "./ProductsSideBar.jsx";
 import api from "../../../api/api.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
@@ -33,19 +32,20 @@ function Items({ currentItems, selectedBrands, selectedCategories }) {
     <>
       {filteredItems.length > 0 ? (
         filteredItems.map((product) => (
-          <div key={product._id} className="w-full">
+          <div className="w-full" key={product._id}>
             <Product
               _id={product._id}
               img={
                 product.images.length > 0
-                  ? product.images[0].imagePath.replace(/..[\\/]+client[\\/]+public/, "")
-                  : '/default_images/image-not-available.png'
+                  ? product.images.map(img => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
+                  : ['/default_images/image-not-available.png']
               }
               productName={product.name}
               price={product.price1}
               color={product.color.join(", ")}
               size={product.size.join(", ")}
               tags={product.tags}
+              description={product.description}
             />
           </div>
         ))
@@ -285,7 +285,7 @@ function Products() {
   };
 
   return (
-    <div className="max-w-container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <Breadcrumbs title="Products" />
 
       {/* Main Content */}
@@ -321,34 +321,32 @@ function Products() {
           {/* Sort and Show Options */}
           <div className="flex items-center gap-4 mt-4 md:mt-0">
             <div className="relative">
-              <label className="block text-sm font-medium text-gray-700">Sort by</label>
+              <label className="block text-sm font-medium text-gray-700">Sort by:</label>
               <select
                 id="sortOptions"
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="block w-full mt-1 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                // className="w-full mt-1 pl-3 pr-10 py-2 text-base border-gray-300 xs:text-sm sm:text-sm rounded-sm cursor-pointer"
+                className="w-full mt-1 pl-3 pr-10 py-1 border border-gray-300 rounded-sm cursor-pointer text-gray-700 appearance-none hover:bg-gray-200"
               >
-                <option value="A-Z">A-Z</option>
-                <option value="Z-A">Z-A</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-                <option value="New Arrival">New Arrival</option>
-                <option value="Featured">Featured</option>
-                <option value="Final Offer">Final Offer</option>
+                <option className="cursor-pointer" value="A-Z">A-Z</option>
+                <option className="cursor-pointer" value="Z-A">Z-A</option>
+                <option className="cursor-pointer" value="Price: Low to High">Price: Low to High</option>
+                <option className="cursor-pointer" value="Price: High to Low">Price: High to Low</option>
               </select>
             </div>
 
-            <div className="relative">
+            <div className="relative cursor-pointer">
               <label className="block text-gray-600">Show:</label>
               <select
                 value={itemsPerPage}
                 onChange={(e) => setItemsPerPage(+e.target.value)}
-                className="w-20 border border-gray-300 py-1 px-4 rounded-md cursor-pointer text-gray-700 appearance-none"
+                className="w-20 border border-gray-300 py-1 px-4 rounded-sm cursor-pointer text-gray-700 appearance-none"
               >
-                <option value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="500">500</option>
+                <option className="cursor-pointer" value="10">10</option>
+                <option className="cursor-pointer" value="50">50</option>
+                <option className="cursor-pointer" value="100">100</option>
+                <option className="cursor-pointer" value="500">500</option>
               </select>
               <span className="absolute right-3 top-2">
                 <GoTriangleDown />

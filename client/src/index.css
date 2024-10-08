@@ -1,35 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Loader Container */
+/* Loader Styling */
 .loader-container {
       display: flex;
-      justify-content: center; /* Center horizontally */
-      align-items: center; /* Center vertically */
-      position: fixed; /* Fixed position to cover the viewport */
-      top: 0; /* Align to the top of the viewport */
-      left: 0; /* Align to the left of the viewport */
-      width: 100vw; /* Full width of the viewport */
-      height: 100vh; /* Full height of the viewport */
-      background-color: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
-      z-index: 9999; /* High z-index to overlay other content */
+      justify-content: center;
+      /* Center horizontally */
+      align-items: center;
+      /* Center vertically */
+      position: fixed;
+      /* Fixed position to cover the viewport */
+      top: 0;
+      /* Align to the top of the viewport */
+      left: 0;
+      /* Align to the left of the viewport */
+      width: 100vw;
+      /* Full width of the viewport */
+      height: 100vh;
+      /* Full height of the viewport */
+      background-color: rgba(255, 255, 255, 0.8);
+      /* Optional: semi-transparent background */
+      z-index: 9999;
+      /* High z-index to overlay other content */
 }
 
-/* Loader Styling */
 .loader {
-      --w: 10ch; /* Width for the text */
+      --w: 10ch;
+      /* Width for the text */
       /* font-weight: bold; Font weight */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font family */
-      font-size: 30px; /* Font size */
-      line-height: 1.4em; /* Line height */
-      letter-spacing: var(--w); /* Letter spacing */
-      width: var(--w); /* Width defined by variable */
-      overflow: hidden; /* Hide overflow */
-      white-space: nowrap; /* No wrapping */
-      color: #0000; /* Transparent color */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Font family */
+      font-size: 30px;
+      /* Font size */
+      line-height: 1.4em;
+      /* Line height */
+      letter-spacing: var(--w);
+      /* Letter spacing */
+      width: var(--w);
+      /* Width defined by variable */
+      overflow: hidden;
+      /* Hide overflow */
+      white-space: nowrap;
+      /* No wrapping */
+      color: #0000;
+      /* Transparent color */
       /* text-transform: uppercase; */
       text-shadow:
             calc(0 * var(--w)) 0 #000,
@@ -42,7 +61,8 @@
             calc(-7 * var(--w)) 0 #000,
             calc(-8 * var(--w)) 0 #000,
             calc(-9 * var(--w)) 0 #000;
-      animation: l20 2s infinite linear; /* Animation */
+      animation: l20 2s infinite linear;
+      /* Animation */
 }
 
 .loader:before {
@@ -110,6 +130,7 @@
                   calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
                   calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) -10px #000
       }
+
       9.09% {
             text-shadow:
                   calc(0*var(--w)) -10px #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
@@ -133,4 +154,113 @@
                   calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) -10px #000, calc(-4*var(--w)) 0 #000,
                   calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
       }
+}
+
+/* Google Fonts CSS */
+.poppins-thin {
+      font-family: "Poppins", sans-serif;
+      font-weight: 100;
+      font-style: normal;
+}
+
+.poppins-extralight {
+      font-family: "Poppins", sans-serif;
+      font-weight: 200;
+      font-style: normal;
+}
+
+.poppins-light {
+      font-family: "Poppins", sans-serif;
+      font-weight: 300;
+      font-style: normal;
+}
+
+.poppins-regular {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+}
+
+.poppins-medium {
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      font-style: normal;
+}
+
+.poppins-semibold {
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      font-style: normal;
+}
+
+.poppins-bold {
+      font-family: "Poppins", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+}
+
+.poppins-extrabold {
+      font-family: "Poppins", sans-serif;
+      font-weight: 800;
+      font-style: normal;
+}
+
+.poppins-black {
+      font-family: "Poppins", sans-serif;
+      font-weight: 900;
+      font-style: normal;
+}
+
+.poppins-thin-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 100;
+      font-style: italic;
+}
+
+.poppins-extralight-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 200;
+      font-style: italic;
+}
+
+.poppins-light-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 300;
+      font-style: italic;
+}
+
+.poppins-regular-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      font-style: italic;
+}
+
+.poppins-medium-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      font-style: italic;
+}
+
+.poppins-semibold-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      font-style: italic;
+}
+
+.poppins-bold-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 700;
+      font-style: italic;
+}
+
+.poppins-extrabold-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 800;
+      font-style: italic;
+}
+
+.poppins-black-italic {
+      font-family: "Poppins", sans-serif;
+      font-weight: 900;
+      font-style: italic;
 }

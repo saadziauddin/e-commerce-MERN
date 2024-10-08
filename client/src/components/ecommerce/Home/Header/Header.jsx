@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import logo1 from "../../../../assets/images/website_images/nayabLogo1.png";
@@ -11,6 +10,8 @@ import { HiOutlinePhone } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
 import { GoSearch } from "react-icons/go";
+import { Link, useNavigate } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(true);
@@ -21,22 +22,14 @@ const Header = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const ref = useRef();
   const products = useSelector((state) => state.reduxReducer.products);
-
-  // const [showMenu, setShowMenu] = useState(true);
-  // const [sidenav, setSidenav] = useState(false);
-  // const [category, setCategory] = useState(false);
-  // const [showUser, setShowUser] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const refUserDropdown = useRef();
-  // const products = useSelector((state) => state.reduxReducer.products);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         setShowUser(false);
       }
     };
-
     document.body.addEventListener("click", handleClickOutside);
     return () => {
       document.body.removeEventListener("click", handleClickOutside);
@@ -69,6 +62,18 @@ const Header = () => {
     setSearchQuery(e.target.value);
   };
 
+  const handleNavigation = (to) => {
+    setSidenav(false);
+    navigate('/');
+    setTimeout(() => {
+      // Scroll to the specific section after a short delay
+      const element = document.getElementById(to);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300); // Adjust the timeout if necessary
+  };
+
   return (
     <>
       {/* Top Notification Bar with Marquee */}
@@ -76,7 +81,7 @@ const Header = () => {
         <div className="flex space-x-4 min-w-[100%] animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center ">
           🎉 50% OFF SALE on selected items!&nbsp;
           <span className="cursor-pointer animate-blink font-bold">
-            <NavLink to="/products" className="group-hover:text-white" >Shop now!</NavLink>
+            <Link to="/products" className="group-hover:text-white" >Shop now!</Link>
           </span>
         </div>
       </div>
@@ -93,10 +98,10 @@ const Header = () => {
 
             {/* Mobile Menu Toggle */}
             <HiOutlineBars3BottomLeft onClick={() => setSidenav(!sidenav)} className="pr-2 block md:hidden cursor-pointer w-8 h-6 text-gray-600" />
-            
+
             {/* Mobile Search Button */}
             <GoSearch onClick={() => setSidenav(!sidenav)} className="pr-2 block md:hidden lg:hidden xl:hidden cursor-pointer w-7 h-5 text-gray-600" />
-            
+
             {/* Mobile Sidebar */}
             {sidenav && (
               <div
@@ -127,7 +132,7 @@ const Header = () => {
                     {/* Search Bar (Mobile View) */}
                     <div className="relative mb-6">
                       <input
-                        className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder:text-gray-400 focus:ring focus:ring-gray-300 transition"
+                        className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder:text-gray-400 focus:ring focus:ring-gray-400 transition"
                         type="text"
                         onChange={handleSearch}
                         value={searchQuery}
@@ -139,45 +144,108 @@ const Header = () => {
                     {/* Navbar Menu */}
                     <ul className="flex flex-col gap-5 text-lg font-medium">
                       <li>
-                        <NavLink to="/products" className="block pt-1 text-[#ff5c5c] animate-blink" onClick={() => setSidenav(false)}>
-                          Sale 30% Off
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink to="/" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
+                        <Link
+                          to="/"
+                          className="relative block text-gray-700 font-light group cursor-pointer"
+                          onClick={() => setSidenav(false)}
+                        >
                           Home
-                        </NavLink>
+                          <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[15%]"></span>
+                        </Link>
                       </li>
+
                       <li>
-                        <NavLink to="/products" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
+                        <ScrollLink
+                          to="new-arrivals"
+                          smooth={true}
+                          duration={500}
+                          offset={-50}
+                          onClick={() => handleNavigation('new-arrivals')}
+                          className="relative block text-gray-700 font-light group cursor-pointer"
+                        >
                           New Arrivals
-                        </NavLink>
+                          <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                        </ScrollLink>
                       </li>
+
                       <li>
-                        <NavLink to="/products" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
-                          Top Selling
-                        </NavLink>
+                        <ScrollLink
+                          to="nayab-exclusive"
+                          smooth={true}
+                          duration={500}
+                          offset={-50}
+                          onClick={() => handleNavigation('nayab-exclusive')}
+                          className="relative block text-gray-700 font-light group cursor-pointer"
+                        >
+                          Nayab Exclusive
+                          <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                        </ScrollLink>
                       </li>
+
                       <li>
-                        <NavLink to="/products" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
-                          Women
-                        </NavLink>
+                        <ScrollLink
+                          to="special-offers"
+                          smooth={true}
+                          duration={500}
+                          offset={-50}
+                          onClick={() => handleNavigation('special-offers')}
+                          className="relative block text-gray-700 font-light group cursor-pointer"
+                        >
+                          Special Offers
+                          <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                        </ScrollLink>
                       </li>
+
                       <li>
-                        <NavLink to="/about" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
-                          About Us
-                        </NavLink>
+                        <Link
+                          to="/products"
+                          className="relative block text-gray-700 font-light group"
+                          onClick={() => setSidenav(false)}
+                        >
+                          Explore Shop
+                          <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[15%]"></span>
+                        </Link>
                       </li>
+
                       <li>
-                        <NavLink to="/contact" className="block text-gray-600 font-light hover:text-gray-200" onClick={() => setSidenav(false)}>
-                          Contact Us
-                        </NavLink>
+                        <Link
+                          to="/products"
+                          className="block text-[#e33939] font-light hover:text-red-700 pt-1 animate-blink"
+                          onClick={() => setSidenav(false)}
+                        >
+                          Sale 30% Off
+                        </Link>
                       </li>
                     </ul>
 
+                    {/* Shop by Category - Advanced */}
+                    {/* <div className="mt-4">
+                      <h1
+                        onClick={() => setCategory(!category)}
+                        className="flex justify-between items-center text-lg font-titleFont text-gray-700 hover:text-gray-500 cursor-pointer mb-2"
+                      >
+                        Shop by Category <span className="text-xl">{category ? "-" : "+"}</span>
+                      </h1>
+
+                      {category && (
+                        <motion.ul
+                          initial={{ y: 15, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.4 }}
+                          className="flex flex-col gap-1 text-sm"
+                        >
+                          {['Unstitched Collection', 'Stitched Collection', 'Saree Outfit', 'Nikkah Outfit', 'Lawn/Cotton', 'Mehndi Outfit'].map((item, index) => (
+                            <li key={index} className="text-gray-700 hover:text-gray-500 cursor-pointer transition duration-300">
+                              <Link to="/products">{item}</Link>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </div> */}
+
                     {/* Shop by Category */}
                     <div className="mt-4">
-                      <h1 onClick={() => setCategory(!category)} className="flex justify-between text-gray-600 hover:text-gray-200 cursor-pointer items-center font-titleFont mb-2">
+                      <h1 onClick={() => setCategory(!category)} className="flex text-lg justify-between text-gray-700 cursor-pointer items-center font-titleFont mb-2">
                         Shop by Category <span className="text-xl">{category ? "-" : "+"}</span>
                       </h1>
                       {category && (
@@ -187,12 +255,42 @@ const Header = () => {
                           transition={{ duration: 0.4 }}
                           className="text-sm flex flex-col gap-1"
                         >
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Unstitched Collection</li>
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Stitched Collection</li>
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Saree Outfit</li>
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Nikkah Outfit</li>
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Lawn/Cotton</li>
-                          <li className="headerSedenavLi text-gray-600 hover:text-gray-200 text-md">Mehndi Outfit</li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Unstitched Collection
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Stitched Collection
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Saree Outfit
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Nikkah Outfit
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Lawn/Cotton
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
+                          <li className="relative block text-gray-700 font-light group text-[16px]">
+                            <Link to="/products" onClick={() => setSidenav(false)}>
+                              Mehndi Outfit
+                              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
+                            </Link>
+                          </li>
                         </motion.ul>
                       )}
                     </div>

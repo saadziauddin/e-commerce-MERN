@@ -131,7 +131,6 @@ function App() {
   useEffect(() => {
     const handlePageLoad = () => {
       setLoading(true);
-      // Simulate loading time (you can replace this with your actual loading logic)
       setTimeout(() => {
         setLoading(false);
       }, 3000); // Adjust the timeout as needed

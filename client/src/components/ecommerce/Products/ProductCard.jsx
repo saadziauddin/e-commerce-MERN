@@ -14,7 +14,6 @@ function ProductCard(props) {
   const productItem = props;
 
   const images = Array.isArray(props.img) ? props.img : [props.img];
-  console.log("Images in array: ", images);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -41,7 +40,9 @@ function ProductCard(props) {
   };
 
   return (
-    <div className={`w-full relative transition-all duration-300 ${isHovered ? "hover:shadow-xl transition-transform hover:scale-105 z-50" : "shadow-none"}`}
+    <div
+      className={`w-full relative transition-all duration-300 ${isHovered ? "hover:shadow-xl hover:scale-105 z-10" : "shadow-none"}`}
+      style={{ transformOrigin: "center" }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -50,15 +51,21 @@ function ProductCard(props) {
         className={`relative w-full h-[350px] xs:h-[250px] sm:h-[350px] md:h-[450px] lg:h-[450px] overflow-hidden cursor-pointer`}
         onClick={handleProductDetails}
       >
-        <img
-          className="w-full h-full object-cover"
-          src={images[currentImageIndex]}
-          alt={props.productName}
-        />
+        {images.map((image, index) => (
+          <img
+            key={index}
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out 
+              ${currentImageIndex === index ? 'opacity-100' : 'opacity-0'}`}
+            src={image}
+            alt={props.productName}
+          />
+        ))}
+
         {/* Add to Cart button on hover */}
         {isHovered && (
           <button
-            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 px-6 py-2 border-2 border-gray-900 text-gray-900 xs:text-xs sm:text-xs md:text-sm font-semibold rounded-sm bg-transparent hover:bg-[#7b246d] hover:border-[#7b246d] hover:text-white transition-colors duration-300"
+            // className="absolute bottom-[45%] left-[50%] transform -translate-x-1/2 px-4 py-2 border-2 border-gray-900 text-gray-900 xs:text-xs sm:text-xs md:text-sm font-semibold rounded-sm bg-transparent hover:bg-[#7b246d] hover:border-[#7b246d] hover:text-white transition-colors duration-300"
+            className="absolute bottom-0 w-full left-[50%] transform -translate-x-1/2 px-4 py-2 bg-gray-800 text-gray-100 xs:text-xs sm:text-xs md:text-sm font-semibold hover:bg-[#7b246d] hover:text-white transition-colors duration-300"
             onClick={() => dispatch(addToCart(productItem))}
           >
             Add to Cart
@@ -66,29 +73,28 @@ function ProductCard(props) {
         )}
       </div>
 
-
       {/* Product Info */}
-      <div className={`mt-1 p-3 transition-all duration-300 ${isHovered ? "h-[150px]" : "h-[100px]"}`}>
+      <div className={`mt-1 p-1 px-2 bg-white transition-all duration-300 ${isHovered ? "h-[150px]" : "h-[100px]"}`}>
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">{props.productName}</h2>
-            <p className="text-gray-600">
+            <h2 className="xs:text-md sm:text-md md:text-lg lg:text-lg xl:text-lg font-semibold text-gray-900">{props.productName}</h2>
+            <p className="text-gray-600 xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg">
               <span className="text-xs">PKR</span> Rs.{props.price ? props.price.toLocaleString() : "Price not available"}
             </p>
           </div>
 
           <button
-            className="border-2 border-gray-900 text-gray-900 xs:text-sm sm:text-sm md:text-sm font-semibold py-2 px-4 rounded-sm bg-transparent hover:bg-[#7b246d] hover:border-[#7b246d] hover:text-white transition-colors duration-300"
+            className="hidden md:block lg:block xl:block border-2 border-gray-900 text-gray-900 xs:text-sm sm:text-sm md:text-sm font-semibold py-2 px-4 rounded-sm bg-transparent hover:bg-[#7b246d] hover:border-[#7b246d] hover:text-white transition-colors duration-300"
             onClick={handleProductDetails}
           >
-            Buy Now
+            Shop Now
           </button>
         </div>
 
         {/* Appears on hover */}
         {isHovered && (
           <>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-500 mt-2 bg-white p-2">
               {props.description || "This is a short description of the product."}
             </p>
             <div className="flex items-center justify-center gap-2">

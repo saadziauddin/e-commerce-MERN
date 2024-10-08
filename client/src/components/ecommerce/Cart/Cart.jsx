@@ -6,7 +6,7 @@ import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import { resetCart } from "../../../redux/reduxSlice";
 import emptyCart from "../../../assets/images/website_images/emptyCart.png";
 import { ImCross } from "react-icons/im";
-import { deleteItem, drecreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
+import { deleteItem, decreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -65,24 +65,18 @@ function Cart() {
                     <td className="py-4 px-6">PKR {item.price.toLocaleString()}</td>
                     <td className="py-4 px-6">
                       <div className="">
-                        <button
-                          onClick={() => dispatch(drecreaseQuantity({ _id: item._id }))}
-                          className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300"
-                        >
+                        <button onClick={() => dispatch(decreaseQuantity({ _id: item._id, size: item.size, color: item.color }))} className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300">
                           -
                         </button>
                         <span className="mx-2">{item.quantity}</span>
-                        <button
-                          onClick={() => dispatch(increaseQuantity({ _id: item._id }))}
-                          className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300"
-                        >
+                        <button onClick={() => dispatch(increaseQuantity({ _id: item._id, size: item.size, color: item.color }))} className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300">
                           +
                         </button>
                       </div>
                     </td>
                     <td className="py-4 px-6">PKR {(item.price * item.quantity).toLocaleString()}</td>
                     <td className="py-4 px-12">
-                      <button onClick={() => dispatch(deleteItem(item._id))}>
+                      <button onClick={() => dispatch(deleteItem({ _id: item._id, size: item.size, color: item.color }))}>
                         <ImCross className="text-red-500 cursor-pointer hover:text-red-700" />
                       </button>
                     </td>
@@ -116,7 +110,7 @@ function Cart() {
                 </p>
               </div>
               <div className="flex justify-start">
-                <Link to="/paymentgateway">
+                <Link to="/orderForm">
                   <button className="w-52 h-10 bg-primeColor text-white font-semibold rounded-md hover:bg-black duration-300 transition-all ease-in-out shadow-md hover:shadow-lg">
                     Proceed to Checkout
                   </button>

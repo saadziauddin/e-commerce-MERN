@@ -192,15 +192,12 @@ function ProductDetails() {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col lg:flex-row gap-4 mb-4">
-                        <button
-                            onClick={handleAddCart}
-                            className="w-full lg:w-auto bg-[#7b246d] text-white hover:bg-gray-500 py-2 px-4 md:py-2 md:px-6 rounded-lg font-semibold transition-all"
-                        >
+                        <button onClick={handleAddCart} className="w-full lg:w-auto bg-[#7b246d] text-white hover:bg-gray-500 py-2 px-4 md:py-2 md:px-6 rounded-lg font-semibold transition-all">
                             Add to Cart
                         </button>
-                        <button className="w-full lg:w-auto bg-gray-200 hover:bg-gray-300 text-[#7b246d] py-2 px-4 md:py-2 md:px-6 rounded-lg font-semibold transition-all">
+                        <Link to='/cart' onClick={handleAddCart} className="w-full lg:w-auto bg-gray-200 hover:bg-gray-300 text-[#7b246d] py-2 px-4 md:py-2 md:px-6 rounded-lg font-semibold transition-all">
                             Buy Now
-                        </button>
+                        </Link>
                     </div>
 
                     <p className="text-gray-800 mt-2 "><b className="text-lg font-semibold">Stock:</b> {productInfo.stock}</p>

@@ -7,14 +7,12 @@ import YearProduct from "../Products/YearProduct/YearProduct";
 
 const Home = () => {
   return (
-    <div className="w-full mx-auto">
-      <div className="max-w-container mx-auto px-4">
+    <div className="w-full mx-auto md:max-w-container lg:max-w-container xl:max-w-container">
         <Banner />
         <NewArrivals />
         <BestSellers />
         <YearProduct />
         <SpecialOffers />
-      </div>
     </div>
   );
 };

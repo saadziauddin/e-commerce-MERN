@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Product from "../ProductCard";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import api from '../../../../api/api.js';
+import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
 function SpecialOffers() {
   const [products, setProducts] = useState([]);
@@ -12,7 +12,6 @@ function SpecialOffers() {
       try {
         const response = await api.get("/api/fetchProductsByCategory/newArrivals");
         const data = await response.data;
-        console.log("Fetched data by category: ", data);
         setProducts(data.products);
       } catch (error) {
         console.error("Error fetching new arrivals:", error);
@@ -25,10 +24,11 @@ function SpecialOffers() {
   const NextArrow = (props) => {
     const { onClick } = props;
     return (
-      <div className="w-10 h-10 text-black hover:text-[#4a1341] text-lg duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] right-0" onClick={onClick}>
-        <span className="text-2xl">
-          <FaChevronRight />
-        </span>
+      <div
+        className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] right-2 lg:right-4"
+        onClick={onClick}
+      >
+        <TfiAngleRight />
       </div>
     );
   };
@@ -36,10 +36,11 @@ function SpecialOffers() {
   const PrevArrow = (props) => {
     const { onClick } = props;
     return (
-      <div className="w-10 h-10 text-black hover:text-[#4a1341] text-md duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] left-0" onClick={onClick}>
-        <span className="text-2xl">
-          <FaChevronLeft />
-        </span>
+      <div
+        className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] left-2 lg:left-4"
+        onClick={onClick}
+      >
+        <TfiAngleLeft />
       </div>
     );
   };
@@ -57,32 +58,28 @@ function SpecialOffers() {
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
-          infinite: true,
         },
       },
       {
         breakpoint: 769,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
-          infinite: true,
+          slidesToScroll: 1,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2, // Display 2 columns on mobile
           slidesToScroll: 1,
-          infinite: true,
         },
       },
     ],
   };
 
   return (
-    <div className="w-full mb-16 mt-16">
-      <div className="text-3xl font-semibold pb-6">Special Offers</div>
-
+    <div className="w-full mb-10 mt-10">
+      <div className="text-3xl text-center font-semibold pb-5">Special Offers</div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
@@ -91,14 +88,15 @@ function SpecialOffers() {
                 _id={product._id}
                 img={
                   product.images.length > 0
-                    ? product.images[0].imagePath.replace(/..[\\/]+client[\\/]+public/, "")
-                    : '/default_images/image-not-available.png'
-                } 
+                    ? product.images.map(img => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
+                    : ['/default_images/image-not-available.png']
+                }
                 productName={product.name}
                 price={product.price1}
                 color={product.color.join(", ")}
                 size={product.size.join(", ")}
                 tags={product.tags}
+                description={product.description}
               />
             </div>
           ))

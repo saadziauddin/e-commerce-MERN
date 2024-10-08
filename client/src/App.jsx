@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { createBrowserRouter, RouterProvider, Outlet, createRoutesFromElements, Route, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from './components/ecommerce/Loader/loader';
 
 // ================= Website =====================
 import Home from "./components/ecommerce/Home/Home";
@@ -21,6 +22,8 @@ import Contact from "./components/ecommerce/Contact/Contact";
 import Offer from "./components/ecommerce/Products/Offer/Offer";
 // ================= Payment =====================
 import Payment from "./components/ecommerce/payment/Payment";
+// ================= Order Form =====================
+import OrderForm from "./components/ecommerce/payment/orderForm";
 // ================= Products =====================
 import Product from "./components/ecommerce/Products/Products";
 import ProductDetails from "./components/ecommerce/Products/ProductDetails";
@@ -90,10 +93,11 @@ const router = createBrowserRouter(
         <Route path="/products" element={<><PageTitle title="Nayab Fashion - Products" /><Product /></>} />
         <Route path="/about" element={<><PageTitle title="Nayab Fashion - About" /><About /></>} />
         <Route path="/contact" element={<><PageTitle title="Nayab Fashion - Contact" /><Contact /></>} />
-        
+
         <Route path="/category/:category" element={<><PageTitle title="Nayab Fashion - Offer" /><Offer /></>} />
         <Route path="/product/:id" element={<><PageTitle title="Nayab Fashion - Product Details" /><ProductDetails /></>} />
         <Route path="/cart" element={<><PageTitle title="Nayab Fashion - Cart" /><Cart /></>} />
+        <Route path="/orderForm" element={<><PageTitle title="Nayab Fashion - Order Form" /><OrderForm /></>} />
         <Route path="/paymentgateway" element={<><PageTitle title="Nayab Fashion - Payment" /><Payment /></>} />
       </Route>
       {/* Auth Routes */}
@@ -122,10 +126,38 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const handlePageLoad = () => {
+      setLoading(true);
+      // Simulate loading time (you can replace this with your actual loading logic)
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000); // Adjust the timeout as needed
+    };
+
+    handlePageLoad();
+
+    // Attach the event listener
+    window.addEventListener('load', handlePageLoad);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('load', handlePageLoad);
+    };
+  }, []);
+
   return (
-    <div className="font-bodyFont">
-      <RouterProvider router={router} />
-    </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="font-bodyFont">
+          <RouterProvider router={router} />
+        </div>
+      )}
+    </>
   );
 };
 

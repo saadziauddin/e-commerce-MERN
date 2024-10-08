@@ -4,31 +4,133 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .hoverEffect {
-    @apply duration-300 cursor-pointer;
-  }
-  .headerSedenavLi {
-    @apply hover:underline underline-offset-2 cursor-pointer text-gray-300 hover:text-white;
-  }
+/* Loader Container */
+.loader-container {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      position: fixed; /* Fixed position to cover the viewport */
+      top: 0; /* Align to the top of the viewport */
+      left: 0; /* Align to the left of the viewport */
+      width: 100vw; /* Full width of the viewport */
+      height: 100vh; /* Full height of the viewport */
+      background-color: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
+      z-index: 9999; /* High z-index to overlay other content */
 }
 
-/* ============= NavLink active Start here ============== */
-nav .active li {
-  color: black;
-  font-weight: 600;
-  text-decoration: 1px underline black;
+/* Loader Styling */
+.loader {
+      --w: 10ch; /* Width for the text */
+      /* font-weight: bold; Font weight */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font family */
+      font-size: 30px; /* Font size */
+      line-height: 1.4em; /* Line height */
+      letter-spacing: var(--w); /* Letter spacing */
+      width: var(--w); /* Width defined by variable */
+      overflow: hidden; /* Hide overflow */
+      white-space: nowrap; /* No wrapping */
+      color: #0000; /* Transparent color */
+      /* text-transform: uppercase; */
+      text-shadow:
+            calc(0 * var(--w)) 0 #000,
+            calc(-1 * var(--w)) 0 #000,
+            calc(-2 * var(--w)) 0 #000,
+            calc(-3 * var(--w)) 0 #000,
+            calc(-4 * var(--w)) 0 #000,
+            calc(-5 * var(--w)) 0 #000,
+            calc(-6 * var(--w)) 0 #000,
+            calc(-7 * var(--w)) 0 #000,
+            calc(-8 * var(--w)) 0 #000,
+            calc(-9 * var(--w)) 0 #000;
+      animation: l20 2s infinite linear; /* Animation */
 }
 
-@media screen and (max-width: 665px) {
-  nav .active li {
-    color: #ffff;
-    font-weight: 600;
-    text-decoration: 1px underline #ffff;
-  }
+.loader:before {
+      /* content: "Nayab Fashion..."; */
+      content: "Loading...";
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+@keyframes l20 {
+      9.09% {
+            text-shadow:
+                  calc(0*var(--w)) -10px #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      18.18% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) -10px #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      27.27% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) -10px #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      36.36% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) -10px #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      45.45% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) -10px #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      54.54% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) -10px #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      63.63% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) -10px #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      72.72% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) -10px #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      81.81% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) -10px #000, calc(-9*var(--w)) 0 #000
+      }
+
+      90.90% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) -10px #000
+      }
+      9.09% {
+            text-shadow:
+                  calc(0*var(--w)) -10px #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      18.18% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) -10px #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      27.27% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) -10px #000, calc(-3*var(--w)) 0 #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
+
+      36.36% {
+            text-shadow:
+                  calc(0*var(--w)) 0 #000, calc(-1*var(--w)) 0 #000, calc(-2*var(--w)) 0 #000, calc(-3*var(--w)) -10px #000, calc(-4*var(--w)) 0 #000,
+                  calc(-5*var(--w)) 0 #000, calc(-6*var(--w)) 0 #000, calc(-7*var(--w)) 0 #000, calc(-8*var(--w)) 0 #000, calc(-9*var(--w)) 0 #000
+      }
 }
-/* ============= NavLink active End here ================ */

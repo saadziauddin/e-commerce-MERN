@@ -4,60 +4,28 @@ import { Link } from "react-router-dom";
 import bannerImgOne from "../../../../assets/images/website_images/banner/bannerImgOne.jpg";
 import bannerImgTwo from "../../../../assets/images/website_images/banner/bannerImgTwo.jpg";
 import bannerImgThree from "../../../../assets/images/website_images/banner/bannerImgThree.jpg";
-import mobileBannerImgOne from "../../../../assets/images/website_images/banner/mobileBannerImgThree.jpg";
-import mobileBannerImgTwo from "../../../../assets/images/website_images/banner/mobileBannerImgThree.jpg";
-import mobileBannerImgThree from "../../../../assets/images/website_images/banner/mobileBannerImgThree.jpg";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
 const NextArrow = ({ onClick }) => (
-  <div
-    onClick={onClick}
-    className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 cursor-pointer 
-    text-black bg-gray-200 hover:bg-[#7b246d] hover:text-white 
-    rounded-l-lg p-2 transition-all duration-300 ease-in-out"
-  >
-    <FaChevronRight className="text-xs md:text-xl lg:text-xl xl:text-xl" />
+  <div onClick={onClick} className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110">
+    <TfiAngleRight className="text-3xl md:text-4xl lg:text-4xl xl:text-4xl" />
   </div>
 );
 
 const PrevArrow = ({ onClick }) => (
-  <div
-    onClick={onClick}
-    className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 cursor-pointer 
-    text-black bg-gray-200 hover:bg-[#7b246d] hover:text-white 
-    rounded-r-lg p-2 transition-all duration-300 ease-in-out"
-  >
-    <FaChevronLeft className="text-xs md:text-xl lg:text-xl xl:text-xl" />
+  <div onClick={onClick} className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110">
+    <TfiAngleLeft className="text-3xl md:text-4xl lg:text-4xl xl:text-4xl" />
   </div>
 );
 
 const CustomSlide = ({ imgSrc }) => (
-  <Link to='/products' className="relative flex justify-center items-center">
-    <img
-      className="w-full h-[480px] md:h-[550px] lg:h-[550px] xl:h-[550px] object-cover cursor-pointer"
-      src={imgSrc}
-      alt="banner"
-    />
+  <Link to='/products'>
+    <img className="w-full h-[250px] md:h-[550px] lg:h-[550px] xl:h-[550px] object-center cursor-pointer" src={imgSrc} alt="Main Banner" />
   </Link>
 );
 
 const Banner = () => {
   const [dotActive, setDotActive] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Check if the screen is less than or equal to 768px (mobile screens)
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    handleResize(); // Call on component mount
-    window.addEventListener("resize", handleResize); // Add event listener for resize
-
-    return () => {
-      window.removeEventListener("resize", handleResize); // Cleanup on unmount
-    };
-  }, []);
 
   const settings = {
     dots: true,
@@ -71,11 +39,7 @@ const Banner = () => {
     prevArrow: <PrevArrow />,
     beforeChange: (prev, next) => setDotActive(next),
     customPaging: (i) => (
-      <div
-        className={`w-4 h-1 px-4 mx-1 cursor-pointer ${
-          i === dotActive ? "bg-white" : "bg-gray-400"
-        }`}
-      />
+      <div className={`w-4 h-1 px-4 mx-1 cursor-pointer ${i === dotActive ? "bg-white" : "bg-gray-400"}`}/>
     ),
     appendDots: (dots) => (
       <div
@@ -99,9 +63,8 @@ const Banner = () => {
           arrows: true,
           customPaging: (i) => (
             <div
-              className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${
-                i === dotActive ? "bg-white" : "bg-gray-400"
-              }`}
+              className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${i === dotActive ? "bg-white" : "bg-gray-400"
+                }`}
             />
           ),
         },
@@ -114,9 +77,8 @@ const Banner = () => {
           arrows: true,
           customPaging: (i) => (
             <div
-              className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${
-                i === dotActive ? "bg-white" : "bg-gray-400"
-              }`}
+              className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${i === dotActive ? "bg-white" : "bg-gray-400"
+                }`}
             />
           ),
         },
@@ -124,21 +86,14 @@ const Banner = () => {
     ],
   };
 
-  // Mobile images for small screens and default images for large screens
-  const slides = isMobile
-    ? [
-        { imgSrc: mobileBannerImgOne },
-        { imgSrc: mobileBannerImgTwo },
-        { imgSrc: mobileBannerImgThree },
-      ]
-    : [
-        { imgSrc: bannerImgOne },
-        { imgSrc: bannerImgTwo },
-        { imgSrc: bannerImgThree },
-      ];
+  const slides = [
+    { imgSrc: bannerImgOne },
+    { imgSrc: bannerImgTwo },
+    { imgSrc: bannerImgThree },
+  ]
 
   return (
-    <div className="w-full bg-white mt-6 relative">
+    <div className="mt-1 md:mt-5 lg:mt-5 xl:mt-5">
       <Slider {...settings}>
         {slides.map((slide, index) => (
           <CustomSlide key={index} imgSrc={slide.imgSrc} />

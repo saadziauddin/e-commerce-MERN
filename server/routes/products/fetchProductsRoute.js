@@ -26,6 +26,17 @@ router.get('/api/fetchProductById/:productId', async (req, res) => {
     }
 });
 
+// Fetch Product by Category
+router.get('/api/fetchProductByCategory/:categoryName', async (req, res) => {
+    const categoryName = (req.params.categoryName);
+    try {
+        const fetchCategory = await Product.find({category: categoryName});
+        return res.status(200).json({fetchCategory});
+    } catch (error) {
+        console.log("Error fetching product by Category: ", error);
+    }
+});
+
 // Fetch products whose category = New Arrivals
 router.get('/api/fetchProductsByCategory/newArrivals', async (req, res) => {
     try {

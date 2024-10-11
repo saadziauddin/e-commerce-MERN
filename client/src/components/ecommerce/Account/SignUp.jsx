@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faLock, faPhone, faImage, faExclamationCircle, faUserTag, faLongArrowAltLeft, faAddressBook, faAddressCard, faCity, faEarth, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../../assets/css/style.css';
-import api from '../../../Api/api.js';
+import api from '../../../api/api.js';
 import LottieAnimation from "../../../assets/animations/LottieAnimation";
 import animationData from "../../../assets/animations/SignUpAnimation2.json";
 import { ToastContainer, toast } from 'react-toastify';

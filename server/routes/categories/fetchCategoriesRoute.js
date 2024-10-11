@@ -26,4 +26,18 @@ router.get('/api/fetchCategoryById/:categoryId', async (req, res) => {
     }
 });
 
+// Fetch Categories excuding which I don't want
+router.get('/api/fetchOnlyRequiredCategories', async (req, res) => {
+    const excludedCategories = ["New Arrivals", "Sale", "Top Selling", "Best Sellers"];
+    
+    try {
+      const categories = await Category.find({ name: { $nin: excludedCategories } });
+      return res.status(200).json(categories);
+    } catch (error) {
+      console.error("Error fetching categories: ", error);
+      return res.status(500).json({ message: "Failed to fetch categories", error });
+    }
+  });
+  
+
 export default router;

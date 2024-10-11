@@ -18,8 +18,6 @@ import About from "./components/ecommerce/About/About";
 import Cart from "./components/ecommerce/Cart/Cart";
 // ================= Contact =====================
 import Contact from "./components/ecommerce/Contact/Contact";
-// ================= Offer =====================
-import Offer from "./components/ecommerce/Products/Offer/Offer";
 // ================= Payment =====================
 import Payment from "./components/ecommerce/payment/Payment";
 // ================= Order Form =====================
@@ -93,8 +91,6 @@ const router = createBrowserRouter(
         <Route path="/products" element={<><PageTitle title="Nayab Fashion - Products" /><Product /></>} />
         <Route path="/about" element={<><PageTitle title="Nayab Fashion - About" /><About /></>} />
         <Route path="/contact" element={<><PageTitle title="Nayab Fashion - Contact" /><Contact /></>} />
-
-        <Route path="/category/:category" element={<><PageTitle title="Nayab Fashion - Offer" /><Offer /></>} />
         <Route path="/product/:id" element={<><PageTitle title="Nayab Fashion - Product Details" /><ProductDetails /></>} />
         <Route path="/cart" element={<><PageTitle title="Nayab Fashion - Cart" /><Cart /></>} />
         <Route path="/orderForm" element={<><PageTitle title="Nayab Fashion - Order Form" /><OrderForm /></>} />

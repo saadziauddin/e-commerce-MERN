@@ -57,14 +57,18 @@ import NayabExclusive from "../Products/NayabExclusive/NayabExclusive";
 
 const Home = () => {
   return (
-    <div className="w-full mx-auto md:max-w-container lg:max-w-container xl:max-w-container">
-      <Banner />
-      
+    <>
+      <div className="w-full">
+        <Banner />
+      </div>
+
       <div id="new-arrivals">
         <NewArrivals />
       </div>
-      
-      <BestSellers />
+
+      <div>
+        <BestSellers />
+      </div>
 
       <div id="nayab-exclusive">
         <NayabExclusive />
@@ -73,7 +77,7 @@ const Home = () => {
       <div id="special-offers">
         <SpecialOffers />
       </div>
-    </div>
+    </>
   );
 };
 

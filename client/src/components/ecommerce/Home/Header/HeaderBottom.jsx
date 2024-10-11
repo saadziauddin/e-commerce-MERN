@@ -1,20 +1,65 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+import api from "../../../../api/api";
 
 const HeaderBottom = () => {
+  const [categories, setCategories] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/api/fetchOnlyRequiredCategories');
+        setCategories(response.data);
+      } catch (error) {
+        console.log('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (categoryId, categoryName) => {
+    setIsDropdownOpen(false);
+    navigate(`/products?category=${categoryName}`);
+  };
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // Keep dropdown open while hovering over the dropdown or the "Categories" button
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  // const handleMouseLeave = () => {
+  //   setIsDropdownOpen(false);
+  // };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleNavigation = (to) => {
     navigate('/');
     setTimeout(() => {
-      // Scroll to the specific section after a short delay
       const element = document.getElementById(to);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }, 300); // Adjust the timeout if necessary
+    }, 300);
   };
 
   return (
@@ -33,7 +78,7 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-gray-800 font-thin group"
             >
               Home
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </Link>
 
             <ScrollLink
@@ -45,7 +90,7 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-gray-800 font-thin group cursor-pointer"
             >
               New Arrivals
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </ScrollLink>
 
             <ScrollLink
@@ -57,7 +102,7 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-gray-800 font-thin group cursor-pointer"
             >
               Nayab Exclusive
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </ScrollLink>
 
             <ScrollLink
@@ -69,7 +114,7 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-gray-800 font-thin group cursor-pointer"
             >
               Special Offers
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </ScrollLink>
 
             <Link
@@ -77,7 +122,7 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-gray-800 font-thin group hover:text-gray-600"
             >
               Explore Shop
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </Link>
 
             <Link
@@ -85,8 +130,43 @@ const HeaderBottom = () => {
               className="relative uppercase text-[16px] text-red-600 font-thin group animate-blink"
             >
               Sale 30% Off
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[75%]"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
             </Link>
+
+            {/* Categories Dropdown */}
+            <div className="relative"
+              onMouseEnter={handleMouseEnter}
+              onClick={handleDropdownToggle}
+              ref={dropdownRef}
+            >
+              <span className="relative uppercase text-[16px] text-gray-800 font-thin cursor-pointer group-hover:text-gray-600">
+                Categories
+                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
+              </span>
+
+              {isDropdownOpen && (
+                <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-200 z-10 p-4 w-60">
+                  <div className="overflow-hidden rounded-lg">
+                    {categories.length > 0 ? (
+                      <ul className="space-y-2">
+                        {categories.map((category) => (
+                          <li key={category.id}>
+                            <button
+                              onClick={() => handleCategoryClick(category.id, category.name)}
+                              className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-[#7b246d] hover:bg-opacity-20 rounded-lg transition-colors duration-300"
+                            >
+                              {category.name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="px-4 py-2 text-gray-700">No Categories</div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </motion.ul>
         </div>
       </div>

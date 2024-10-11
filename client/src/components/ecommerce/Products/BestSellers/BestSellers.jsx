@@ -78,8 +78,10 @@ function BestSellers() {
   };
 
   return (
-    <div className="w-full mb-10 mt-10">
-      <div className="text-3xl text-center font-semibold pb-5">Our Best Sellers</div>
+    <>
+      <div className="text-3xl text-center font-semibold pb-10 uppercase">
+        <p className="bg-[#7b246d] text-white">Our Best Sellers</p>
+      </div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
@@ -97,6 +99,7 @@ function BestSellers() {
                 size={product.size.join(", ")}
                 tags={product.tags}
                 description={product.description}
+                status={product.status}
               />
             </div>
           ))
@@ -104,7 +107,7 @@ function BestSellers() {
           <p>No products found.</p>
         )}
       </Slider>
-    </div>
+    </>
   );
 };
 

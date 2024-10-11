@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import logo1 from "../../../../assets/images/website_images/nayabLogo1.png";
-import logo2 from "../../../../assets/images/website_images/nayabLogo2.png";
 import { FaSearch } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import { PiShoppingCartThin } from "react-icons/pi";
@@ -12,18 +11,20 @@ import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
 import { GoSearch } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+import { SlEnvolope } from "react-icons/sl";
+import { SlPhone } from "react-icons/sl";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(true);
   const [sidenav, setSidenav] = useState(false);
-  const [category, setCategory] = useState(false);
+  const [category, setCategory] = useState(true);
   const [showUser, setShowUser] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const ref = useRef();
   const products = useSelector((state) => state.reduxReducer.products);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
@@ -77,31 +78,65 @@ const Header = () => {
   return (
     <>
       {/* Top Notification Bar with Marquee */}
-      <div className="w-full h-9 bg-[#7b246d] text-white text-center sm:text-sm xs:text-xs py-2 overflow-hidden group">
-        <div className="flex space-x-4 min-w-[100%] animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center ">
+      {/* <div className="w-full h-9 bg-[#7b246d] text-white text-center sm:text-sm xs:text-xs py-2 overflow-hidden group">
+        <div className="flex space-x-4 min-w-[100%] animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center cursor-pointer">
           🎉 50% OFF SALE on selected items!&nbsp;
-          <span className="cursor-pointer animate-blink font-bold">
-            <Link to="/products" className="group-hover:text-white" >Shop now!</Link>
+          <span className="cursor-pointer animate-blink font-bold group-hover:animate-none ">
+            <Link to="/products" className="group-hover:text-white">Shop now!</Link>
           </span>
+        </div>
+      </div> */}
+
+      {/* Top banner with shipping info */}
+      <div className="w-full h-10 xs:text-xs sm:text-xs md:text-[15px] lg:text-[15px] xl:text-[15px] bg-black text-white text-center flex justify-center items-center py-3 font-titleFont">
+        Free shipping worldwide above the order of Rs.100,000 T&C apply
+      </div>
+
+      <div className="w-full h-[50px] bg-gray-300 text-gray-900 py-2 md:px-6 flex justify-between items-center text-md">
+        <div className="flex items-center space-x-2 ml-4 md:ml-10">
+          <SlEnvolope className="xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-600" />
+          <a href="mailto:info@nayabfashion.com" target="_blank" className="xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700">
+            info@nayabfashion.com
+          </a>
+        </div>
+
+        <div className="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-6 mr-4 md:mr-10 md:mt-0">
+          <div className="flex items-center">
+            <SlPhone className="xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg text-gray-600" />
+            <a href="tel:+922136111685" className="pl-2 xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700 hover:text-gray-900">
+              +92(21)-23-456-789
+            </a>
+          </div>
+          <div className="flex items-center">
+            <SlPhone className="xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg text-gray-600" />
+            <a href="tel:+922136111685" className="pl-2 xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700 hover:text-gray-900">
+              +92(21)-23-456-789
+            </a>
+          </div>
         </div>
       </div>
 
-      <div className="w-full h-16 bg-white sticky top-0 z-50 border-b-[1px] border-b-gray-200 shadow-sm">
+      <div className="w-full h-16 bg-white sticky top-0 z-[70] border-b-[1px] border-b-gray-200 shadow-sm">
         <nav className="h-full px-4 max-w-container mx-auto relative flex items-center justify-between">
           {/* Left Section */}
           <div className="flex items-center flex-grow">
-            {/* Phone Number for Desktop View */}
-            <HiOutlinePhone className="text-gray-600 w-7 h-5 mr-2 hidden md:block lg:block xl:block" />
-            <a href="tel:+922136111685" className="text-md hidden md:block lg:block xl:block text-gray-600">
-              +92(21)-23-456-789
-            </a>
+            {/* Search Bar */}
+            <div className="hidden md:flex w-full relative">
+              <GoSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 text-lg cursor-pointer" />
+              <input
+                className="h-8 pl-12 pr-4 border-b border-gray-300 outline-none text-gray-800 placeholder-gray-500 placeholder:text-sm focus:ring-0 focus:border-gray-500 transition-all shadow-sm"
+                type="text"
+                onChange={handleSearch}
+                value={searchQuery}
+                placeholder="Search products, categories..."
+              />
+            </div>
 
+            {/* Mobile Settings */}
             {/* Mobile Menu Toggle */}
-            <HiOutlineBars3BottomLeft onClick={() => setSidenav(!sidenav)} className="pr-2 block md:hidden cursor-pointer w-8 h-6 text-gray-600" />
-
-            {/* Mobile Search Button */}
+            <HiOutlineBars3BottomLeft onClick={() => setSidenav(!sidenav)} className="pr-2 block md:hidden lg:hidden xl:hidden cursor-pointer w-8 h-6 text-gray-600" />
+            {/* Mobile Search Icon */}
             <GoSearch onClick={() => setSidenav(!sidenav)} className="pr-2 block md:hidden lg:hidden xl:hidden cursor-pointer w-7 h-5 text-gray-600" />
-
             {/* Mobile Sidebar */}
             {sidenav && (
               <div
@@ -129,7 +164,7 @@ const Header = () => {
                       <img className="w-28" src={logo1} alt="main_logo" />
                     </div>
 
-                    {/* Search Bar (Mobile View) */}
+                    {/* Mobile Search Bar */}
                     <div className="relative mb-6">
                       <input
                         className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder:text-gray-400 focus:ring focus:ring-gray-400 transition"
@@ -140,7 +175,6 @@ const Header = () => {
                       />
                       <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
                     </div>
-
                     {/* Navbar Menu */}
                     <ul className="flex flex-col gap-5 text-lg font-medium">
                       <li>
@@ -245,8 +279,9 @@ const Header = () => {
 
                     {/* Shop by Category */}
                     <div className="mt-4">
-                      <h1 onClick={() => setCategory(!category)} className="flex text-lg justify-between text-gray-700 cursor-pointer items-center font-titleFont mb-2">
-                        Shop by Category <span className="text-xl">{category ? "-" : "+"}</span>
+                      <h1 className="flex text-lg justify-between text-gray-700 cursor-pointer items-center font-titleFont mb-2">
+                        Categories
+                        {/* onClick={() => setCategory(!category)} <span className="text-xl">{category ? "-" : "+"}</span> */}
                       </h1>
                       {category && (
                         <motion.ul
@@ -303,7 +338,7 @@ const Header = () => {
           {/* Center Logo */}
           <div className="absolute left-1/2 transform -translate-x-1/2">
             <Link to="/">
-              <img className="w-[50px] h-[50px] object-cover" src={logo2} alt="main_logo" /> {/* logo2 */}
+              <img className="w-[150px] h-[50px] object-cover" src={logo1} alt="main_logo" />
             </Link>
           </div>
 
@@ -339,7 +374,6 @@ const Header = () => {
           </div>
         </nav>
       </div>
-
     </>
   );
 };

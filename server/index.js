@@ -61,6 +61,7 @@ app.delete('/api/deleteCategory', deleteCategoryRouter);
 
 import fetchCategoriesRouter from './routes/categories/fetchCategoriesRoute.js';
 app.get('/api/fetchCategories', fetchCategoriesRouter);
+app.get('/api/fetchOnlyRequiredCategories', fetchCategoriesRouter);
 app.get('/api/fetchCategoryById/:categoryId', fetchCategoriesRouter);
 
 // ======================= Product Routes ==============================
@@ -79,6 +80,7 @@ app.delete('/api/deleteProductImage/:ProductId', deleteProductImageRouter);
 import fetchProductsRouter from './routes/products/fetchProductsRoute.js';
 app.get('/api/fetchProducts', fetchProductsRouter);
 app.get('/api/fetchProductById/:productId', fetchProductsRouter);
+app.get('/api/fetchProductByCategory/:categoryName', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/newArrivals', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/bestSellers', fetchProductsRouter);
 

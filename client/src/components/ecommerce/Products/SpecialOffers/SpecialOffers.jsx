@@ -78,8 +78,10 @@ function SpecialOffers() {
   };
 
   return (
-    <div className="w-full mb-10 mt-10">
-      <div className="text-3xl text-center font-semibold pb-5">Special Offers</div>
+    <div className="mb-10">      
+      <div className="text-3xl text-center font-semibold pb-10 uppercase">
+        <p className="bg-[#7b246d] text-white">Special Offers</p>
+      </div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
@@ -97,6 +99,7 @@ function SpecialOffers() {
                 size={product.size.join(", ")}
                 tags={product.tags}
                 description={product.description}
+                status={product.status}
               />
             </div>
           ))

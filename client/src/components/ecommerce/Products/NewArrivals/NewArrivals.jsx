@@ -21,36 +21,11 @@ function NewArrivals() {
     fetchProducts();
   }, []);
 
-  // const NextArrow = (props) => {
-  //   const { onClick } = props;
-  //   return (
-  //     <div
-  //       className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] right-2 lg:right-4"
-  //       onClick={onClick}
-  //     >
-  //       <TfiAngleRight />
-  //     </div>
-  //   );
-  // };
-
-  // const PrevArrow = (props) => {
-  //   const { onClick } = props;
-  //   return (
-  //     <div
-  //       className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl duration-300 cursor-pointer flex justify-center items-center z-10 absolute top-[35%] left-2 lg:left-4"
-  //       onClick={onClick}
-  //     >
-  //       <TfiAngleLeft />
-  //     </div>
-  //   );
-  // };
-
   const NextArrow = (props) => {
     const { onClick } = props;
     return (
       <div
-        className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl flex justify-center items-center z-10 absolute top-[35%] right-2 lg:right-4 cursor-pointer 
-                   transition-transform duration-300 transform hover:scale-110"
+        className="w-10 h-10 text-black hover:text-[#4a1341] text-3xl flex justify-center items-center z-10 absolute top-[35%] right-2 lg:right-4 cursor-pointer transition-transform duration-300 transform hover:scale-110"
         onClick={onClick}
       >
         <TfiAngleRight />
@@ -70,44 +45,12 @@ function NewArrivals() {
       </div>
     );
   };
-  
-  // const settings = {
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 4,
-  //   slidesToScroll: 4,
-  //   nextArrow: <NextArrow />,
-  //   prevArrow: <PrevArrow />,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1025,
-  //       settings: {
-  //         slidesToShow: 3,
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 769,
-  //       settings: {
-  //         slidesToShow: 2,
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 480,
-  //       settings: {
-  //         slidesToShow: 2, // Display 2 columns on mobile
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //   ],
-  // };
 
   const settings = {
     infinite: true,
     speed: 500,
     slidesToShow: 4, // Default to show 4 slides
-    slidesToScroll: 1, // Always scroll 1 slide at a time
+    slidesToScroll: 4, // Always scroll 1 slide at a time
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
@@ -139,8 +82,10 @@ function NewArrivals() {
   };
 
   return (
-    <div className="w-full mb-10 mt-10">
-      <div className="text-3xl text-center font-semibold pb-5">New Arrivals</div>
+    <>
+      <div className="text-3xl text-center font-semibold py-10 uppercase">
+        <p className="bg-[#7b246d] text-white">New Arrivals</p>
+      </div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
@@ -158,6 +103,7 @@ function NewArrivals() {
                 size={product.size.join(", ")}
                 tags={product.tags}
                 description={product.description}
+                status={product.status}
               />
             </div>
           ))
@@ -165,7 +111,7 @@ function NewArrivals() {
           <p>No products found.</p>
         )}
       </Slider>
-    </div>
+    </>
   );
 };
 

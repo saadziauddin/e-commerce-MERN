@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-import { resetCart, deleteItem, decreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
+import { deleteItem, decreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
 import emptyCart from "../../../assets/images/website_images/emptyCart.png";
 import { ImCross } from "react-icons/im";
+import FormatPrice from "../../../helpers/FormatPrice";
 
 function Cart() {
+  const { selectedCurrency } = useOutletContext();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.reduxReducer.products);
   const [shippingCharge, setShippingCharge] = useState(0);
@@ -15,7 +17,7 @@ function Cart() {
   const totalAmt = products.reduce((total, item) => total + item.price * item.quantity, 0);
 
   useEffect(() => {
-    setShippingCharge(200); // Set fixed shipping for now
+    setShippingCharge(50);
   }, [totalAmt]);
 
   return (
@@ -37,15 +39,16 @@ function Cart() {
                     <h2 className="text-lg font-semibold text-gray-800">{item.name || "N/A"}</h2>
                     <p className="text-md text-gray-500 mt-2">Size: {item.size || "N/A"}</p>
                     <p className="text-md text-gray-500 mt-2">Color: {item.color || "N/A"}</p>
-                    <p className="text-lg font-bold text-gray-800 mt-2">Rs. {item.price.toLocaleString()}</p>
+                    <p className="text-lg font-bold text-gray-800 mt-2">
+                      <FormatPrice price={item.price * item.quantity} currency={selectedCurrency} />
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-4">
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={() =>
-                        dispatch(decreaseQuantity({ _id: item._id, size: item.size, color: item.color }))
-                      }
+                        dispatch(decreaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
                       className="px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-300 transition duration-200"
                     >
                       -
@@ -53,8 +56,7 @@ function Cart() {
                     <span className="font-semibold">{item.quantity}</span>
                     <button
                       onClick={() =>
-                        dispatch(increaseQuantity({ _id: item._id, size: item.size, color: item.color }))
-                      }
+                        dispatch(increaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
                       className="px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-300 transition duration-200"
                     >
                       +
@@ -90,12 +92,12 @@ function Cart() {
                 {products.map((item) => (
                   <tr key={item._id} className="border-t border-gray-200 hover:bg-gray-50 transition">
                     <td className="px-6 py-4 text-center">
-                      <img src={item.image} alt={item.name} className="w-24 h-32 object-cover rounded-md cursor-pointer"/>
+                      <img src={item.image} alt={item.name} className="w-24 h-32 object-cover rounded-md cursor-pointer" />
                     </td>
                     <td className="px-6 py-4">{item.name}</td>
                     <td className="px-6 py-4">{item.size}</td>
                     <td className="px-6 py-4">{item.color}</td>
-                    <td className="px-6 py-4">Rs. {item.price.toLocaleString()}</td>
+                    <td className="px-6 py-4"><FormatPrice price={item.price} currency={selectedCurrency} /></td>
                     <td className="px-6 py-4 text-center">
                       <div className="inline-flex items-center space-x-2">
                         <button
@@ -113,7 +115,7 @@ function Cart() {
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4">Rs. {(item.price * item.quantity).toLocaleString()}</td>
+                    <td className="px-6 py-4"><FormatPrice price={item.price * item.quantity} currency={selectedCurrency} /></td>
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => dispatch(deleteItem({ _id: item._id, size: item.size, color: item.color }))}
@@ -135,15 +137,15 @@ function Cart() {
               <div className="space-y-3">
                 <p className="flex justify-between items-center text-gray-700">
                   <span className="font-medium">Subtotal</span>
-                  <span className="font-bold">Rs. {totalAmt.toLocaleString()}</span>
+                  <FormatPrice price={totalAmt} currency={selectedCurrency} />
                 </p>
                 <p className="flex justify-between items-center text-gray-700">
                   <span className="font-medium">Shipping</span>
-                  <span className="font-bold">Rs. {shippingCharge}</span>
+                  <FormatPrice price={shippingCharge} currency={selectedCurrency} />
                 </p>
                 <p className="flex justify-between items-center text-gray-900 text-lg font-bold">
                   <span>Total</span>
-                  <span>Rs. {(totalAmt + shippingCharge).toLocaleString()}</span>
+                  <FormatPrice price={totalAmt + shippingCharge} currency={selectedCurrency} />
                 </p>
               </div>
               <Link to="/orderForm" className="mt-6 block">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/reduxSlice.jsx";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.jsx";
@@ -11,8 +11,10 @@ import { Counter, Fullscreen, Slideshow, Thumbnails, Zoom } from "yet-another-re
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
+import FormatPrice from "../../../helpers/FormatPrice.js";
 
-function ProductDetails({ selectedCurrency }) {
+function ProductDetails() {
+    const { selectedCurrency } = useOutletContext();
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,10 +26,6 @@ function ProductDetails({ selectedCurrency }) {
     const [productInfo, setProductInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [open, setOpen] = useState(false);
-
-    // const productImages = productInfo?.images?.length > 0
-    //     ? productInfo.images.map(image => image.imagePath.replace(/..[\\/]+client[\\/]+public/, ''))
-    //     : ['/default_images/image-not-available.png'];
 
     const productImages = Array.isArray(productInfo?.images) && productInfo.images.length > 0
         ? productInfo.images.map(image => image.imagePath.replace(/..[\\/]+client[\\/]+public/, ''))
@@ -143,9 +141,9 @@ function ProductDetails({ selectedCurrency }) {
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{productInfo.name}</h1>
                     <p className="text-sm uppercase text-gray-500 font-semibold mb-2">{productInfo.status}</p>
                     <div className="text-2xl font-bold text-gray-900 mb-2 flex gap-2 items-center">
-                        <p><span className="text-xs">PKR</span> Rs. {productInfo?.price1 ? productInfo.price1.toLocaleString() : "N/A"}</p>
+                        <p><FormatPrice price={productInfo.price1} currency={selectedCurrency} /></p>
                         {productInfo?.price2 && (
-                            <p className="line-through text-gray-500 text-lg">PKR {productInfo.price2.toLocaleString()}</p>
+                            <p className="line-through text-gray-500 text-lg"><FormatPrice price={productInfo.price2} currency={selectedCurrency} /></p>
                         )}
                     </div>
                     <p className="text-red-600 text-xs">GST Inclusive</p>

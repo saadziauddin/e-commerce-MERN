@@ -30,7 +30,6 @@ import SignIn from "./components/ecommerce/Account/SignIn";
 import SignUp from "./components/ecommerce/Account/SignUp";
 import Reset from "./components/ecommerce/Account/Reset";
 
-
 // ================= Dashboard =====================
 import DashboardHome from './components/dashboard/Home/Home';
 // ================= User management =====================
@@ -44,39 +43,6 @@ import UpdateCategory from './components/dashboard/Categories/UpdateCategory';
 import Products from './components/dashboard/Products/Products';
 import AddProduct from "./components/dashboard/Products/AddProduct";
 import UpdateProduct from './components/dashboard/Products/UpdateProduct';
-// ================= Orders management =====================
-// import Orders from './components/dashboard/Orders/Orders';
-
-// const Layout = () => {
-//   const [currency, setCurrency] = useState("PKR");
-
-//   const handleCurrencyChange = (newCurrency) => {
-//     setCurrency(newCurrency);
-//   };
-//   return (
-//     <div>
-//       <ToastContainer
-//         position="top-right"
-//         autoClose={1000}
-//         hideProgressBar={false}
-//         newestOnTop={false}
-//         closeOnClick
-//         rtl={false}
-//         pauseOnFocusLoss
-//         draggable
-//         pauseOnHover
-//         theme="colored"
-//       />
-//       <Navbar onCurrencyChange={handleCurrencyChange} />
-//       <NavbarBottom />
-//       {/* <SpecialCase /> */}
-//       <ScrollRestoration />
-//       <Outlet />
-//       <Footer />
-//       <FooterBottom />
-//     </div>
-//   );
-// };
 
 const Layout = () => {
   const [currency, setCurrency] = useState("PKR");
@@ -102,7 +68,6 @@ const Layout = () => {
       <Navbar onCurrencyChange={handleCurrencyChange} />
       <NavbarBottom />
       <ScrollRestoration />
-      {/* Pass the selectedCurrency to the Outlet */}
       <Outlet context={{ selectedCurrency: currency }} />
       <Footer />
       <FooterBottom />

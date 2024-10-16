@@ -31,7 +31,6 @@ const Navbar = ({ onCurrencyChange, activeDropdown, setActiveDropdown }) => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         setShowUser(false);
-        // setIsOpen(false);
       }
     };
     document.body.addEventListener("click", handleClickOutside);
@@ -369,10 +368,11 @@ const Navbar = ({ onCurrencyChange, activeDropdown, setActiveDropdown }) => {
 
           {/* Right Section */}
           <div className="flex items-center gap-1 justify-end flex-grow">
-            <div className="relative inline-block" ref={ref}>
-              <div className="flex w-full items-center cursor-pointer border border-gray-300 p-2 rounded-md bg-white" onClick={() => setIsOpen(!isOpen)} >
+            {/* Currency Dropdown */}
+            <div className="relative" ref={ref}>
+              <div className="flex w-full items-center cursor-pointer border border-gray-300 p-[5px] rounded-md bg-white" onClick={() => setIsOpen(!isOpen)} >
                 {flagComponents[currency]}
-                <span>{currency}</span>
+                <span className="hidden md:block lg:block xl:block">{currency}</span>
               </div>
               {isOpen && (
                 <div className="absolute top-full right-0 z-10 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg">
@@ -391,7 +391,7 @@ const Navbar = ({ onCurrencyChange, activeDropdown, setActiveDropdown }) => {
             </div>
 
             {/* User Dropdown */}
-            <div className="relative cursor-pointer" ref={ref}>
+            <div className="relative hidden md:block lg:block xl:block cursor-pointer" ref={ref}>
               <CiUser className="w-8 h-6 text-gray-700" onClick={() => setShowUser(!showUser)} />
               {showUser && (
                 <motion.ul

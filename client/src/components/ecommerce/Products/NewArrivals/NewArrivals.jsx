@@ -4,7 +4,7 @@ import Product from "../ProductCard";
 import api from '../../../../api/api.js';
 import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
-function NewArrivals() {
+function NewArrivals({ selectedCurrency }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function NewArrivals() {
       </div>
     );
   };
-  
+
   const PrevArrow = (props) => {
     const { onClick } = props;
     return (
@@ -49,15 +49,18 @@ function NewArrivals() {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Default to show 4 slides
-    slidesToScroll: 4, // Always scroll 1 slide at a time
+    slidesToShow: 4,
+    slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1025,
         settings: {
-          slidesToShow: 3, // Show 3 slides on medium screens
+          slidesToShow: 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -65,7 +68,7 @@ function NewArrivals() {
       {
         breakpoint: 769,
         settings: {
-          slidesToShow: 2, // Show 2 slides on smaller screens
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -73,7 +76,7 @@ function NewArrivals() {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2, // Show 2 slides on mobile
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -83,13 +86,13 @@ function NewArrivals() {
 
   return (
     <>
-      <div className="text-3xl text-center font-semibold py-10 uppercase">
+      <div className="text-3xl text-center font-semibold pt-10 pb-1 uppercase">
         <p className="bg-[#7b246d] text-white">New Arrivals</p>
       </div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
-            <div className="px-2" key={product._id}>
+            <div className="px-2 py-10" key={product._id}>
               <Product
                 _id={product._id}
                 img={
@@ -97,13 +100,12 @@ function NewArrivals() {
                     ? product.images.map(img => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
                     : ['/default_images/image-not-available.png']
                 }
-                productName={product.name}
-                price={product.price1}
-                color={product.color.join(", ")}
-                size={product.size.join(", ")}
-                tags={product.tags}
-                description={product.description}
-                status={product.status}
+                productName={product.name || "Product Name Not Available"}
+                price={product.price1 || "Product Price Not Available"}
+                tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
+                shortDescription={product.shortDescription || null}
+                status={product.status || null}
+                selectedCurrency={selectedCurrency}
               />
             </div>
           ))
@@ -115,4 +117,4 @@ function NewArrivals() {
   );
 };
 
-export default NewArrivals  ;
+export default NewArrivals;

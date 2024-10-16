@@ -20,9 +20,15 @@ router.post('/api/signin', async (req, res) => {
         }
 
         const token = jwt.sign(
-            {id: user._id, name: user.fullName, email: user.email, role: user.role},
+            {
+                id: user._id,
+                name: user.fullName,
+                email: user.email,
+                role: user.role,
+                image: user.ImageName
+            },
             process.env.JWT_SECRET,
-            {expiresIn: '5h'}
+            {expiresIn: '3h'}
         );
 
         res.cookie('token', token, {
@@ -34,8 +40,12 @@ router.post('/api/signin', async (req, res) => {
         return res.status(200).json({
             message: "Login Successfull!",
             token,
-            role: user.role
-          });
+            id: user._id,
+            name: user.fullName,
+            email: user.email,
+            role: user.role,
+            image: user.ImageName
+        });
 
     } catch (error) {
         console.log("Error during login: ", error);

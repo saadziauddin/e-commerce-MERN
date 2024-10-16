@@ -4,7 +4,7 @@ import Product from "../ProductCard";
 import api from '../../../../api/api.js';
 import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
-function SpecialOffers() {
+function SpecialOffers({ selectedCurrency }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -52,12 +52,16 @@ function SpecialOffers() {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1025,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
+          infinite: true,
         },
       },
       {
@@ -65,41 +69,45 @@ function SpecialOffers() {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          infinite: true,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2, // Display 2 columns on mobile
+          slidesToShow: 2,
           slidesToScroll: 1,
+          infinite: true,
         },
       },
     ],
   };
 
   return (
-    <div className="mb-10">      
-      <div className="text-3xl text-center font-semibold pb-10 uppercase">
+    <div className="mb-10">
+      <div className="text-3xl text-center font-semibold uppercase">
         <p className="bg-[#7b246d] text-white">Special Offers</p>
       </div>
       <Slider {...settings}>
         {products.length > 0 ? (
           products.map((product) => (
-            <div className="px-2" key={product._id}>
+            <div className="px-2 py-10" key={product._id}>
               <Product
                 _id={product._id}
                 img={
-                  product.images.length > 0
+                  Array.isArray(product.images) && product.images.length > 0
                     ? product.images.map(img => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
                     : ['/default_images/image-not-available.png']
                 }
-                productName={product.name}
-                price={product.price1}
-                color={product.color.join(", ")}
-                size={product.size.join(", ")}
-                tags={product.tags}
-                description={product.description}
-                status={product.status}
+                productName={product.name || "Product Name Not Available"}
+                price={product.price1 || null} // Only pass price if available
+                color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
+                size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
+                tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
+                shortDescription={product.shortDescription || null}
+                longDescription={product.longDescription || null}
+                status={product.status || null}
+                selectedCurrency={selectedCurrency}
               />
             </div>
           ))

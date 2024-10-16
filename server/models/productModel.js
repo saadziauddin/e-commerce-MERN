@@ -7,14 +7,15 @@ const productSchema = new mongoose.Schema({
         { type: String, required: true }
     ],
     size: [
-        { type: String, required: true }
+        { type: String }
     ],
     tags: { type: String, trim: true },
     stock: { type: Number, required: true },
     category: { type: String, required: true, trim: true },
     discount: { type: Number },
     status: { type: String, required: true, enum: ['Available', 'Out of Stock'] },
-    description: { type: String, required: true, trim: true },
+    shortDescription: { type: String, required: true, trim: true },
+    longDescription: { type: String, required: true, trim: true },
     price1: { type: Number, required: true },
     price2: { type: Number },
     images: [

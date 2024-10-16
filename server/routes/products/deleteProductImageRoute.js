@@ -34,7 +34,7 @@ router.delete('/api/deleteProductImage/:ProductId', async (req, res) => {
         await product.save();
 
         // Remove the image from the file system
-        const fullImagePath = path.join(__dirname, '../../../public', imageToRemove.imagePath);
+        const fullImagePath = path.join(__dirname, '../../public', imageToRemove.imagePath);
         if (fs.existsSync(fullImagePath)) {
             fs.unlink(fullImagePath, (err) => {
                 if (err) {

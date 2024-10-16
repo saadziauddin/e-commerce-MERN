@@ -50,7 +50,7 @@ function Sidebar({ isOpen, closeSidebar }) {
     <aside ref={sidebarRef} className={`fixed inset-y-0 my-4 ml-4 block w-64 flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-lg transition-transform duration-200 xl:left-0 ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}`}>
       <div className="flex justify-center items-center py-4">
         <NavLink to='/dashboard/home'>
-          <img src="" className="h-16 w-auto" alt="main_logo" />
+          <img src={logo} className="h-16 w-auto" alt="main_logo" />
         </NavLink>
       </div>
       <hr className="h-px mt-0 mb-3 bg-gray-200" />
@@ -84,12 +84,12 @@ function Sidebar({ isOpen, closeSidebar }) {
               <span>Products</span>
             </NavLink>
           </li>
-          <li className="mt-2 w-full">
+          {/* <li className="mt-2 w-full">
             <NavLink to="/dashboard/sales" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
               <FontAwesomeIcon icon={faPercent} className="mr-2" />
               <span>Sales</span>
             </NavLink>
-          </li>
+          </li> */}
           <li className="mt-2 w-full">
             <NavLink to="/dashboard/orders" className={({ isActive }) => `py-2.5 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 transition-all ${isActive ? 'bg-gray-200 text-black' : 'text-gray-600 hover:bg-gray-200 hover:text-black'}`}>
               <FontAwesomeIcon icon={faCartPlus} className="mr-2" />

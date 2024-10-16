@@ -22,7 +22,7 @@ router.delete('/api/deleteUser', async (req, res) => {
         const profileImageObj = user.profileImage[0];
 
         if(profileImageObj && profileImageObj.imagePath){
-            const fullImagePath = path.join(__dirname, '../../', profileImageObj.imagePath);
+            const fullImagePath = path.join(__dirname, '../../public', profileImageObj.imagePath);
             fs.unlink(fullImagePath, (err) => {
                 if (err) {
                     console.error('Error deleting user profile image:', err);

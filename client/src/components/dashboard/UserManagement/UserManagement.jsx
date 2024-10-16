@@ -52,6 +52,17 @@ function UserManagement() {
     }
   };
 
+  const getProfileImage = (row) => {
+    if (row.profileImage && row.profileImage.length > 0) {
+      return `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`;
+    }
+    return '/default_images/default_profile.png';
+  };
+
+  // const profileImage = row.profileImage && row.profileImage.length > 0
+  //   ? `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`
+  //   : '/default_images/default_profile.png';
+
   return (
     <div className="absolute top-0 left-0 w-full h-full">
       <ToastContainer
@@ -93,18 +104,26 @@ function UserManagement() {
                       {
                         name: 'Profile Image',
                         cell: row => {
-                          const profileImage = row.profileImage && row.profileImage.length > 0
-                            ? `/uploads/user_images/${row.profileImage[0].imageName}`
-                            : '/default_images/default_profile.png';
-
+                          // const profileImage = row.profileImage && row.profileImage.length > 0
+                          //   ? `../../../../../server/public/uploads/user_images/${row.profileImage[0].imageName}`
+                          //   : '/default_images/default_profile.png';
+                          // const profileImage = row.profileImage && row.profileImage.length > 0
+                          //   ? `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`
+                          //   : '/default_images/default_profile.png';
                           return (
                             <div>
                               <img
-                                src={profileImage}
+                                src={getProfileImage(row)}
                                 alt="profile_image"
                                 className="h-10 w-10 rounded-full"
                                 onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
                               />
+                              {/* <img
+                                src={getProfileImage}
+                                alt="profile_image"
+                                className="h-10 w-10 rounded-full"
+                                onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
+                              /> */}
                             </div>
                           );
                         },
@@ -179,42 +198,42 @@ function UserManagement() {
                         wrap: true,
                       }
                     ]}
-                  customStyles={{
-                    headCells: {
-                      style: {
-                        fontWeight: 'bold',
-                        fontSize: '12px',
-                        textTransform: 'uppercase',
-                        backgroundColor: '#e8e8e8',
-                      },
-                    },
-                    rows: {
-                      style: {
-                        minHeight: '50px',
-                        '&:not(:last-of-type)': {
-                          borderBottomStyle: 'solid',
-                          borderBottomWidth: '1px',
-                          borderBottomColor: '#d1d1d1',
-                        },
-                        '&:hover': {
-                          backgroundColor: '#f1f1f1',
+                    customStyles={{
+                      headCells: {
+                        style: {
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                          textTransform: 'uppercase',
+                          backgroundColor: '#e8e8e8',
                         },
                       },
-                    },
-                    pagination: {
-                      style: {
-                        borderTopStyle: 'solid',
-                        borderTopWidth: '1px',
-                        borderTopColor: '#d1d1d1',
+                      rows: {
+                        style: {
+                          minHeight: '50px',
+                          '&:not(:last-of-type)': {
+                            borderBottomStyle: 'solid',
+                            borderBottomWidth: '1px',
+                            borderBottomColor: '#d1d1d1',
+                          },
+                          '&:hover': {
+                            backgroundColor: '#f1f1f1',
+                          },
+                        },
                       },
-                    },
-                  }}
-                  data={fetchUsersData}
-                  fixedHeader
-                  fixedHeaderScrollHeight="400px"
-                  pagination
-                  paginationPerPage={10}
-                  paginationRowsPerPageOptions={[10, 20, 50, 100]}
+                      pagination: {
+                        style: {
+                          borderTopStyle: 'solid',
+                          borderTopWidth: '1px',
+                          borderTopColor: '#d1d1d1',
+                        },
+                      },
+                    }}
+                    data={fetchUsersData}
+                    fixedHeader
+                    fixedHeaderScrollHeight="400px"
+                    pagination
+                    paginationPerPage={10}
+                    paginationRowsPerPageOptions={[10, 20, 50, 100]}
                   />
                 </div>
               </div>

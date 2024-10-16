@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import { RxCross1 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import logo1 from "../../../../assets/images/website_images/nayabLogo1.png";
-import { FaSearch } from "react-icons/fa";
-import { CiUser } from "react-icons/ci";
-import { PiShoppingCartThin } from "react-icons/pi";
-import { HiOutlinePhone } from "react-icons/hi2";
 import { useSelector } from "react-redux";
-import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
-import { GoSearch } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+// Icons
 import { SlEnvolope } from "react-icons/sl";
 import { SlPhone } from "react-icons/sl";
+import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
+import { GoSearch } from "react-icons/go";
+import { CiUser } from "react-icons/ci";
+import { RxCross1 } from "react-icons/rx";
+import { PiShoppingCartThin } from "react-icons/pi";
+import { FaSearch } from "react-icons/fa";
+import { PK, IN, US, GB, TR, OM, AE, SA } from 'country-flag-icons/react/3x2';
 
-const Header = () => {
+const Navbar = ({ onCurrencyChange, activeDropdown, setActiveDropdown }) => {
+  const [currency, setCurrency] = useState('PKR');
+  const [isOpen, setIsOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
   const [sidenav, setSidenav] = useState(false);
   const [category, setCategory] = useState(true);
   const [showUser, setShowUser] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const ref = useRef();
   const products = useSelector((state) => state.reduxReducer.products);
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ const Header = () => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         setShowUser(false);
+        // setIsOpen(false);
       }
     };
     document.body.addEventListener("click", handleClickOutside);
@@ -36,13 +39,6 @@ const Header = () => {
       document.body.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
-
-  // useEffect(() => {
-  //   const filtered = paginationItems.filter((item) =>
-  //     item.productName.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  //   setFilteredProducts(filtered);
-  // }, [searchQuery]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,6 +54,13 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const handleCurrencyChange = (e) => {
+    const selectedCurrency = e.target.value;
+    setCurrency(e.target.value);
+    onCurrencyChange(selectedCurrency);
+    setIsOpen(false);
+  };
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -75,6 +78,28 @@ const Header = () => {
     }, 300); // Adjust the timeout if necessary
   };
 
+  const flagComponents = {
+    PKR: <PK className="inline-block w-5 h-5 mr-2" />,
+    INR: <IN className="inline-block w-5 h-5 mr-2" />,
+    USD: <US className="inline-block w-5 h-5 mr-2" />,
+    GBP: <GB className="inline-block w-5 h-5 mr-2" />,
+    TRY: <TR className="inline-block w-5 h-5 mr-2" />,
+    OMR: <OM className="inline-block w-5 h-5 mr-2" />,
+    AED: <AE className="inline-block w-5 h-5 mr-2" />,
+    SAR: <SA className="inline-block w-5 h-5 mr-2" />,
+  };
+
+  const currencies = [
+    { code: "PKR", name: "Pakistani Rupee" },
+    { code: "INR", name: "Indian Rupee" },
+    { code: "USD", name: "US Dollar" },
+    { code: "GBP", name: "British Pound" },
+    { code: "TRY", name: "Turkish Lira" },
+    { code: "OMR", name: "Omani Rial" },
+    { code: "AED", name: "UAE Dirham" },
+    { code: "SAR", name: "Saudi Riyal" }
+  ];
+
   return (
     <>
       {/* Top Notification Bar with Marquee */}
@@ -88,11 +113,11 @@ const Header = () => {
       </div> */}
 
       {/* Top banner with shipping info */}
-      <div className="w-full h-10 xs:text-xs sm:text-xs md:text-[15px] lg:text-[15px] xl:text-[15px] bg-black text-white text-center flex justify-center items-center py-3 font-titleFont">
+      <div className="w-full h-10 xs:text-xs sm:text-xs md:text-[15px] lg:text-[15px] xl:text-[15px] bg-black text-gray-200 text-center flex justify-center items-center py-3 font-titleFont">
         Free shipping worldwide above the order of Rs.100,000 T&C apply
       </div>
 
-      <div className="w-full h-[50px] bg-gray-300 text-gray-900 py-2 md:px-6 flex justify-between items-center text-md">
+      <div className="w-full h-[50px] bg-gray-200 text-gray-900 py-2 md:px-6 flex justify-between items-center text-md">
         <div className="flex items-center space-x-2 ml-4 md:ml-10">
           <SlEnvolope className="xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-600" />
           <a href="mailto:info@nayabfashion.com" target="_blank" className="xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700">
@@ -116,7 +141,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="w-full h-16 bg-white sticky top-0 z-[70] border-b-[1px] border-b-gray-200 shadow-sm">
+      <div className="w-full h-16 bg-white sticky top-0 z-[70] border-b border-b-gray-200">
         <nav className="h-full px-4 max-w-container mx-auto relative flex items-center justify-between">
           {/* Left Section */}
           <div className="flex items-center flex-grow">
@@ -344,9 +369,30 @@ const Header = () => {
 
           {/* Right Section */}
           <div className="flex items-center gap-1 justify-end flex-grow">
+            <div className="relative inline-block" ref={ref}>
+              <div className="flex w-full items-center cursor-pointer border border-gray-300 p-2 rounded-md bg-white" onClick={() => setIsOpen(!isOpen)} >
+                {flagComponents[currency]}
+                <span>{currency}</span>
+              </div>
+              {isOpen && (
+                <div className="absolute top-full right-0 z-10 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg">
+                  {currencies.map((curr) => (
+                    <div
+                      key={curr.code}
+                      className="flex items-center p-2 w-full hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleCurrencyChange({ target: { value: curr.code } })}
+                    >
+                      <div className="flex items-center justify-center w-10 h-8">{flagComponents[curr.code]}</div>
+                      <span className="ml-2">{curr.code} - {curr.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* User Dropdown */}
             <div className="relative cursor-pointer" ref={ref}>
-              <CiUser className="w-7 h-5 text-gray-700" onClick={() => setShowUser(!showUser)} />
+              <CiUser className="w-8 h-6 text-gray-700" onClick={() => setShowUser(!showUser)} />
               {showUser && (
                 <motion.ul
                   initial={{ y: 30, opacity: 0 }}
@@ -355,7 +401,7 @@ const Header = () => {
                   className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-44 z-50"
                 >
                   <Link to="/signin">
-                    <li className="px-4 py-2 hover:bg-gray-200">Login</li>
+                    <li className="px-4 py-2 hover:bg-gray-200 border-b">Sign In</li>
                   </Link>
                   <Link to="/signup">
                     <li className="px-4 py-2 hover:bg-gray-200">Sign Up</li>
@@ -366,16 +412,16 @@ const Header = () => {
 
             {/* Cart */}
             <Link to="/cart" className="relative">
-              <PiShoppingCartThin className="w-7 h-5 text-gray-700" />
+              <PiShoppingCartThin className="w-8 h-6 text-gray-700" />
               <span className="absolute -top-2 -right-2 w-4 h-4 bg-[#7b246d] text-white text-xs flex items-center justify-center rounded-full">
                 {products.length > 0 ? products.length : 0}
               </span>
             </Link>
           </div>
-        </nav>
-      </div>
+        </nav >
+      </div >
     </>
   );
 };
 
-export default Header;
+export default Navbar;

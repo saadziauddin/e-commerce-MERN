@@ -9,6 +9,7 @@ const verifyToken = (req, res, next) => {
             if (err) {
                 return res.status(403).json({ error: "Token is not correct!" });
             } else {
+                req.id = decoded.id;
                 req.name = decoded.name;
                 req.role = decoded.role;
                 next();

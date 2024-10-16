@@ -739,20 +739,14 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { toggleCategory, toggleBrand, togglePrice } from "../../../redux/reduxSlice";
 import { motion } from "framer-motion";
 
-function Products() {
+function Products({ selectedCurrency }) {
   const [products, setProducts] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [gridViewActive, setGridViewActive] = useState(true);
   const [itemOffset, setItemOffset] = useState(0);
   const [sortOption, setSortOption] = useState("Best Sellers");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const location = useLocation();
-
-  // const [showCategories, setShowCategories] = useState(true);
-  // const [showBrands, setShowBrands] = useState(true);
-  // const [showPrices, setShowPrices] = useState(true);
-
   const checkedCategories = useSelector((state) => state.reduxReducer.checkedCategories);
   const checkedBrands = useSelector((state) => state.reduxReducer.checkedBrands);
   const checkedPrices = useSelector((state) => state.reduxReducer.checkedPrices);
@@ -799,24 +793,29 @@ function Products() {
     const fetchProducts = async () => {
       const params = new URLSearchParams(location.search);
       const category = params.get("category");
-  
+
       try {
         const response = category
           ? await api.get(`/api/fetchProductByCategory/${encodeURIComponent(category)}`)
           : await api.get("/api/fetchProducts");
-          
+
         console.log(response);
         const data = response.data;
-        setProducts(Array.isArray(data.fetchCategory) ? data.fetchCategory : []);
+        // setProducts(Array.isArray(data.fetchCategory) ? data.fetchCategory : []);
+        if (category) {
+          setProducts(Array.isArray(data.fetchCategory) ? data.fetchCategory : []);
+        } else {
+          setProducts(Array.isArray(data) ? data : []);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
         setProducts([]);
       }
     };
-  
+
     fetchProducts();
   }, [location.search]);
-  
+
   const sortedProducts = [...products].sort((a, b) => {
     switch (sortOption) {
       case "A-Z":
@@ -1020,18 +1019,21 @@ function Products() {
                 <Product
                   _id={product._id}
                   img={
-                    product.images.length > 0
+                    product.images && product.images.length > 0
                       ? product.images.map((img) => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
                       : ['/default_images/image-not-available.png']
                   }
                   productName={product.name}
                   price={product.price1}
-                  color={product.color.join(", ")}
-                  size={product.size.join(", ")}
+                  color={product.color ? product.color.join(", ") : "N/A"}  // Add null check
+                  size={product.size ? product.size.join(", ") : "N/A"}     // Add null check
                   tags={product.tags}
-                  description={product.description}
+                  shortDescription={product.shortDescription}
+                  longDescription={product.longDescription}
                   status={product.status}
+                  selectedCurrency={selectedCurrency}
                 />
+
               </div>
             ))
           ) : (
@@ -1058,6 +1060,6 @@ function Products() {
       </div>
     </>
   );
-}
+};
 
 export default Products;

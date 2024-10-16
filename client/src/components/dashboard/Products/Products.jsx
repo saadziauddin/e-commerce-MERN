@@ -167,8 +167,14 @@ function Products() {
                         wrap: true,
                       },
                       {
-                        name: 'Description',
-                        selector: row => row.description,
+                        name: 'Short Description',
+                        selector: row => row.shortDescription,
+                        sortable: true,
+                        // wrap: true,
+                      },
+                      {
+                        name: 'Long Description',
+                        selector: row => row.longDescription,
                         sortable: true,
                         // wrap: true,
                       },

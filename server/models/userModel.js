@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         { imageName: { type: String }, imagePath: { type: String } }
     ],
     // roles: [{ type: mongoose.Schema.Types., ref: 'Role' }], // For _id of Roles
-    role: { type: String },
+    role: { type: String, default: 'Client' },
     dateOfCreation: { type: Date, default: Date.now }
 });
 

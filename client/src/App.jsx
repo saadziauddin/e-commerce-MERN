@@ -9,9 +9,9 @@ import Home from "./components/ecommerce/Home/Home";
 // ================= Footer =====================
 import Footer from "./components/ecommerce/Home/Footer/Footer";
 import FooterBottom from "./components/ecommerce/Home/Footer/FooterBottom";
-// ================= Header =====================
-import Header from "./components/ecommerce/Home/Header/Header";
-import HeaderBottom from "./components/ecommerce/Home/Header/HeaderBottom";
+// ================= Navbar =====================
+import Navbar from "./components/ecommerce/Home/Navbar/Navbar";
+import NavbarBottom from "./components/ecommerce/Home/Navbar/NavbarBottom";
 // ================= About =====================
 import About from "./components/ecommerce/About/About";
 // ================= Cart =====================
@@ -45,11 +45,46 @@ import Products from './components/dashboard/Products/Products';
 import AddProduct from "./components/dashboard/Products/AddProduct";
 import UpdateProduct from './components/dashboard/Products/UpdateProduct';
 // ================= Orders management =====================
-import Orders from './components/dashboard/Orders/Orders';
-// ================= Sales management =====================
-import Sales from './components/dashboard/Sales/Sales';
+// import Orders from './components/dashboard/Orders/Orders';
+
+// const Layout = () => {
+//   const [currency, setCurrency] = useState("PKR");
+
+//   const handleCurrencyChange = (newCurrency) => {
+//     setCurrency(newCurrency);
+//   };
+//   return (
+//     <div>
+//       <ToastContainer
+//         position="top-right"
+//         autoClose={1000}
+//         hideProgressBar={false}
+//         newestOnTop={false}
+//         closeOnClick
+//         rtl={false}
+//         pauseOnFocusLoss
+//         draggable
+//         pauseOnHover
+//         theme="colored"
+//       />
+//       <Navbar onCurrencyChange={handleCurrencyChange} />
+//       <NavbarBottom />
+//       {/* <SpecialCase /> */}
+//       <ScrollRestoration />
+//       <Outlet />
+//       <Footer />
+//       <FooterBottom />
+//     </div>
+//   );
+// };
 
 const Layout = () => {
+  const [currency, setCurrency] = useState("PKR");
+
+  const handleCurrencyChange = (newCurrency) => {
+    setCurrency(newCurrency);
+  };
+
   return (
     <div>
       <ToastContainer
@@ -64,11 +99,11 @@ const Layout = () => {
         pauseOnHover
         theme="colored"
       />
-      <Header />
-      <HeaderBottom />
-      {/* <SpecialCase /> */}
+      <Navbar onCurrencyChange={handleCurrencyChange} />
+      <NavbarBottom />
       <ScrollRestoration />
-      <Outlet />
+      {/* Pass the selectedCurrency to the Outlet */}
+      <Outlet context={{ selectedCurrency: currency }} />
       <Footer />
       <FooterBottom />
     </div>
@@ -105,6 +140,7 @@ const router = createBrowserRouter(
       {/* User management routes */}
       <Route path="/dashboard/userManagement" element={<><PageTitle title="Nayab Fashion - User Management" /><UserManagement /></>} />
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="Nayab Fashion - Edit User" /><UserProfile /></>} />
+      <Route path="/dashboard/userProfile/:userId" element={<><PageTitle title="Nayab Fashion - Edit Profile" /><UserProfile /></>} />
       {/* Categories management routes */}
       <Route path="/dashboard/categories" element={<><PageTitle title="Nayab Fashion - Categories" /><Categories /></>} />
       <Route path="/dashboard/categories/addCategory" element={<><PageTitle title="Nayab Fashion - Add Category" /><AddCategory /></>} />
@@ -114,9 +150,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard/products/addProduct" element={<><PageTitle title="Nayab Fashion - Add Product" /><AddProduct /></>} />
       <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="Nayab Fashion - Update Product" /><UpdateProduct /></>} />
       {/* Orders management routes */}
-      <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Orders /></>} />
-      {/* Sales management routes */}
-      <Route path="/dashboard/sales" element={<><PageTitle title="Nayab Fashion - Sales" /><Sales /></>} />
+      <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Categories /></>} />
     </Route>
   )
 );

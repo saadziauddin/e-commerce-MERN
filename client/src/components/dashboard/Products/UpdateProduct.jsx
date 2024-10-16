@@ -24,7 +24,8 @@ function UpdateProduct() {
     status: '',
     price1: '',
     price2: '',
-    description: '',
+    shortDescription: '',
+    longDescription: '',
     images: [],
   });
   const [editing, setEditing] = useState(false);
@@ -48,7 +49,8 @@ function UpdateProduct() {
         const product = response.data.product[0];
         setFormData({
           name: product.name,
-          description: product.description,
+          shortDescription: product.shortDescription,
+          longDescription: product.longDescription,
           price1: product.price1,
           price2: product.price2,
           color: product.color,
@@ -93,15 +95,15 @@ function UpdateProduct() {
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const totalImages = formData.images.length + newImages.length + selectedFiles.length;
-  
+
     if (totalImages > 5) {
       toast.error('You can only upload up to 5 images!');
       return;
     }
-  
+
     setNewImages([...newImages, ...selectedFiles]);
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -436,37 +438,6 @@ function UpdateProduct() {
                   </select>
                 </div>
 
-                {/* Discount */}
-                <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Discount:</label>
-                  <input
-                    type="text"
-                    id="discount"
-                    name="discount"
-                    value={formData.discount}
-                    onChange={handleInputChange}
-                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
-                    disabled={!editing}
-                  />
-                </div>
-
-                {/* Status */}
-                <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Status:</label>
-                  <select
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
-                    disabled={!editing}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Available">Available</option>
-                    <option value="Out of Stock">Out of Stock</option>
-                  </select>
-                </div>
-
                 {/* Price 1 */}
                 <div className="flex flex-col">
                   <label htmlFor="price1" className="mb-2 text-sm font-semibold text-gray-700">Price 1:</label>
@@ -495,13 +466,57 @@ function UpdateProduct() {
                   />
                 </div>
 
-                {/* Description */}
-                <div className="flex flex-col md:col-span-3">
-                  <label htmlFor="description" className="mb-2 text-sm font-semibold text-gray-700">Description:</label>
+                {/* Status */}
+                <div className="flex flex-col">
+                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Status:</label>
+                  <select
+                    id="status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                    disabled={!editing}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Available">Available</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                  </select>
+                </div>
+
+                {/* Discount */}
+                <div className="flex flex-col">
+                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Discount:</label>
+                  <input
+                    type="text"
+                    id="discount"
+                    name="discount"
+                    value={formData.discount}
+                    onChange={handleInputChange}
+                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                    disabled={!editing}
+                  />
+                </div>
+
+                {/* Short Description */}
+                <div className="flex flex-col">
+                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Short Description:</label>
                   <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                    id="shortDescription"
+                    name="shortDescription"
+                    value={formData.shortDescription}
+                    onChange={handleInputChange}
+                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                    disabled={!editing}
+                  />
+                </div>
+
+                {/* Long Description */}
+                <div className="flex flex-col md:col-span-3">
+                  <label htmlFor="description" className="mb-2 text-sm font-semibold text-gray-700">Long Description:</label>
+                  <textarea
+                    id="longDescription"
+                    name="longDescription"
+                    value={formData.longDescription}
                     onChange={handleInputChange}
                     className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                     disabled={!editing}
@@ -539,7 +554,7 @@ function UpdateProduct() {
 
               {/* Existing Images Section */}
               <div className="">
-              <label htmlFor="images" className="mb-3 text-[15px] font-semibold text-gray-700">Existing Product Images:</label>
+                <label htmlFor="images" className="mb-3 text-[15px] font-semibold text-gray-700">Existing Product Images:</label>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                   {formData.images.length > 0 ? (
                     formData.images.map((image, index) => (

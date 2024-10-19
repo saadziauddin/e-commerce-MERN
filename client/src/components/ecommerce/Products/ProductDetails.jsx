@@ -14,6 +14,7 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import FormatPrice from "../../../helpers/FormatPrice.js";
 
 function ProductDetails() {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { selectedCurrency } = useOutletContext();
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -28,8 +29,8 @@ function ProductDetails() {
     const [open, setOpen] = useState(false);
 
     const productImages = Array.isArray(productInfo?.images) && productInfo.images.length > 0
-        ? productInfo.images.map(image => image.imagePath.replace(/..[\\/]+client[\\/]+public/, ''))
-        : ['/default_images/image-not-available.png'];
+        ? productInfo.images.map(image => `${apiUrl}/uploads/product_images/${image.imageName}`)
+        : [`${apiUrl}/default_images/image-not-available.png`];
 
     useEffect(() => {
         const slideInterval = setInterval(() => {
@@ -44,7 +45,6 @@ function ProductDetails() {
             try {
                 const response = await api.get(`/api/fetchProductById/${id}`);
                 setProductInfo(response.data.product[0]);
-                console.log('Fetched Product Info:', response.data.product[0]);
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching product data: ", error);

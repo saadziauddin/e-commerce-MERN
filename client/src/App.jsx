@@ -7,11 +7,11 @@ import Loader from './components/ecommerce/Loader/loader';
 // ================= Website =====================
 import Home from "./components/ecommerce/Home/Home";
 // ================= Footer =====================
-import Footer from "./components/ecommerce/Home/Footer/Footer";
-import FooterBottom from "./components/ecommerce/Home/Footer/FooterBottom";
+import Footer from "./components/ecommerce/Footer/Footer";
+import FooterBottom from "./components/ecommerce/Footer/FooterBottom";
 // ================= Navbar =====================
-import Navbar from "./components/ecommerce/Home/Navbar/Navbar";
-import NavbarBottom from "./components/ecommerce/Home/Navbar/NavbarBottom";
+import Navbar from "./components/ecommerce/Navbar/Navbar";
+import NavbarBottom from "./components/ecommerce/Navbar/NavbarBottom";
 // ================= About =====================
 import About from "./components/ecommerce/About/About";
 // ================= Cart =====================
@@ -21,7 +21,7 @@ import Contact from "./components/ecommerce/Contact/Contact";
 // ================= Payment =====================
 import Payment from "./components/ecommerce/payment/Payment";
 // ================= Order Form =====================
-import OrderForm from "./components/ecommerce/payment/orderForm";
+import Order from "./components/ecommerce/Order/Order";
 // ================= Products =====================
 import Product from "./components/ecommerce/Products/Products";
 import ProductDetails from "./components/ecommerce/Products/ProductDetails";
@@ -93,7 +93,7 @@ const router = createBrowserRouter(
         <Route path="/contact" element={<><PageTitle title="Nayab Fashion - Contact" /><Contact /></>} />
         <Route path="/product/:id" element={<><PageTitle title="Nayab Fashion - Product Details" /><ProductDetails /></>} />
         <Route path="/cart" element={<><PageTitle title="Nayab Fashion - Cart" /><Cart /></>} />
-        <Route path="/orderForm" element={<><PageTitle title="Nayab Fashion - Order Form" /><OrderForm /></>} />
+        <Route path="/order" element={<><PageTitle title="Nayab Fashion - Order" /><Order /></>} />
         <Route path="/paymentgateway" element={<><PageTitle title="Nayab Fashion - Payment" /><Payment /></>} />
       </Route>
       {/* Auth Routes */}

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faExclamationCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import api from "../../../Api/api.js";
-import LottieAnimation from "../../../assets/animations/LottieAnimation";
-import animationData from "../../../assets/animations/LoginAnimation.json";
+import api from "../../../api/api.js";
+import LottieAnimation from "../../../../public/Assets/Animations/LottieAnimation";
+import animationData from "../../../../public/Assets/Animations/LoginAnimation.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 const SignIn = () => {

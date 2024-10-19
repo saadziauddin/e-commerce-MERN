@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function UpdateProduct() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
@@ -557,24 +558,31 @@ function UpdateProduct() {
                 <label htmlFor="images" className="mb-3 text-[15px] font-semibold text-gray-700">Existing Product Images:</label>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                   {formData.images.length > 0 ? (
-                    formData.images.map((image, index) => (
-                      <div key={index} className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-                        <img src={`/uploads/product_images/${image.imagePath.split('\\').pop()}`} alt="product_image" className="flex object-fit w-full h-full" />
-                        <img
-                          src={`/uploads/product_images/${image.imageName}`}
-                          alt="product_image"
-                          className="flex object-fit w-full h-full"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeExistingImage(index)}
-                          className={`absolute top-1 right-1 bg-gray-300 text-slate-700 p-0.5 rounded-lg w-4 sm:w-5 h-4 sm:h-5 text-xs sm:text-sm hover:font-semibold flex items-center justify-center hover:bg-gray-200 ease-in-out ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal' : ''}`}
-                          disabled={!editing}
-                        >
-                          x
-                        </button>
-                      </div>
-                    ))
+                    formData.images.map((image, index) => {
+
+                      const imagePaths = image.imageName
+                        ? `${apiUrl}/uploads/product_images/${image.imageName}`
+                        : `${apiUrl}/default_images/image-not-available.png`;
+
+                      return (
+                        <div key={index} className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+                          <img
+                            // src={`/uploads/product_images/${image.imageName}`}
+                            src={imagePaths}
+                            alt="product_image"
+                            className="flex object-fit w-full h-full"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className={`absolute top-1 right-1 bg-gray-300 text-slate-700 p-0.5 rounded-lg w-4 sm:w-5 h-4 sm:h-5 text-xs sm:text-sm hover:font-semibold flex items-center justify-center hover:bg-gray-200 ease-in-out ${!editing ? 'cursor-not-allowed hover:bg-gray-300 hover:font-normal' : ''}`}
+                            disabled={!editing}
+                          >
+                            x
+                          </button>
+                        </div>
+                      );
+                    })
                   ) : (
                     <p className="text-gray-500">No images available.</p>
                   )}

@@ -23,15 +23,19 @@ export default defineConfig({
   //   }
   // }
 
-  // server: {
-  //   // Access your environment variables using process.env
-  //   host: process.env.VITE_COOKIE_DOMAIN || 'localhost',
-  //   port: 3000,
-  // },
-  // define: {
-  //   'process.env': {
-  //     NODE_ENV: process.env.VITE_NODE_ENV,
-  //     API_URL: process.env.VITE_API_URL,
-  //   }
-  // }
+  server: {
+    host: process.env.VITE_COOKIE_DOMAIN,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL,
+        changeOrigin: true,
+      },
+    },
+  },
+  define: {
+    'process.env': {
+      NODE_ENV: process.env.VITE_NODE_ENV,
+      API_URL: process.env.VITE_API_URL,
+    }
+  }
 });

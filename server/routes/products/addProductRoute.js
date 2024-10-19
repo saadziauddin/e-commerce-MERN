@@ -48,7 +48,7 @@ const sanitizeField = (field) => {
 
 const validateProductFields = (body) => {
   const errors = {};
-  
+
   if (!body.name || body.name.trim() === '') {
     errors.name = 'Product name is required.';
   }
@@ -97,7 +97,6 @@ router.post('/api/products/addProduct', (req, res) => {
       longDescription,
     } = req.body;
 
-    // Validate fields
     const errors = validateProductFields(req.body);
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({ errors });
@@ -105,10 +104,16 @@ router.post('/api/products/addProduct', (req, res) => {
 
     try {
       // Convert image paths to relative URLs
-      const images = req.files.map(file => ({
-        imageName: file.originalname,
-        imagePath: `/uploads/product_images/${file.filename}`
-      }));
+      // const images = req.files.map(file => ({
+      //   imageName: file.filename,
+      //   imagePath: `/uploads/product_images/${file.filename}`
+      // }));
+      const images = req.files && req.files.length > 0
+        ? req.files.map(file => ({
+          imageName: file.filename,
+          imagePath: file.filename ? `/uploads/product_images/${file.filename}` : null
+        }))
+        : null;
 
       const sanitizedProduct = {
         name: sanitizeField(name),

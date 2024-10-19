@@ -5,10 +5,11 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+dotenv.config();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
 const isProduction = process.env.NODE_ENV === 'production';
 const apiURL = isProduction ? process.env.PRODUCTION_API_URL : process.env.VITE_API_URL;
 
@@ -29,6 +30,7 @@ app.use(cors(corsOptions));
 
 // Serve static files from the public directory
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/default_images', express.static(path.join(__dirname, 'public/default_images')));
 
 // Middleware to allow next() calls
 app.use((req, res, next) => {

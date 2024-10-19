@@ -13,6 +13,7 @@ import { toggleCategory, toggleBrand, togglePrice } from "../../../redux/reduxSl
 import { motion } from "framer-motion";
 
 function Products() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const { selectedCurrency } = useOutletContext();
   const [products, setProducts] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(12);
@@ -73,9 +74,7 @@ function Products() {
           ? await api.get(`/api/fetchProductByCategory/${encodeURIComponent(category)}`)
           : await api.get("/api/fetchProducts");
 
-        console.log(response);
         const data = response.data;
-        // setProducts(Array.isArray(data.fetchCategory) ? data.fetchCategory : []);
         if (category) {
           setProducts(Array.isArray(data.fetchCategory) ? data.fetchCategory : []);
         } else {
@@ -286,34 +285,38 @@ function Products() {
         )}
 
         {/* Products Display */}
-        <div className={`px-4 ${gridViewActive ? "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-x-6" : "flex-col gap-4"}`}>
-          {currentItems.length > 0 ? (
-            currentItems.map((product) => (
-              <div className="w-full" key={product._id}>
-                <Product
-                  _id={product._id}
-                  img={
-                    product.images && product.images.length > 0
-                      ? product.images.map((img) => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
-                      : ['/default_images/image-not-available.png']
-                  }
-                  productName={product.name}
-                  price={product.price1}
-                  color={product.color ? product.color.join(", ") : "N/A"}  // Add null check
-                  size={product.size ? product.size.join(", ") : "N/A"}     // Add null check
-                  tags={product.tags}
-                  shortDescription={product.shortDescription}
-                  longDescription={product.longDescription}
-                  status={product.status}
-                  selectedCurrency={selectedCurrency}
-                />
+        <div className={`px-4 ${gridViewActive ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-6" : "flex-col gap-4"}`}>
 
-              </div>
-            ))
+          {currentItems.length > 0 ? (
+            currentItems.map((product) => {
+              
+              const imagePaths = product.images && product.images.length > 0
+                ? product.images.map((img) => `${apiUrl}/uploads/product_images/${img.imageName}`)
+                : [`${apiUrl}/default_images/image-not-available.png`];
+
+              return (
+                <div className="w-full" key={product._id}>
+                  <Product
+                    _id={product._id}
+                    img={imagePaths}
+                    productName={product.name}
+                    price1={product.price1 !== null ? product.price1 : "Price Not Available"}
+                    price2={product.price2 !== null ? product.price2 : "Price Not Available"}
+                    color={product.color ? product.color.join(", ") : "N/A"}
+                    size={product.size ? product.size.join(", ") : "N/A"}
+                    tags={product.tags}
+                    shortDescription={product.shortDescription}
+                    longDescription={product.longDescription}
+                    status={product.status}
+                    selectedCurrency={selectedCurrency}
+                  />
+                </div>
+              );
+            })
           ) : (
             <p className="text-center items-center justify-center text-gray-500 mt-4">No products found.</p>
           )}
-          {/* </div> */}
+
         </div>
 
         {/* Pagination */}

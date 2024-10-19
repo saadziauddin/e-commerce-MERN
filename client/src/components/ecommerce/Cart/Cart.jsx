@@ -4,7 +4,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import { deleteItem, decreaseQuantity, increaseQuantity } from "../../../redux/reduxSlice";
-import emptyCart from "../../../assets/images/website_images/emptyCart.png";
+import emptyCart from "/Images/EmptyCart.png";
 import { ImCross } from "react-icons/im";
 import FormatPrice from "../../../helpers/FormatPrice";
 
@@ -148,7 +148,7 @@ function Cart() {
                   <FormatPrice price={totalAmt + shippingCharge} currency={selectedCurrency} />
                 </p>
               </div>
-              <Link to="/orderForm" className="mt-6 block">
+              <Link to="/order" className="mt-6 block">
                 <button className="w-full py-3 bg-[#7b246d] text-white text-lg font-semibold rounded-lg hover:bg-black transition duration-300">
                   Proceed to Checkout
                 </button>

@@ -5,6 +5,7 @@ import api from '../../../../api/api.js';
 import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
 function SpecialOffers({ selectedCurrency }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -85,32 +86,36 @@ function SpecialOffers({ selectedCurrency }) {
 
   return (
     <div className="mb-10">
-      <div className="text-3xl text-center font-semibold uppercase">
+      <div className="text-lg md:text-xl lg:text-2xl xl:text-2xl text-center font-semibold uppercase">
         <p className="bg-[#7b246d] text-white">Special Offers</p>
       </div>
       <Slider {...settings}>
         {products.length > 0 ? (
-          products.map((product) => (
-            <div className="px-2 py-10" key={product._id}>
-              <Product
-                _id={product._id}
-                img={
-                  Array.isArray(product.images) && product.images.length > 0
-                    ? product.images.map(img => img.imagePath.replace(/..[\\/]+client[\\/]+public/, ""))
-                    : ['/default_images/image-not-available.png']
-                }
-                productName={product.name || "Product Name Not Available"}
-                price={product.price1 || null} // Only pass price if available
-                color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
-                size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
-                tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
-                shortDescription={product.shortDescription || null}
-                longDescription={product.longDescription || null}
-                status={product.status || null}
-                selectedCurrency={selectedCurrency}
-              />
-            </div>
-          ))
+          products.map((product) => {
+            
+            const imagePaths = Array.isArray(product.images) && product.images.length > 0
+              ? product.images.map((img) => `${apiUrl}/uploads/product_images/${img.imageName}`)
+              : [`${apiUrl}/default_images/image-not-available.png`];
+            
+            return (
+              <div className="px-2 py-10" key={product._id}>
+                <Product
+                  _id={product._id}
+                  img={imagePaths}
+                  productName={product.name || "Product Name Not Available"}
+                  price1={product.price1 || "Price Not Available"}
+                  price2={product.price2 || "Price Not Available"}
+                  color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
+                  size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
+                  tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
+                  shortDescription={product.shortDescription || null}
+                  longDescription={product.longDescription || null}
+                  status={product.status || null}
+                  selectedCurrency={selectedCurrency}
+                />
+              </div>
+            );
+          })
         ) : (
           <p>No products found.</p>
         )}

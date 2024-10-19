@@ -1,0 +1,10 @@
+.bg-image {
+    background-image: url('../images/dashboard_images/web/bgImage.jpg');
+}
+
+/* Add a CSS reset */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}

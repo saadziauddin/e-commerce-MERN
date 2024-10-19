@@ -130,8 +130,9 @@ router.put('/api/updateProduct/:productId', (req, res) => {
         //   imagePath: `/uploads/product_images/${file.filename}`, // Publicly accessible path
         // }));
         const newImages = req.files.map((file) => ({
-          imageName: file.originalname,
-          imagePath: path.join('public/uploads/product_images/', file.filename),
+          imageName: file.filename,
+          // imagePath: path.join('public/uploads/product_images/', file.filename),
+          imagePath: `/uploads/product_images/${file.filename}`
         }));
         updatedImages = [...updatedImages, ...newImages];
       }

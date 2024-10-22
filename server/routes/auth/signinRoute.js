@@ -10,14 +10,12 @@ router.post('/api/signin', async (req, res) => {
 
     try {
         const user = await User.findOne({email: email});
-        if(!user){
-            return res.status(400).json({error: "User not found!"})
-        }
+        if(!user){ return res.status(400).json({error: "User not found!"}) }
 
         const isPasswordMatch = await bcrypt.compare(password.toString(), user.hashedPassword);
-        if(!isPasswordMatch){
-            return res.status(400).json({error: "Password not matched!"})
-        }
+        if(!isPasswordMatch){ return res.status(400).json({error: "Password not matched!"}) }
+
+        const profileImage = (user.profileImage && user.profileImage[0].imageName) ? user.profileImage[0].imageName : null;
 
         const token = jwt.sign(
             {
@@ -25,7 +23,7 @@ router.post('/api/signin', async (req, res) => {
                 name: user.fullName,
                 email: user.email,
                 role: user.role,
-                image: user.ImageName
+                image: profileImage
             },
             process.env.JWT_SECRET,
             {expiresIn: '3h'}
@@ -35,17 +33,18 @@ router.post('/api/signin', async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: 'strict'   
-        })
-
+        });
+        
         return res.status(200).json({
+            Status: "Success",
             message: "Login Successfull!",
             token,
             id: user._id,
             name: user.fullName,
             email: user.email,
             role: user.role,
-            image: user.ImageName
-        });
+            image: profileImage
+        });        
 
     } catch (error) {
         console.log("Error during login: ", error);

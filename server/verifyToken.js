@@ -12,9 +12,11 @@ const verifyToken = (req, res, next) => {
                 req.id = decoded.id;
                 req.name = decoded.name;
                 req.role = decoded.role;
+                req.email = decoded.email;
+                req.image = decoded.image;
                 next();
             }
-        });
+        });        
     }
 };
 

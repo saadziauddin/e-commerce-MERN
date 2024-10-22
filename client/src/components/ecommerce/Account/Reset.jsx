@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faExclamationCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import api from "../../../api/api.js";
-import LottieAnimation from "../../../../public/Assets/Animations/LottieAnimation";
-import animationData from "../../../../public/Assets/Animations/LoginAnimation.json";
+import LottieAnimation from "../../../assets/Animations/LottieAnimation";
+import animationData from "../../../assets/Animations/LoginAnimation.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 function Reset(){
@@ -35,7 +35,7 @@ function Reset(){
         try {
             const result = await api.post("/api/verifyEmail", { email: values.email });
             if (result.data.message === "Email verified successfully!") {
-                setEmailVerified(true);  // Show password fields after successful email verification
+                setEmailVerified(true);
             } else {
                 toast.error(result.data.error);
             }

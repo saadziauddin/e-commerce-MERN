@@ -9,11 +9,33 @@ import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 
 function UserManagement() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    // setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen(prevState => !prevState);
+  };
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
   const [fetchUsersData, setFetchUsersData] = useState([]);
-  const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
-  const closeSidebar = () => { setIsSidebarOpen(false); };
+  const [userRole, setUserRole] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLoggedUser = async () => {
+      try {
+        const result = await api.get('/api/signin');
+        if (result.data.Status === "Success") {
+          setUserRole(result.data.role);
+        }
+      } catch (error) {
+        console.log("Error fetching logged-in user data: ", error);
+        navigate('/signin');
+      }
+    };
+    fetchLoggedUser();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -26,6 +48,14 @@ function UserManagement() {
     };
     fetchUsers();
   }, []);
+
+  const filteredUsersData = fetchUsersData.filter(user => {
+    // If the logged-in user is SubAdmin, exclude administrators from the list
+    if (userRole === 'SubAdmin') {
+      return user.role !== 'Admin';
+    }
+    return true; // Otherwise, return all users
+  });
 
   const addUser = async () => {
     navigate('/signup');
@@ -52,19 +82,8 @@ function UserManagement() {
     }
   };
 
-  const getProfileImage = (row) => {
-    if (row.profileImage && row.profileImage.length > 0) {
-      return `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`;
-    }
-    return '/default_images/default_profile.png';
-  };
-
-  // const profileImage = row.profileImage && row.profileImage.length > 0
-  //   ? `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`
-  //   : '/default_images/default_profile.png';
-
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="relative top-24 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -77,10 +96,12 @@ function UserManagement() {
         pauseOnHover
         theme='colored'
       />
+
       {/* Sidebar */}
-      <div className={`fixed z-50 inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out xl:translate-x-0`}>
+      <div className={`fixed inset-y-0 z-50 left-0 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
+
       {/* Main */}
       <main className="ease-soft-in-out xl:ml-68.5 relative h-full transition-all duration-200 bg-light">
         {/* Topbar */}
@@ -98,32 +119,23 @@ function UserManagement() {
               </div>
               <div className="flex-auto px-0 pt-0 pb-2">
                 <div className="p-0 overflow-x-auto">
-                  {/* <div className="p-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 hover:scrollbar-thumb-gray-500"> */}
                   <DataTable
                     columns={[
                       {
                         name: 'Profile Image',
                         cell: row => {
-                          // const profileImage = row.profileImage && row.profileImage.length > 0
-                          //   ? `../../../../../server/public/uploads/user_images/${row.profileImage[0].imageName}`
-                          //   : '/default_images/default_profile.png';
-                          // const profileImage = row.profileImage && row.profileImage.length > 0
-                          //   ? `http://localhost:8090/uploads/user_images/${row.profileImage[0].imageName}`
-                          //   : '/default_images/default_profile.png';
+                          const profileImage =
+                            row.profileImage && row.profileImage[0] && row.profileImage[0].imageName
+                              ? `${apiUrl}/uploads/user_images/${row.profileImage[0]?.imageName}`
+                              : `${apiUrl}/default_images/default_profile.png`;
+
                           return (
                             <div>
                               <img
-                                src={getProfileImage(row)}
-                                alt="profile_image"
+                                src={profileImage}
+                                alt="User Image"
                                 className="h-10 w-10 rounded-full"
-                                onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
                               />
-                              {/* <img
-                                src={getProfileImage}
-                                alt="profile_image"
-                                className="h-10 w-10 rounded-full"
-                                onError={(e) => { e.target.src = '/uploads/user_images/defaultProfile.png'; }}
-                              /> */}
                             </div>
                           );
                         },
@@ -173,18 +185,30 @@ function UserManagement() {
                         sortable: true,
                         wrap: true,
                       },
-                      {
-                        name: 'Role',
-                        selector: row => row.role,
-                        sortable: true,
-                        wrap: true,
-                      },
-                      {
-                        name: 'Date Created',
-                        selector: row => row.dateOfCreation,
-                        sortable: true,
-                        wrap: true,
-                      },
+                      ...(userRole !== 'SubAdmin' ? [
+                        {
+                          name: 'Role',
+                          selector: row => row.role,
+                          sortable: true,
+                          wrap: true,
+                        }
+                      ] : []),
+                      ...(userRole !== 'SubAdmin' ? [
+                        {
+                          name: 'Date Created',
+                          selector: row => new Date(row.dateOfCreation).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: true, // This makes it 12-hour format (AM/PM). Set to false for 24-hour format.
+                          }),
+                          sortable: true,
+                          wrap: true,
+                        },
+                      ] : []),
                       {
                         name: 'Actions',
                         cell: row => (
@@ -228,7 +252,7 @@ function UserManagement() {
                         },
                       },
                     }}
-                    data={fetchUsersData}
+                    data={filteredUsersData}
                     fixedHeader
                     fixedHeaderScrollHeight="400px"
                     pagination

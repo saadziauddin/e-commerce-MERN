@@ -9,6 +9,7 @@ import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 
 function Categories() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
@@ -51,7 +52,7 @@ function Categories() {
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="relative top-24 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -64,8 +65,9 @@ function Categories() {
         pauseOnHover
         theme="colored"
       />
+      
       {/* Sidebar */}
-      <div className={`fixed z-50 inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out xl:translate-x-0`}>
+      <div className={`fixed inset-y-0 z-50 left-0 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
 
@@ -96,7 +98,7 @@ function Categories() {
                           const hasImage = Array.isArray(row.image) && row.image.length > 0 && row.image[0].imageName;
                           return hasImage ? (
                             <div className="h-10 w-10 rounded-full">
-                              <img src={`/uploads/category_images/${row.image[0].imageName}`} alt="" />
+                              <img src={`${apiUrl}/uploads/category_images/${row.image[0].imageName}`} alt="" />
                             </div>
                           ) : (
                             "No Image"
@@ -120,7 +122,16 @@ function Categories() {
                       },
                       {
                         name: 'Date Added',
-                        selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
+                        // selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',                      
+                        selector: row => new Date(row.dateAdded).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: true, // This makes it 12-hour format (AM/PM). Set to false for 24-hour format.
+                        }),
                         sortable: true,
                         wrap: true,
                       },

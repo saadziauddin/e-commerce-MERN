@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function UserProfile() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
@@ -31,6 +32,22 @@ function UserProfile() {
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const fetchLoggedUser = async () => {
+      try {
+        const result = await api.get('/api/signin');
+        if (result.data.Status === "Success") {
+          setUserRole(result.data.role);
+        }
+      } catch (error) {
+        console.log("Error fetching logged-in user data: ", error);
+        navigate('/signin');
+      }
+    };
+    fetchLoggedUser();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -43,7 +60,6 @@ function UserProfile() {
           confirmPassword: '',
           fullName: `${userData.firstName} ${userData.lastName}`
         });
-
         const fetchRolesResponse = await api.get('/api/roles');
         setAllRoles(fetchRolesResponse.data);
         setRoles(filterRoles(userData.role, fetchRolesResponse.data));
@@ -62,8 +78,15 @@ function UserProfile() {
   };
 
   const handleEdit = () => setEditing(true);
-
-  const goBack = () => navigate('/dashboard/userManagement');
+  const goBack = () => {
+    if (userRole === 'Admin') {
+      navigate('/dashboard/userManagement');
+    } else if (userRole === 'SubAdmin') {
+      navigate('/dashboard/userManagement');
+    } else {
+      navigate('/dashboard/home');
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -106,12 +129,12 @@ function UserProfile() {
     }
   };
 
-  const profileImageUrl = values.profileImage
-    ? `/uploads/user_images/${values.profileImage[0]?.imageName}`
-    : '/uploads/user_images/defaultProfile.png';
+  const profileImageUrl = values.profileImage && values.profileImage[0] && values.profileImage[0].imageName
+    ? `${apiUrl}/uploads/user_images/${values.profileImage[0]?.imageName}`
+    : `${apiUrl}/default_images/default_profile.png`;
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="relative top-28 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -124,7 +147,8 @@ function UserProfile() {
         pauseOnHover
       />
 
-      <div className={`fixed z-50 inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out xl:translate-x-0`}>
+      {/* Sidebar */}
+      <div className={`fixed inset-y-0 z-50 left-0 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
 
@@ -134,13 +158,14 @@ function UserProfile() {
         <div className="flex flex-1 justify-center mt-3 pt-5 px-0">
           <div className="w-full max-w-6xl">
             <div className="border-b-2 flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
+              {/* Left Side */}
               <div className="w-full md:w-2/5 p-6 bg-white shadow-md">
                 <div className="flex justify-between items-center mb-4">
                   <span className="w-full flex justify-center text-2xl font-semibold">{values.fullName}</span>
                 </div>
                 <span className="w-full flex justify-center text-gray-600">This information is secret so be careful</span>
                 <div className="w-full flex justify-center py-6">
-                  <img src={profileImageUrl} alt="Profile" className="h-40 w-40 rounded-full" />
+                  <img src={profileImageUrl} alt="Profile" className="h-40 w-40 rounded-lg" />
                 </div>
                 <div className="w-full flex justify-center mt-32">
                   {editing ? (
@@ -157,8 +182,9 @@ function UserProfile() {
                 </div>
               </div>
 
+              {/* Right Side */}
               <form className="w-full md:w-4/5 p-5 space-y-4" onSubmit={handleSave} encType="multipart/form-data">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
                   {['firstName', 'lastName', 'email', 'contactNo', 'address', 'city', 'country', 'postalCode'].map((field) => (
                     <div key={field} className="flex flex-col">
                       <label htmlFor={field} className="mb-2 text-sm font-medium text-gray-700">
@@ -170,7 +196,7 @@ function UserProfile() {
                         name={field}
                         value={values[field]}
                         onChange={handleInputChange}
-                        className="text-sm text-gray-500 pl-3 pr-5 rounded-full border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+                        className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                         disabled={!editing}
                       />
                     </div>
@@ -183,7 +209,7 @@ function UserProfile() {
                       id="password"
                       name={values.password}
                       onChange={handleInputChange}
-                      className="text-sm text-gray-500 pl-3 pr-5 rounded-full border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                       disabled={!editing}
                     />
                   </div>
@@ -195,14 +221,14 @@ function UserProfile() {
                       id="confirmPassword"
                       name={values.confirmPassword}
                       onChange={handleInputChange}
-                      className="text-sm text-gray-500 pl-3 pr-5 rounded-full border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                       disabled={!editing}
                     />
                   </div>
 
                   <div className="flex flex-col">
                     <label htmlFor="image" className="mb-2 text-sm font-medium text-gray-700">Profile Image:</label>
-                    <label className="w-full py-2 border border-gray-300 rounded-full flex items-center bg-white cursor-pointer pl-3 pr-5 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    <label className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}>
                       <input
                         type="file"
                         id="image"
@@ -215,23 +241,25 @@ function UserProfile() {
                     </label>
                   </div>
 
-                  <div className="flex flex-col">
-                    <label htmlFor="role" className="mb-2 text-sm font-medium text-gray-700">User Role:</label>
-                    <select
-                      id="role"
-                      name="role"
-                      value={values.role}
-                      onChange={handleInputChange}
-                      className="text-sm text-gray-500 pl-3 pr-5 rounded-full border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
-                      disabled={!editing}
-                    >
-                      {roles.map((role, idx) => (
-                        <option key={idx} value={role.name}>
-                          {role.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {userRole === "Admin" && (
+                    <div className="flex flex-col">
+                      <label htmlFor="role" className="mb-2 text-sm font-medium text-gray-700">User Role:</label>
+                      <select
+                        id="role"
+                        name="role"
+                        value={values.role}
+                        onChange={handleInputChange}
+                        className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                        disabled={!editing}
+                      >
+                        {roles.map((role, idx) => (
+                          <option key={idx} value={role.name}>
+                            {role.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
               </form>
             </div>

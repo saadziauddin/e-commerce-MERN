@@ -50,8 +50,8 @@ function Products() {
     }
   };
 
-  return (
-    <div className="absolute top-0 left-0 w-full h-full">
+  return (    
+    <div className="relative top-24 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -64,8 +64,9 @@ function Products() {
         pauseOnHover
         theme="colored"
       />
+      
       {/* Sidebar */}
-      <div className={`fixed z-50 inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out xl:translate-x-0`}>
+      <div className={`fixed inset-y-0 z-50 left-0 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
 
@@ -180,7 +181,16 @@ function Products() {
                       },
                       {
                         name: 'Date Added',
-                        selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
+                        // selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
+                        selector: row => new Date(row.dateAdded).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: true, // This makes it 12-hour format (AM/PM). Set to false for 24-hour format.
+                        }),
                         sortable: true,
                         wrap: true,
                       },                                           

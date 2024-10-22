@@ -232,7 +232,7 @@ function UpdateProduct() {
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="relative top-28 left-0 w-full h-full">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -246,7 +246,7 @@ function UpdateProduct() {
       />
 
       {/* Sidebar */}
-      <div className={`fixed z-50 inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out xl:translate-x-0`}>
+      <div className={`fixed inset-y-0 z-50 left-0 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       </div>
 

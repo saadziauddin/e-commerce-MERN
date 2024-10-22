@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faLock, faPhone, faImage, faExclamationCircle, faUserTag, faLongArrowAltLeft, faAddressBook, faAddressCard, faCity, faEarth, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, Link } from 'react-router-dom';
-// import '../../../../public/Assets/CSS/style.css';
 import api from '../../../api/api.js';
-import LottieAnimation from "../../../../public/Assets/Animations/LottieAnimation";
-import animationData from "../../../../public/Assets/Animations/SignUpAnimation2.json";
+import LottieAnimation from "../../../assets/Animations/LottieAnimation";
+import animationData from "../../../assets/Animations/SignUpAnimation2.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 function SignUp() {

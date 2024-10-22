@@ -39,15 +39,25 @@ app.use((req, res, next) => {
 
 // Server Initialization
 const port = process.env.PORT || 8090;
-app.listen(port, () => { 
-    console.log("Server is running at PORT: " + port); 
+app.listen(port, () => {
+    console.log("Server is running at PORT: " + port);
 });
 
 // ======================= Auth Routes ==============================
 import signinRouter from './routes/auth/signinRoute.js';
 app.post('/api/signin', signinRouter);
+
 import verifyToken from './verifyToken.js';
-app.get('/api/signin', verifyToken, (req, res) => { return res.json({ Status: "Success", name: req.name, role: req.role }); });
+app.get('/api/signin', verifyToken, (req, res) => {
+    return res.json({ 
+        Status: "Success", 
+        id: req.id, 
+        name: req.name, 
+        email: req.email, 
+        role: req.role,
+        image: req.image
+    });
+});
 
 import signupRouter from './routes/auth/signupRoute.js';
 app.post('/api/signup', signupRouter);

@@ -101,7 +101,7 @@ function Sidebar({ isOpen, closeSidebar }) {
           </li>
         </ul>
       </div>
-      <div className="flex justify-center items-center w-full p-4 absolute bottom-0 right-0 cursor-pointer text-xl hover:text-slate-500 hover:bg-gray-100 text-gray-700 xl:hidden" onClick={closeSidebar}>
+      <div className="flex justify-center items-center w-full p-4 absolute bottom-0 right-0 cursor-pointer text-xl hover:text-slate-500 hover:bg-gray-100 text-gray-700" onClick={closeSidebar}>
         <FontAwesomeIcon icon={faTimes} />
       </div>
     </aside>

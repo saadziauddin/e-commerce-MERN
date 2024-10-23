@@ -101,34 +101,102 @@ function UserProfile() {
     setImageFile(e.target.files[0]);
   };
 
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+
+  //   const formData = new FormData();
+  //   if (imageFile) {
+  //     formData.append('image', imageFile);
+  //   }
+
+  //   for (let key in values) {
+  //     if (key !== 'image') {
+  //       formData.append(key, values[key]);
+  //     }
+  //   }
+
+  //   try {
+  //     await api.put(`/api/updateUser/${userId}`, formData, {
+  //       headers: { 'Content-Type': 'multipart/form-data' },
+  //       withCredentials: true,
+  //     });
+
+  //     toast.success("User Updated Successfully!");
+  //     // setValues({
+  //     //   firstName: userData.firstName || '',
+  //     //   lastName: userData.lastName || '',
+  //     //   email: userData.email || '',
+  //     //   contactNo: userData.contactNo || '',
+  //     //   address: userData.address || '',
+  //     //   city: userData.city || '',
+  //     //   country: userData.country || '',
+  //     //   postalCode: userData.postalCode || '',
+  //     //   password: '', // Keep password empty for security reasons
+  //     //   confirmPassword: '',
+  //     //   fullName: `${userData.firstName} ${userData.lastName}`, // Combine first and last names
+  //     //   role: userData.role || '',
+  //     //   profileImage: userData.profileImage || ''
+  //     // });
+  //     setEditing(false);
+
+  //   } catch (err) {
+  //     const errorMessage = err.response?.data?.error || "Error updating user!";
+  //     toast.error(errorMessage);
+  //     console.error("Error:", errorMessage);
+  //   }
+  // };
+
   const handleSave = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
-    if (imageFile) formData.append('image', imageFile);
-
+    
+    // Append the image file only if it's updated
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+  
+    // Append other values except password fields if they are empty
     for (let key in values) {
-      if (key !== 'profileImage') {
+      if (key !== 'password' && key !== 'confirmPassword') {
         formData.append(key, values[key]);
       }
     }
-
+  
+    // Only append password if the user is changing it
+    if (values.password && values.confirmPassword) {
+      if (values.password !== values.confirmPassword) {
+        toast.error("Passwords do not match!");
+        return;
+      } else {
+        formData.append('password', values.password);
+        formData.append('confirmPassword', values.confirmPassword);
+      }
+    }
+  
     try {
       await api.put(`/api/updateUser/${userId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
-
+  
       toast.success("User Updated Successfully!");
-
       setEditing(false);
+  
+      // Reset password fields to empty for security reasons
+      setValues({
+        ...values,
+        password: '',
+        confirmPassword: '',
+      });
+  
     } catch (err) {
       const errorMessage = err.response?.data?.error || "Error updating user!";
       toast.error(errorMessage);
       console.error("Error:", errorMessage);
     }
   };
-
+  
   const profileImageUrl = values.profileImage && values.profileImage[0] && values.profileImage[0].imageName
     ? `${apiUrl}/uploads/user_images/${values.profileImage[0]?.imageName}`
     : `${apiUrl}/default_images/default_profile.png`;
@@ -157,15 +225,15 @@ function UserProfile() {
 
         <div className="flex flex-1 justify-center mt-3 pt-5 px-0">
           <div className="w-full max-w-6xl">
-            <div className="border-b-2 flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="border-b-2 flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden">
               {/* Left Side */}
-              <div className="w-full md:w-2/5 p-6 bg-white shadow-md">
+              <div className="w-full md:w-2/5 p-6 bg-white border-r sm:border-b xs:border-b">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="w-full flex justify-center text-2xl font-semibold">{values.fullName}</span>
+                  <span className="w-full flex justify-center text-2xl font-semibold uppercase">{values.fullName}</span>
                 </div>
                 <span className="w-full flex justify-center text-gray-600">This information is secret so be careful</span>
-                <div className="w-full flex justify-center py-6">
-                  <img src={profileImageUrl} alt="Profile" className="h-40 w-40 rounded-lg" />
+                <div className="w-full flex justify-center items-center py-3 mt-[75px] flex-grow-0">
+                  <img src={profileImageUrl} alt="Profile" className="h-44 w-44 rounded-lg object-cover" />
                 </div>
                 <div className="w-full flex justify-center mt-32">
                   {editing ? (
@@ -184,7 +252,7 @@ function UserProfile() {
 
               {/* Right Side */}
               <form className="w-full md:w-4/5 p-5 space-y-4" onSubmit={handleSave} encType="multipart/form-data">
-                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
                   {['firstName', 'lastName', 'email', 'contactNo', 'address', 'city', 'country', 'postalCode'].map((field) => (
                     <div key={field} className="flex flex-col">
                       <label htmlFor={field} className="mb-2 text-sm font-medium text-gray-700">

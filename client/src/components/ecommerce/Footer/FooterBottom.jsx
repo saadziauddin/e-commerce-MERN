@@ -2,6 +2,7 @@ import React from "react";
 import { AiOutlineCopyright } from "react-icons/ai";
 
 const FooterBottom = () => {
+  const currentYear = new Date().getFullYear();
   return (
     <div className="w-full bg-[#F5F5F3] group">
       <div className="max-w-container mx-auto border-t-[1px] pt-10 pb-8">
@@ -9,7 +10,7 @@ const FooterBottom = () => {
           <span className="text-md mr-[1px] mt-[2px] md:mt-0 text-center hidden md:inline-flex">
             <AiOutlineCopyright />
           </span>
-          Copyright 2024 | Nayab Fashion | All Rights Reserved |
+          Copyright {currentYear} | Nayab Fashion | All Rights Reserved |
           <a href="https://madigiworld.com">
             <span className="ml-1 font-medium group-hover:text-primeColor">
               Designed & Developed by MA DigiWorld

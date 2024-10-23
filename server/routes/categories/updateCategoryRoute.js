@@ -66,6 +66,7 @@ router.put('/api/updateCategory/:categoryId', (req, res) => {
 
         const { categoryId } = req.params;
         const updatedData = { ...req.body };
+        
         try {
             const existingCategory = await Category.findById(categoryId);
             if (!existingCategory) {

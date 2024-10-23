@@ -4,13 +4,13 @@ import './config.js';
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     color: [
-        { type: String, required: true }
+        { type: String }
     ],
     size: [
         { type: String }
     ],
     tags: { type: String, trim: true },
-    stock: { type: Number, required: true },
+    stock: { type: Number },
     category: { type: String, required: true, trim: true },
     discount: { type: Number },
     status: { type: String, required: true, enum: ['Available', 'Out of Stock'] },

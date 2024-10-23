@@ -49,49 +49,29 @@ const Footer = () => {
               Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
             </p>
             <ul className="flex items-center gap-4">
-              <a
-                href="https://www.youtube.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-10 h-10 bg-red-600 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-red-500 duration-300">
-                  <FaYoutube />
+              <a href="https://wa.me/+923100122349" target="_blank" rel="noreferrer">
+                <li className="w-10 h-10 bg-green-500 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-green-400 duration-300">
+                  <FaWhatsapp />
                 </li>
               </a>
-              <a
-                href="https://www.tiktok.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-10 h-10 bg-black text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-gray-800 duration-300">
-                  <FaTiktok />
-                </li>
-              </a>
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-10 h-10 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-gradient-to-tr duration-300">
-                  <FaInstagram />
-                </li>
-              </a>
-              <a
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="https://www.facebook.com/Nayabonlinestore/" target="_blank" rel="noreferrer">
                 <li className="w-10 h-10 bg-blue-600 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-blue-500 duration-300">
                   <FaFacebook />
                 </li>
               </a>
-              <a
-                href="https://www.whatsapp.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-10 h-10 bg-green-500 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-green-400 duration-300">
-                  <FaWhatsapp />
+              <a href="https://www.instagram.com/nayab_fashion_" target="_blank" rel="noreferrer">
+                <li className="w-10 h-10 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-gradient-to-tr duration-300">
+                  <FaInstagram />
+                </li>
+              </a>
+              <a href="https://www.tiktok.com/@nayabfashion" target="_blank" rel="noreferrer">
+                <li className="w-10 h-10 bg-black text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-gray-800 duration-300">
+                  <FaTiktok />
+                </li>
+              </a>
+              <a href="https://youtube.com/@nayabfashion" target="_blank" rel="noreferrer">
+                <li className="w-10 h-10 bg-red-600 text-white cursor-pointer text-2xl rounded-full flex justify-center items-center hover:bg-red-500 duration-300">
+                  <FaYoutube />
                 </li>
               </a>
             </ul>

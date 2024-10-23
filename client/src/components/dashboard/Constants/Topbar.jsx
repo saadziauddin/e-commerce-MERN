@@ -64,36 +64,34 @@ function Navbar({ toggleSidebar }) {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 py-2 mx-6 my-4 shadow-lg rounded-lg bg-transparent bg-white">
+    <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 py-1 mx-6 my-3 shadow-lg rounded-lg bg-transparent bg-white">
 
       <div className="flex justify-between w-full items-center mx-auto">
-        {/* Sidebar toggle */}
-        <button onClick={toggleSidebar} className="ml-1 text-lg text-gray-700 hover:text-slate-500 transition-all focus:outline-none">
+        {/* Left: Sidebar toggle */}
+        <button onClick={toggleSidebar} className="text-base lg:text-lg xl:text-lg text-gray-800 hover:text-slate-500">
           <FontAwesomeIcon icon={faBarsStaggered} />
         </button>
 
-        {/* Centered Dashboard text */}
-        <h1 className="flex-grow text-center text-gray-700 font-semibold uppercase">
+        {/* Center: Dashboard text */}
+        <h1 className="flex-grow text-center text-base lg:text-xl xl:text-xl text-gray-800 font-medium font-titleFont uppercase">
           Nayab Fashion Dashboard
         </h1>
 
+        {/* Right: User Dropdown */}
         <div className="flex items-center">
           <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center text-gray-700 px-3 py-2 font-semibold font-bodyFont focus:outline-none hover:text-slate-500 transition-all"
-            >
-              <img src={userImage} alt="User profile" className="w-10 h-10 rounded-full object-cover" />
+            <button onClick={toggleDropdown} className="py-1" >
+              <img src={userImage} alt="User profile" className="w-8 h-8 lg:w-10 lg:h-10 xl:w-10 xl:h-10 rounded-full object-cover" />
             </button>
-            <div className={`${isDropdownOpen ? 'block' : 'hidden'} absolute right-0 mt-2 w-40 bg-white font-normal shadow-lg rounded-md z-10`} >
+            <div className={`${isDropdownOpen ? 'block' : 'hidden'} absolute right-0 mt-2 w-40 bg-white font-titleFont shadow-lg rounded-md z-10`} >
               <ul className="py-1">
-                <li className="px-3 py-2 hover:bg-gray-100 border-b">
-                  <p className='text-gray-800'>{name}!</p>
+                <li className="px-2 py-2 hover:bg-gray-100 border-b">
+                  <p className='text-gray-800 cursor-pointer'>Hi, {name}!</p>
                 </li>
-                <li className="px-3 py-2 hover:bg-gray-100 border-b">
+                <li className="px-2 py-2 hover:bg-gray-100 border-b">
                   <button className='text-gray-800' onClick={handleEditProfile}>Edit Profile</button>
                 </li>
-                <li className="px-3 py-2 hover:bg-gray-100">
+                <li className="px-2 py-2 hover:bg-gray-100">
                   <button className='text-gray-800' onClick={logout}>Logout</button>
                 </li>
               </ul>

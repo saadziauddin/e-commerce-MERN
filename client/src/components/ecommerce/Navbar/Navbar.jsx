@@ -21,7 +21,6 @@ const Navbar = ({ onCurrencyChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
   const [sidenav, setSidenav] = useState(false);
-  const [category, setCategory] = useState(true);
   const [categories, setCategories] = useState([]);
   // const [showUser, setShowUser] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -134,7 +133,9 @@ const Navbar = ({ onCurrencyChange }) => {
 
       {/* First top banner with shipping info */}
       <div className="w-full h-10 xs:text-xs sm:text-xs md:text-[15px] lg:text-[15px] xl:text-[15px] bg-black text-gray-200 text-center flex justify-center items-center py-3 font-titleFont">
-        Welcome to your dream closet🌸 Enjoy free delivery in Pakistan&nbsp;{flagComponents.PKR}
+        <p className="animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center">
+          Welcome to your dream closet🌸 Enjoy free delivery in Pakistan&nbsp;{flagComponents.PKR}
+        </p>
       </div>
 
       {/* Second top banner with phone nos. and email */}
@@ -149,16 +150,16 @@ const Navbar = ({ onCurrencyChange }) => {
         <div className="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-6 mr-4 md:mr-10 md:mt-0">
           <div className="flex items-center">
             <SlPhone className="xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg text-gray-600" />
-            <a href="tel:+922136111685" className="pl-2 xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700 hover:text-gray-900">
+            <a href="tel:+922136111685" className="pl-2 xs:text-xs sm:text-xs md:text-md lg:text-md xl:text-md text-gray-700 hover:text-gray-900">
               +92(21)-23-456-789
             </a>
           </div>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <SlPhone className="xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg text-gray-600" />
             <a href="tel:+922136111685" className="pl-2 xs:text-sm sm:text-sm md:text-md lg:text-md xl:text-md text-gray-700 hover:text-gray-900">
               +92(21)-23-456-789
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -186,10 +187,7 @@ const Navbar = ({ onCurrencyChange }) => {
 
             {/* Mobile Sidebar */}
             {sidenav && (
-              <div
-                className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-60 z-50"
-                onClick={() => setSidenav(false)}
-              >
+              <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-60 z-50" onClick={() => setSidenav(false)} >
                 <motion.div
                   initial={{ x: -300, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -197,7 +195,7 @@ const Navbar = ({ onCurrencyChange }) => {
                   className="w-[70%] h-screen relative bg-white shadow-xl rounded-r-3xl overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="w-full h-full p-6 bg-gray-100 text-primeColor overflow-y-auto scrollbar-none">
+                  <div className="h-full p-6 bg-gray-100 text-primeColor overflow-y-auto scrollbar-none">
                     {/* Close Icon */}
                     <span
                       onClick={() => setSidenav(false)}
@@ -208,10 +206,12 @@ const Navbar = ({ onCurrencyChange }) => {
 
                     {/* Logo */}
                     <div className="flex justify-center mb-6">
-                      <img className="w-36" src={logo} alt="main_logo" />
+                      <Link to='/'>
+                        <img className="w-36" src={logo} alt="main_logo" />
+                      </Link>
                     </div>
 
-                    {/* Mobile Search Bar */}
+                    {/* Search Bar */}
                     <div className="relative mb-6">
                       <input
                         className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder:text-gray-400 focus:ring focus:ring-gray-400 transition"
@@ -354,49 +354,29 @@ const Navbar = ({ onCurrencyChange }) => {
                     {/* Social Media Icons */}
                     <div className="mt-8">
                       <ul className="flex items-center gap-3 justify-center md:gap-4">
-                        <a
-                          href="https://www.youtube.com/"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <li className="w-8 h-8 bg-red-600 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-red-500 duration-300 md:w-10 md:h-10 md:text-2xl">
-                            <FaYoutube />
+                        <a href="https://wa.me/+923100122349" target="_blank" rel="noreferrer">
+                          <li className="w-8 h-8 bg-green-500 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-green-400 duration-300 md:w-10 md:h-10 md:text-2xl">
+                            <FaWhatsapp />
                           </li>
                         </a>
-                        <a
-                          href="https://www.tiktok.com/"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <li className="w-8 h-8 bg-black text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-gray-800 duration-300 md:w-10 md:h-10 md:text-2xl">
-                            <FaTiktok />
-                          </li>
-                        </a>
-                        <a
-                          href="https://www.instagram.com/"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <li className="w-8 h-8 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-gradient-to-tr duration-300 md:w-10 md:h-10 md:text-2xl">
-                            <FaInstagram />
-                          </li>
-                        </a>
-                        <a
-                          href="https://www.facebook.com/"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
+                        <a href="https://www.facebook.com/Nayabonlinestore/" target="_blank" rel="noreferrer">
                           <li className="w-8 h-8 bg-blue-600 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-blue-500 duration-300 md:w-10 md:h-10 md:text-2xl">
                             <FaFacebook />
                           </li>
                         </a>
-                        <a
-                          href="https://www.whatsapp.com/"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <li className="w-8 h-8 bg-green-500 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-green-400 duration-300 md:w-10 md:h-10 md:text-2xl">
-                            <FaWhatsapp />
+                        <a href="https://www.instagram.com/nayab_fashion_" target="_blank" rel="noreferrer">
+                          <li className="w-8 h-8 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-gradient-to-tr duration-300 md:w-10 md:h-10 md:text-2xl">
+                            <FaInstagram />
+                          </li>
+                        </a>
+                        <a href="https://www.tiktok.com/@nayabfashion" target="_blank" rel="noreferrer">
+                          <li className="w-8 h-8 bg-black text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-gray-800 duration-300 md:w-10 md:h-10 md:text-2xl">
+                            <FaTiktok />
+                          </li>
+                        </a>
+                        <a href="https://youtube.com/@nayabfashion" target="_blank" rel="noreferrer">
+                          <li className="w-8 h-8 bg-red-600 text-white cursor-pointer text-xl rounded-full flex justify-center items-center hover:bg-red-500 duration-300 md:w-10 md:h-10 md:text-2xl">
+                            <FaYoutube />
                           </li>
                         </a>
                       </ul>
@@ -417,13 +397,37 @@ const Navbar = ({ onCurrencyChange }) => {
           {/* Right Section */}
           <div className="flex items-center gap-1 justify-end flex-grow">
             {/* Currency Dropdown */}
-            {/* <div className="relative" ref={ref}>
+            <div className="relative" ref={ref}>
               <div className="flex w-full items-center cursor-pointer border border-gray-300 p-[3px] md:p-[5px] lg:p-[5px] xl:p-[5px] rounded-md bg-white"
                 onClick={() => setIsOpen(!isOpen)}
-                onMouseEnter={() => setIsOpen(true)}
+                // onMouseEnter={() => setIsOpen(true)}
+                // onClick={() => {
+                //   if (window.innerWidth <= 768) {
+                //     setIsOpen(!isOpen); // Toggle on mobile
+                //   }
+                // }}
+                // onMouseEnter={() => {
+                //   if (window.innerWidth > 768) {
+                //     setIsOpen(true); // Open on hover for larger screens
+                //   }
+                // }}
               >
                 {flagComponents[currency]}
                 <span className="hidden md:block lg:block xl:block">{currency}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </div>
               {isOpen && (
                 <div className="absolute top-full right-0 z-10 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg">
@@ -439,7 +443,7 @@ const Navbar = ({ onCurrencyChange }) => {
                   ))}
                 </div>
               )}
-            </div> */}
+            </div>
 
             {/* User Dropdown */}
             <div className="relative hidden md:block lg:block xl:block cursor-pointer" ref={ref}>
@@ -470,7 +474,7 @@ const Navbar = ({ onCurrencyChange }) => {
             </Link>
           </div>
         </nav >
-      </div>
+      </div >
     </>
   );
 };

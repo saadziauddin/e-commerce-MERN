@@ -30,13 +30,13 @@ const Banner = () => {
   const [dotActive, setDotActive] = useState(0);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    arrows: true,
+    arrows: false,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (prev, next) => setDotActive(next),
@@ -62,7 +62,7 @@ const Banner = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          arrows: true,
+          arrows: false,
           customPaging: (i) => (
             <div
               className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${i === dotActive ? "bg-white" : "bg-gray-400"
@@ -76,7 +76,7 @@ const Banner = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          arrows: true,
+          arrows: false,
           customPaging: (i) => (
             <div
               className={`w-1 h-0.5 px-2 mx-1 cursor-pointer ${i === dotActive ? "bg-white" : "bg-gray-400"

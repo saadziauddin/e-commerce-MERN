@@ -439,9 +439,9 @@ function UpdateProduct() {
                   </select>
                 </div>
 
-                {/* Price 1 */}
+                {/* New Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price1" className="mb-2 text-sm font-semibold text-gray-700">Price 1:</label>
+                  <label htmlFor="price1" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
                   <input
                     type="text"
                     id="price1"
@@ -453,9 +453,9 @@ function UpdateProduct() {
                   />
                 </div>
 
-                {/* Price 2 */}
+                {/* Old Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price2" className="mb-2 text-sm font-semibold text-gray-700">Price 2:</label>
+                  <label htmlFor="price2" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
                   <input
                     type="text"
                     id="price2"

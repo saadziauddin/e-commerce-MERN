@@ -40,16 +40,6 @@ const upload = multer({
     },
 });
 
-const deleteOldImage = (imagePath) => {
-    fs.unlink(imagePath, (err) => {
-        if (err) {
-            console.error("Error deleting old image: ", err);
-        } else {
-            console.log("Old image deleted successfully.");
-        }
-    });
-};
-
 router.put('/api/updateUser/:userId', (req, res) => {
     upload.single('image')(req, res, async (uploadError) => {
         if (uploadError) {
@@ -65,72 +55,103 @@ router.put('/api/updateUser/:userId', (req, res) => {
         }
 
         const userId = new mongoose.Types.ObjectId(req.params.userId);
-        const userData = { ...req.body };
-        if (userData.password !== userData.confirmPassword) {
-            return res.status(400).json({ error: 'Password and confirm password do not match' });
-        }
-        const fullName = userData.firstName + " " + userData.lastName;
-        const userName = userData.email;
+        const { firstName, lastName, email, contactNo, address, city, country, postalCode, password, confirmPassword, role } = req.body;
+        const fullName = firstName + " " + lastName;
+        const userName = email;
+
         try {
-            const existingUser = await User.findById(userId);
-            if (!existingUser) {
+            const user = await User.findById(userId);
+            if (!user) {
                 return res.status(404).json({ error: "User not found!" });
             }
 
             // If there's a new image uploaded, delete the old image
-            // if (req.file && existingUser.profileImage && existingUser.profileImage.length > 0) {
-            //     const oldImagePath = existingUser.profileImage[0].imagePath;
-            //     if (fs.existsSync(oldImagePath)) {
-            //         deleteOldImage(oldImagePath);
-            //     }
-            // }
-            // Handle image file upload
             if (req.file) {
                 // Check if user already has an image
-                if (existingUser.profileImage && existingUser.profileImage[0]?.imageName) {
-                    const oldImagePath = path.join(__dirname, '..', 'public', 'uploads', 'user_images', existingUser.profileImage[0].imageName);
-
-                    // Delete the old image
+                if (user.profileImage && user.profileImage[0]?.imageName && user.profileImage[0]?.imagePath) {
+                    const oldImagePath = path.join(__dirname, '../../public/uploads/user_images/', user.profileImage[0].imageName);
                     if (fs.existsSync(oldImagePath)) {
-                        fs.unlinkSync(oldImagePath);
+                        fs.unlink(oldImagePath, (err) => {
+                            if (err) {
+                                console.error(`Error deleting image from system:`, err);
+                            } else {
+                                console.log(`Image deleted: ${oldImagePath}`);
+                            }
+                        });
+                    } else {
+                        console.log(`Image file not found at path: ${oldImagePath}`);
                     }
                 }
-
-                // Save the new image information
-                existingUser.profileImage = [{ imageName: req.file.filename }];
+                user.profileImage = [{ imageName: req.file.filename }];
             }
 
             const profileImage = req.file
                 ? [{ imageName: req.file.filename, imagePath: `/uploads/user_images/${req.file.filename}` }]
-                : existingUser.profileImage;
+                : user.profileImage;
 
-            let hashedPassword = existingUser.password;
-            if (userData.password && userData.password.trim() !== "") {
-                hashedPassword = await bcrypt.hash(userData.password, 10);
+            let hashedPassword = user.password;
+            if (password && password.trim() !== "") {
+                hashedPassword = await bcrypt.hash(password, 10);
             }
 
-            const updateUser = await User.findByIdAndUpdate(userId, {
-                ...(userData.firstName && { firstName: userData.firstName }),
-                ...(userData.lastName && { lastName: userData.lastName }),
-                ...(userData.email && { email: userData.email }),
-                ...(userData.contactNo && { contactNo: userData.contactNo }),
-                ...(userData.address && { address: userData.address }),
-                ...(userData.city && { city: userData.city }),
-                ...(userData.country && { country: userData.country }),
-                ...(userData.postalCode && { postalCode: userData.postalCode }),
-                ...(userData.password && { password: userData.password }),
-                ...(userData.confirmPassword && { confirmPassword: userData.confirmPassword }),
-                ...(userData.password && { hashedPassword: hashedPassword }),
-                ...(userData.role && { role: userData.role }),
-                ...(req.file && { profileImage: profileImage }),
+            const sanitizedUser = {
+                ...(firstName && {
+                    firstName: sanitizeField(firstName)
+                }),
+                ...(lastName && {
+                    lastName: sanitizeField(lastName)
+                }),
+                ...(email && {
+                    email: sanitizeField(email)
+                }),
+                ...(contactNo && {
+                    contactNo: sanitizeField(contactNo)
+                }),
+                ...(address && {
+                    address: sanitizeField(address)
+                }),
+                ...(city && {
+                    city: sanitizeField(city)
+                }),
+                ...(country && {
+                    country: sanitizeField(country)
+                }),
+                ...(postalCode && {
+                    postalCode: sanitizeField(postalCode)
+                }),
+                ...(password && {
+                    password: sanitizeField(password)
+                }),
+                ...(confirmPassword && {
+                    confirmPassword: sanitizeField(confirmPassword)
+                }),
+                ...(password && {
+                    hashedPassword: hashedPassword
+                }),
+                ...(role && {
+                    role: role
+                }),
+                ...(req.file && {
+                    profileImage: profileImage
+                }),
                 fullName: fullName,
                 userName: userName
-            }, { new: true });
+            };
 
-            if (!updateUser) {
-                return res.status(400).json({ error: "User not found!" });
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                sanitizedUser,
+                { new: true }
+            );
+
+            if (!updatedUser) {
+                return res.status(404).json({ error: 'User not found!' });
             }
-            res.status(200).json({ message: "User updated successfully!", updatedUserData: updateUser });
+
+            // await newUser.save();
+
+            res.status(200).json({ message: "User updated successfully!", updatedUser });
+
         } catch (error) {
             console.log("Error during user updation: ", error);
             return res.status(500).json({ error: "Internal server error!" });

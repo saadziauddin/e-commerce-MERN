@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faEnvelope, faLock, faPhone, faImage, faExclamationCircle, faUserTag, faLongArrowAltLeft, faAddressBook, faAddressCard, faCity, faEarth, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEnvelope, faLock, faPhone, faImage, faExclamationCircle, faAddressCard, faCity, faEarth } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../../api/api.js';
 import LottieAnimation from "../../../assets/Animations/LottieAnimation";
@@ -86,9 +86,7 @@ function SignUp() {
       }
     }
   };
-  const backToHome = () => {
-    navigate('/')
-  };
+
   const validate = () => {
     let errors = {};
     let isValid = true;

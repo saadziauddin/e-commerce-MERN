@@ -95,17 +95,17 @@ function Categories() {
                       {
                         name: 'Image',
                         selector: row => {
-                          const hasImage = Array.isArray(row.image) && row.image.length > 0 && row.image[0].imageName;
-                          return hasImage ? (
+                          const categoryImage = row.image && row.image[0].imageName && row.image[0].imagePath;
+                          return categoryImage ? (
                             <div className="h-10 w-10 rounded-full">
-                              <img src={`${apiUrl}/uploads/category_images/${row.image[0].imageName}`} alt="" />
+                              <img src={`${apiUrl}/uploads/category_images/${row.image[0].imageName}`} alt="category_image" />
                             </div>
                           ) : (
                             "No Image"
                           );
                         },
                         sortable: false,
-                        center: true.toString(),
+                        center: true,
                         wrap: true,
                       },
                       {
@@ -182,8 +182,9 @@ function Categories() {
                         },
                       },
                     }}
-                    fixedHeader
                     data={fetchCategoriesData}
+                    fixedHeader
+                    fixedHeaderScrollHeight="400px"
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

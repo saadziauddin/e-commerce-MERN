@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import Product from '../../models/productModel.js';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import moment from 'moment';
 
@@ -165,6 +166,7 @@ router.put('/api/updateProduct/:productId', (req, res) => {
       }
 
       res.status(200).json({ message: 'Product updated successfully!', updatedProduct });
+      
     } catch (error) {
       console.error('Error updating product:', error);
       res.status(500).json({ error: 'An error occurred while updating the product' });

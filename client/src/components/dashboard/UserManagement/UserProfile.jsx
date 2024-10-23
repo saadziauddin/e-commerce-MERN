@@ -33,6 +33,7 @@ function UserProfile() {
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
   const [userRole, setUserRole] = useState('');
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchLoggedUser = async () => {
@@ -101,69 +102,25 @@ function UserProfile() {
     setImageFile(e.target.files[0]);
   };
 
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData();
-  //   if (imageFile) {
-  //     formData.append('image', imageFile);
-  //   }
-
-  //   for (let key in values) {
-  //     if (key !== 'image') {
-  //       formData.append(key, values[key]);
-  //     }
-  //   }
-
-  //   try {
-  //     await api.put(`/api/updateUser/${userId}`, formData, {
-  //       headers: { 'Content-Type': 'multipart/form-data' },
-  //       withCredentials: true,
-  //     });
-
-  //     toast.success("User Updated Successfully!");
-  //     // setValues({
-  //     //   firstName: userData.firstName || '',
-  //     //   lastName: userData.lastName || '',
-  //     //   email: userData.email || '',
-  //     //   contactNo: userData.contactNo || '',
-  //     //   address: userData.address || '',
-  //     //   city: userData.city || '',
-  //     //   country: userData.country || '',
-  //     //   postalCode: userData.postalCode || '',
-  //     //   password: '', // Keep password empty for security reasons
-  //     //   confirmPassword: '',
-  //     //   fullName: `${userData.firstName} ${userData.lastName}`, // Combine first and last names
-  //     //   role: userData.role || '',
-  //     //   profileImage: userData.profileImage || ''
-  //     // });
-  //     setEditing(false);
-
-  //   } catch (err) {
-  //     const errorMessage = err.response?.data?.error || "Error updating user!";
-  //     toast.error(errorMessage);
-  //     console.error("Error:", errorMessage);
-  //   }
-  // };
-
   const handleSave = async (e) => {
     e.preventDefault();
-  
+    const isValid = validate();
+    if (!isValid) return;
     const formData = new FormData();
-    
+
     // Append the image file only if it's updated
     if (imageFile) {
       formData.append('image', imageFile);
     }
-  
+
     // Append other values except password fields if they are empty
     for (let key in values) {
       if (key !== 'password' && key !== 'confirmPassword') {
         formData.append(key, values[key]);
       }
     }
-  
-    // Only append password if the user is changing it
+
+    console.log("Values data: ", values)
     if (values.password && values.confirmPassword) {
       if (values.password !== values.confirmPassword) {
         toast.error("Passwords do not match!");
@@ -173,33 +130,114 @@ function UserProfile() {
         formData.append('confirmPassword', values.confirmPassword);
       }
     }
-  
+
     try {
       await api.put(`/api/updateUser/${userId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
-  
+
       toast.success("User Updated Successfully!");
       setEditing(false);
-  
-      // Reset password fields to empty for security reasons
       setValues({
         ...values,
         password: '',
         confirmPassword: '',
       });
-  
+
     } catch (err) {
       const errorMessage = err.response?.data?.error || "Error updating user!";
       toast.error(errorMessage);
       console.error("Error:", errorMessage);
     }
   };
-  
+
   const profileImageUrl = values.profileImage && values.profileImage[0] && values.profileImage[0].imageName
     ? `${apiUrl}/uploads/user_images/${values.profileImage[0]?.imageName}`
     : `${apiUrl}/default_images/default_profile.png`;
+
+  const validate = () => {
+    let errors = {};
+    let isValid = true;
+
+    // First Name validation
+    if (!values.firstName || values.firstName.length < 3) {
+      errors.firstName = "First name must be at least 3 characters";
+      isValid = false;
+    }
+
+    // Last Name validation
+    if (!values.lastName || values.lastName.length < 3) {
+      errors.lastName = "Last name must be at least 3 characters";
+      isValid = false;
+    }
+
+    // Email validation
+    if (!values.email) {
+      errors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = "Invalid email format (Format: abcd@example.com)";
+      isValid = false;
+    }
+
+    // Password validation
+    if (!values.password) {
+      // errors.password = "Password is required";
+      isValid = true;
+    } else if (values.password.length < 8 || !/(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}/.test(values.password)) {
+      errors.password = "Password must be at least 8 characters long and include at least one uppercase letter and one number";
+      isValid = false;
+    }
+
+    // Confirm Password validation
+    if (!values.confirmPassword) {
+      // errors.confirmPassword = "Confirm password is required";
+      isValid = true;
+    } else if (values.confirmPassword !== values.password) {
+      errors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    }
+
+    // Contact No validation (Format: +92XXXXXXXXXX)
+    if (!values.contactNo) {
+      errors.contactNo = "Phone number is required";
+      isValid = false;
+    } else if (!/^\+92\d{3}\d{7}$/.test(values.contactNo)) {
+      errors.contactNo = "Invalid phone number (Format: +92XXXXXXXXXX)";
+      isValid = false;
+    }
+
+    // Address validation
+    if (!values.address) {
+      errors.address = "Address is required";
+      isValid = false;
+    }
+
+    // City validation
+    if (!values.city) {
+      errors.city = "City is required";
+      isValid = false;
+    }
+
+    // Country validation
+    if (!values.country) {
+      errors.country = "Country is required";
+      isValid = false;
+    }
+
+    // Postal Code validation (if applicable)
+    if (!values.postalCode) {
+      // errors.postalCode = "Postal code is required";
+      isValid = true;
+    } else if (!/^\d{5}$/.test(values.postalCode)) {  // Example: 5-digit postal code
+      errors.postalCode = "Invalid postal code";
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return isValid;
+  };
 
   return (
     <div className="relative top-28 left-0 w-full h-full">
@@ -253,45 +291,145 @@ function UserProfile() {
               {/* Right Side */}
               <form className="w-full md:w-4/5 p-5 space-y-4" onSubmit={handleSave} encType="multipart/form-data">
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4">
-                  {['firstName', 'lastName', 'email', 'contactNo', 'address', 'city', 'country', 'postalCode'].map((field) => (
-                    <div key={field} className="flex flex-col">
-                      <label htmlFor={field} className="mb-2 text-sm font-medium text-gray-700">
-                        {field.charAt(0).toUpperCase() + field.slice(1)}:
-                      </label>
-                      <input
-                        type="text"
-                        id={field}
-                        name={field}
-                        value={values[field]}
-                        onChange={handleInputChange}
-                        className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
-                        disabled={!editing}
-                      />
-                    </div>
-                  ))}
+                  <div className="flex flex-col">
+                    <label htmlFor="firstName" className="mb-2 text-sm font-medium text-gray-700">First Name:</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={values.firstName}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.firstName ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.firstName && <span className="text-red-500 text-xs">{errors.firstName}</span>}
+                  </div>
 
                   <div className="flex flex-col">
-                    <label htmlFor="password" className="mb-2 text-sm font-medium text-gray-700">Password:</label>
+                    <label htmlFor="lastName" className="mb-2 text-sm font-medium text-gray-700">Last Name:</label>
                     <input
-                      type="password"
-                      id="password"
-                      name={values.password}
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={values.lastName}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.lastName ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.lastName && <span className="text-red-500 text-xs">{errors.lastName}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="email" className="mb-2 text-sm font-medium text-gray-700">Email:</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={values.email}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="contactNo" className="mb-2 text-sm font-medium text-gray-700">Contact No:</label>
+                    <input
+                      type="text"
+                      id="contactNo"
+                      name="contactNo"
+                      value={values.contactNo}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.contactNo ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.contactNo && <span className="text-red-500 text-xs">{errors.contactNo}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-700">Address:</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={values.address}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.address ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.address && <span className="text-red-500 text-xs">{errors.address}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="mb-2 text-sm font-medium text-gray-700">City:</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={values.city}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.city ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.city && <span className="text-red-500 text-xs">{errors.city}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="country" className="mb-2 text-sm font-medium text-gray-700">Country:</label>
+                    <input
+                      type="text"
+                      id="country"
+                      name="country"
+                      value={values.country}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.country ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.country && <span className="text-red-500 text-xs">{errors.country}</span>}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="postalCode" className="mb-2 text-sm font-medium text-gray-700">Postal Code:</label>
+                    <input
+                      type="text"
+                      id="postalCode"
+                      name="postalCode"
+                      value={values.postalCode}
                       onChange={handleInputChange}
                       className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                       disabled={!editing}
                     />
                   </div>
 
+                  {/* Password field */}
+                  <div className="flex flex-col">
+                    <label htmlFor="password" className="mb-2 text-sm font-medium text-gray-700">Password:</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={values.password}
+                      onChange={handleInputChange}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      disabled={!editing}
+                    />
+                    {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
+                  </div>
+
+                  {/* Confirm Password field */}
                   <div className="flex flex-col">
                     <label htmlFor="confirmPassword" className="mb-2 text-sm font-medium text-gray-700">Confirm Password:</label>
                     <input
                       type="password"
                       id="confirmPassword"
-                      name={values.confirmPassword}
+                      name="confirmPassword"
+                      value={values.confirmPassword}
                       onChange={handleInputChange}
-                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                      className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                       disabled={!editing}
                     />
+                    {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
                   </div>
 
                   <div className="flex flex-col">
@@ -309,6 +447,7 @@ function UserProfile() {
                     </label>
                   </div>
 
+                  {/* User Role (Only for Admin) */}
                   {userRole === "Admin" && (
                     <div className="flex flex-col">
                       <label htmlFor="role" className="mb-2 text-sm font-medium text-gray-700">User Role:</label>
@@ -336,7 +475,6 @@ function UserProfile() {
       </main>
     </div>
   );
-}
+};
 
 export default UserProfile;
-

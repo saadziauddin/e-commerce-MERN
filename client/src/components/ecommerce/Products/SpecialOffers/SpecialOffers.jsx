@@ -11,7 +11,7 @@ function SpecialOffers({ selectedCurrency }) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get("/api/fetchProductsByCategory/newArrivals");
+        const response = await api.get("/api/fetchProductsByCategory/specialOffers");
         const data = await response.data;
         setProducts(data.products);
       } catch (error) {
@@ -103,8 +103,8 @@ function SpecialOffers({ selectedCurrency }) {
                   _id={product._id}
                   img={imagePaths}
                   productName={product.name || "Product Name Not Available"}
-                  price1={product.price1 || "Price Not Available"}
-                  price2={product.price2 || "Price Not Available"}
+                  newPrice={product.newPrice || "Price Not Available"}
+                  oldPrice={product.oldPrice || "Price Not Available"}
                   color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
                   size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
                   tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}

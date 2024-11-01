@@ -9,20 +9,22 @@ import BannerImgFive from "/Images/Slider/Mehndi Outfit (Slider 4).png";
 import { TfiAngleRight, TfiAngleLeft } from "react-icons/tfi";
 
 const NextArrow = ({ onClick }) => (
-  <div onClick={onClick} className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110">
+  <div onClick={onClick} >
+    {/* className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110" */}
     <TfiAngleRight className="text-3xl md:text-4xl lg:text-4xl xl:text-4xl" />
   </div>
 );
 
 const PrevArrow = ({ onClick }) => (
-  <div onClick={onClick} className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110">
+  <div onClick={onClick} >
+    {/* className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 cursor-pointer text-black p-1 transition-transform duration-300 hover:scale-110" */}
     <TfiAngleLeft className="text-3xl md:text-4xl lg:text-4xl xl:text-4xl" />
   </div>
 );
 
 const CustomSlide = ({ imgSrc }) => (
   <Link to='/products'>
-    <img className="w-full h-[190px] md:h-[500px] lg:h-[500px] xl:h-[500px] object-center cursor-pointer" src={imgSrc} alt="Main Banner" />
+    <img className="w-full h-[190px] md:h-[500px] object-center cursor-pointer" src={imgSrc} alt="Main Banner" />
   </Link>
 );
 
@@ -97,7 +99,7 @@ const Banner = () => {
   ]
 
   return (
-    <div className="mt-1 md:mt-5 lg:mt-5 xl:mt-5">
+    <div className="mt-1 md:mt-5">
       <Slider {...settings}>
         {slides.map((slide, index) => (
           <CustomSlide key={index} imgSrc={slide.imgSrc} />

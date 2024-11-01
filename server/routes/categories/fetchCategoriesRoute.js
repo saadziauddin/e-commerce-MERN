@@ -28,7 +28,7 @@ router.get('/api/fetchCategoryById/:categoryId', async (req, res) => {
 
 // Fetch Categories excuding which I don't want
 router.get('/api/fetchOnlyRequiredCategories', async (req, res) => {
-    const excludedCategories = ["New Arrivals", "Sale", "Top Selling", "Best Sellers"];
+    const excludedCategories = ["New Arrivals", "Best Sellers", "Special Offers"];
     
     try {
       const categories = await Category.find({ name: { $nin: excludedCategories } });

@@ -1,7 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
-import mongoose from 'mongoose';
 import User from '../../models/userModel.js';
 import moment from 'moment';
 import fs from 'fs';
@@ -40,6 +39,13 @@ const upload = multer({
     },
 });
 
+const sanitizeField = (field) => {
+    if (Array.isArray(field)) {
+        return field.length > 0 ? field.map(f => f.trim()).filter(f => f !== '') : null;
+    }
+    return typeof field === 'string' && field.trim() !== '' ? field.trim() : null;
+};
+
 router.put('/api/updateUser/:userId', (req, res) => {
     upload.single('image')(req, res, async (uploadError) => {
         if (uploadError) {
@@ -54,7 +60,8 @@ router.put('/api/updateUser/:userId', (req, res) => {
             }
         }
 
-        const userId = new mongoose.Types.ObjectId(req.params.userId);
+        // const userId = new mongoose.Types.ObjectId(req.params.userId);
+        const {userId} = req.params;
         const { firstName, lastName, email, contactNo, address, city, country, postalCode, password, confirmPassword, role } = req.body;
         const fullName = firstName + " " + lastName;
         const userName = email;
@@ -87,7 +94,8 @@ router.put('/api/updateUser/:userId', (req, res) => {
 
             const profileImage = req.file
                 ? [{ imageName: req.file.filename, imagePath: `/uploads/user_images/${req.file.filename}` }]
-                : user.profileImage;
+                // : user.profileImage;
+                : null;
 
             let hashedPassword = user.password;
             if (password && password.trim() !== "") {
@@ -116,9 +124,10 @@ router.put('/api/updateUser/:userId', (req, res) => {
                 ...(country && {
                     country: sanitizeField(country)
                 }),
-                ...(postalCode && {
+                // ...(postalCode && {
                     postalCode: sanitizeField(postalCode)
-                }),
+                // })
+                ,
                 ...(password && {
                     password: sanitizeField(password)
                 }),

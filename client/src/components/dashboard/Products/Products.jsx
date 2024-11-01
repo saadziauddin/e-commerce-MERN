@@ -114,26 +114,25 @@ function Products() {
                       },
                       {
                         name: 'Color',
-                        selector: row => Array.isArray(row.color) && row.color.length > 0 ? row.color[0] : 'No Color',
+                        selector: row => Array.isArray(row.color) && row.color.length > 0 ? row.color[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
                       {
                         name: 'Size',
-                        selector: row => Array.isArray(row.size) && row.size.length > 0 ? row.size[0] : 'No Size',
+                        selector: row => Array.isArray(row.size) && row.size.length > 0 ? row.size[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
                       {
                         name: 'Tags',
-                        // selector: row => Array.isArray(row.tags) && row.tags.length > 0 ? row.tags[0] : 'No Tags',
-                        selector: row => row.tags,
+                        selector: row => row.tags && row.tags.length > 0 ? row.tags[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
                       {
                         name: 'Stock',
-                        selector: row => row.stock,
+                        selector: row => row.stock && row.stock.length > 0 ? row.stock[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },                     
@@ -145,7 +144,7 @@ function Products() {
                       },
                       {
                         name: 'Discount',
-                        selector: row => row.discount,
+                        selector: row => row.discount && row.discount.length > 0 ? row.discount[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
@@ -156,14 +155,14 @@ function Products() {
                         wrap: true,
                       },
                       {
-                        name: 'Price 1',
-                        selector: row => row.price1,
+                        name: 'New Price',
+                        selector: row => row.newPrice,
                         sortable: true,
                         wrap: true,
                       },
                       {
-                        name: 'Price 2',
-                        selector: row => row.price2,
+                        name: 'Old Price',
+                        selector: row => row.oldPrice && row.oldPrice.length > 0 ? row.oldPrice[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
@@ -241,8 +240,9 @@ function Products() {
                         },
                       },
                     }}
-                    fixedHeader
                     data={fetchProductsData}
+                    fixedHeader
+                    fixedHeaderScrollHeight="700px"
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

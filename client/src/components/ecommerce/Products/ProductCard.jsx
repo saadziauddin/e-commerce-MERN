@@ -97,8 +97,8 @@ function ProductCard(props) {
 
             {props.price && (
               <p className="text-gray-800 font-[550] text-center xs:text-sm sm:text-sm md:text-lg lg:text-lg xl:text-lg">
-                {<FormatPrice price={productItem.price1} currency={selectedCurrency} />}
-                <span className="line-through">{<FormatPrice price={productItem.price2} currency={selectedCurrency} />}</span>
+                {<FormatPrice price={productItem.newPrice} currency={selectedCurrency} />}
+                <span className="line-through">{<FormatPrice price={productItem.oldPrice} currency={selectedCurrency} />}</span>
               </p>
             )}
           </div>

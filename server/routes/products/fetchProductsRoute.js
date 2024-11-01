@@ -57,4 +57,14 @@ router.get('/api/fetchProductsByCategory/bestSellers', async (req, res) => {
     }
 });
 
+// Fetch products whose category = Best Sellers
+router.get('/api/fetchProductsByCategory/specialOffers', async (req, res) => {
+    try {
+        const products = await Product.find({category: 'Special Offers'});
+        return res.status(200).json({products});
+    } catch (error) {
+        console.log("Error fetching products whose category = Special Offers: ", error);
+    }
+});
+
 export default router;

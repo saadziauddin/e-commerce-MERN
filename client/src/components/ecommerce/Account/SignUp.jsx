@@ -25,6 +25,7 @@ function SignUp() {
   const [roles, setRoles] = useState([]);
   const [errors, setErrors] = useState({});
   const [checked, setChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -364,10 +365,16 @@ function SignUp() {
             />
             <p className="text-sm text-primeColor text-wrap">
               I agree to the Nayab Fashion{" "}
-              <span className="text-blue-600 cursor-pointer">Terms of Service</span> and{" "}
-              <span className="text-blue-600 cursor-pointer">Privacy Policy</span>.
+              <a onClick={() => setIsModalOpen(true)} className="text-blue-800 hover:text-blue-500 cursor-pointer">
+                <Link to='/signup/privacy-policy'>Terms of Service and Privacy Policy.</Link>
+              </a>
             </p>
           </div>
+
+          {/* Modal Component */}
+          {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Terms of Service & Privacy Policy">
+              <PrivacyPolicy />
+          </Modal> */}
 
           <button
             onClick={handleSubmit}

@@ -39,8 +39,11 @@ app.use((req, res, next) => {
 
 // Server Initialization
 const port = process.env.PORT || 8090;
-app.listen(port, () => {
-    console.log("Server is running at PORT: " + port);
+// app.listen(port, () => {
+//     console.log("Server is running at PORT: " + port);
+// });
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on http://0.0.0.0:${port}`);
 });
 
 // ======================= Auth Routes ==============================
@@ -103,6 +106,7 @@ app.get('/api/fetchProductById/:productId', fetchProductsRouter);
 app.get('/api/fetchProductByCategory/:categoryName', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/newArrivals', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/bestSellers', fetchProductsRouter);
+app.get('/api/fetchProductsByCategory/specialOffers', fetchProductsRouter);
 
 // ======================= User Routes =================================
 import updateUserRouter from './routes/users/updateUserRoute.js';
@@ -110,6 +114,9 @@ app.put('/api/updateUser/:userId', updateUserRouter);
 
 import deleteUserRouter from './routes/users/deleteUserRoute.js';
 app.delete('/api/deleteUser', deleteUserRouter);
+
+import deleteProfileImageRouter from './routes/users/deleteProfileImageRoute.js';
+app.delete('/api/deleteProfileImage/:userId', deleteProfileImageRouter);
 
 import fetchUsersRouter from './routes/users/fetchUsersRoute.js';
 app.get('/api/roles', fetchUsersRouter); // Fetch Roles

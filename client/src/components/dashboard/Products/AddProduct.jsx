@@ -17,8 +17,8 @@ function AddProduct() {
     name: '',
     shortDescription: '',
     longDescription: '',
-    price1: '',
-    price2: '',
+    newPrice: '',
+    oldPrice: '',
     color: [''],
     size: [''],
     tags: '',
@@ -65,8 +65,10 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataToSend = new FormData();
+
+    const colorData = formData.color.filter(color => color.trim() !== '');
+    const sizeData = formData.size.filter(size => size.trim() !== '');
 
     for (let key in formData) {
       if (key === 'images') {
@@ -80,10 +82,14 @@ function AddProduct() {
       }
     }
 
-    // Debugging FormData
-    // for (let pair of formDataToSend.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
+    if (colorData.length > 0) {
+      colorData.forEach(color => formDataToSend.append('color[]', color));
+    }
+  
+    // Append `size` only if it contains values
+    if (sizeData.length > 0) {
+      sizeData.forEach(size => formDataToSend.append('size[]', size));
+    }
 
     try {
       const uploadProduct = await api.post('/api/products/addProduct', formDataToSend, {
@@ -96,8 +102,8 @@ function AddProduct() {
           name: '',
           shortDescription: '',
           longDescription: '',
-          price1: '',
-          price2: '',
+          newPrice: '',
+          oldPrice: '',
           discount: '',
           status: '',
           color: [''],
@@ -312,12 +318,12 @@ function AddProduct() {
 
                 {/* New Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price1" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
+                  <label htmlFor="newPrice" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
                   <input
                     type="text"
-                    id="price1"
-                    name="price1"
-                    value={formData.price1}
+                    id="newPrice"
+                    name="newPrice"
+                    value={formData.newPrice}
                     onChange={handleInputChange}
                     className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                   />
@@ -325,12 +331,12 @@ function AddProduct() {
 
                 {/* Old Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price2" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
+                  <label htmlFor="oldPrice" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
                   <input
                     type="text"
-                    id="price2"
-                    name="price2"
-                    value={formData.price2}
+                    id="oldPrice"
+                    name="oldPrice"
+                    value={formData.oldPrice}
                     onChange={handleInputChange}
                     className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                   />

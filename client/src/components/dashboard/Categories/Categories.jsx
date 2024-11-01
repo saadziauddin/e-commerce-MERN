@@ -101,7 +101,7 @@ function Categories() {
                               <img src={`${apiUrl}/uploads/category_images/${row.image[0].imageName}`} alt="category_image" />
                             </div>
                           ) : (
-                            "No Image"
+                            <p>N\A</p>
                           );
                         },
                         sortable: false,
@@ -116,7 +116,7 @@ function Categories() {
                       },
                       {
                         name: 'Description',
-                        selector: row => row.description,
+                        selector: row => row.description && row.description.length > 0 ? row.description[0] : 'N/A',
                         sortable: true,
                         // wrap: true,
                       },
@@ -184,7 +184,7 @@ function Categories() {
                     }}
                     data={fetchCategoriesData}
                     fixedHeader
-                    fixedHeaderScrollHeight="400px"
+                    fixedHeaderScrollHeight="450px"
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

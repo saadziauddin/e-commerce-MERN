@@ -5,6 +5,8 @@ import Sidebar from '../Constants/Sidebar.jsx';
 import api from '../../../api/api.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function UserProfile() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -102,6 +104,27 @@ function UserProfile() {
     setImageFile(e.target.files[0]);
   };
 
+  const handleRemoveImage = async (index) => {
+    if (window.confirm('Are you sure you want to remove your profile image?')) {
+
+      try {
+        const response = await api.delete(`/api/deleteProfileImage/${userId}`);
+  
+        if (response.data.success) {
+          toast.success("Image removed successfully!");
+            setEditing(false);
+            setValues({ profileImage: values.profileImage});
+          // await fetchUserData();
+        } else {
+          toast.error("Failed to remove image.");
+        }
+      } catch (error) {
+        console.error("Error removing image:", error);
+        toast.error("Error removing image.");
+      }
+    }
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     const isValid = validate();
@@ -120,7 +143,6 @@ function UserProfile() {
       }
     }
 
-    console.log("Values data: ", values)
     if (values.password && values.confirmPassword) {
       if (values.password !== values.confirmPassword) {
         toast.error("Passwords do not match!");
@@ -269,10 +291,27 @@ function UserProfile() {
                 <div className="flex justify-between items-center mb-4">
                   <span className="w-full flex justify-center text-2xl font-semibold uppercase">{values.fullName}</span>
                 </div>
+
                 <span className="w-full flex justify-center text-gray-600">This information is secret so be careful</span>
-                <div className="w-full flex justify-center items-center py-3 mt-[75px] flex-grow-0">
+
+                {/* <div className="w-full flex justify-center items-center py-3 mt-[75px] flex-grow-0">
                   <img src={profileImageUrl} alt="Profile" className="h-44 w-44 rounded-lg object-cover" />
+                </div> */}
+
+                <div className="relative group w-full flex justify-center items-center py-3 mt-[75px] flex-grow-0">
+                  <img src={profileImageUrl} alt="Profile" className="h-44 w-44 rounded-lg object-cover" />
+
+                  {editing && (
+                    <button
+                      onClick={handleRemoveImage}
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-600 text-white rounded-lg p-1 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out hover:bg-red-700  w-8 h-8"
+                      title="Remove Image"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  )}
                 </div>
+
                 <div className="w-full flex justify-center mt-32">
                   {editing ? (
                     <div className="flex space-x-4">
@@ -402,7 +441,6 @@ function UserProfile() {
                     />
                   </div>
 
-                  {/* Password field */}
                   <div className="flex flex-col">
                     <label htmlFor="password" className="mb-2 text-sm font-medium text-gray-700">Password:</label>
                     <input
@@ -417,7 +455,6 @@ function UserProfile() {
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                   </div>
 
-                  {/* Confirm Password field */}
                   <div className="flex flex-col">
                     <label htmlFor="confirmPassword" className="mb-2 text-sm font-medium text-gray-700">Confirm Password:</label>
                     <input
@@ -443,7 +480,7 @@ function UserProfile() {
                         className="hidden"
                         disabled={!editing}
                       />
-                      <span className="text-gray-400">{imageFile ? imageFile.name : 'Select Profile Image'}</span>
+                      <span className="text-gray-400">{imageFile ? imageFile.name : 'Select profile Image'}</span>
                     </label>
                   </div>
 

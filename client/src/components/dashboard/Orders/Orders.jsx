@@ -81,11 +81,7 @@ function Categories() {
           <div className="flex-none w-full max-w-full px-3">
             <div className="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
               <div className="flex justify-between items-center p-6 pb-0 mb-3 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                <h6 className="text-xl font-semibold">Categories</h6>
-
-                <button className="text-sm font-semibold text-white bg-[#2f456a] px-5 py-2 rounded-lg hover:bg-[#1d2c44] hover:shadow-lg transform hover:scale-105 transition-transform duration-300" onClick={addCategory}>
-                  Add Category
-                </button>
+                <h6 className="text-xl font-semibold">Orders</h6>
               </div>
 
               <div className="flex-auto px-0 pt-0 pb-2">
@@ -173,8 +169,9 @@ function Categories() {
                         },
                       },
                     }}
-                    fixedHeader
                     data={fetchCategoriesData}
+                    fixedHeader
+                    fixedHeaderScrollHeight="450px"
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 30, 50, 100]}

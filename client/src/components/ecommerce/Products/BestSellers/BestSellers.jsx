@@ -101,8 +101,8 @@ function BestSellers({ selectedCurrency }) {
                     : ['/default_images/image-not-available.png']
                 }
                 productName={product.name || "Product Name Not Available"}
-                price1={product.price1 || "Price Not Available"}
-                price2={product.price2 || "Price Not Available"}
+                newPrice={product.newPrice || "Price Not Available"}
+                oldPrice={product.oldPrice || "Price Not Available"}
                 color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
                 size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
                 tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
@@ -131,8 +131,8 @@ function BestSellers({ selectedCurrency }) {
                   _id={product._id}
                   img={imagePaths}
                   productName={product.name || "Product Name Not Available"}
-                  price1={product.price1 || "Price Not Available"}
-                  price2={product.price2 || "Price Not Available"}
+                  newPrice={product.newPrice || "Price Not Available"}
+                  oldPrice={product.oldPrice || "Price Not Available"}
                   color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
                   size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
                   tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}

@@ -29,6 +29,7 @@ import ProductDetails from "./components/ecommerce/Products/ProductDetails";
 import SignIn from "./components/ecommerce/Account/SignIn";
 import SignUp from "./components/ecommerce/Account/SignUp";
 import Reset from "./components/ecommerce/Account/Reset";
+import PrivacyPolicy from "./components/ecommerce/PrivacyPolicy/PrivacyPolicy";
 
 // ================= Dashboard =====================
 import DashboardHome from './components/dashboard/Home/Home';
@@ -43,6 +44,8 @@ import UpdateCategory from './components/dashboard/Categories/UpdateCategory';
 import Products from './components/dashboard/Products/Products';
 import AddProduct from "./components/dashboard/Products/AddProduct";
 import UpdateProduct from './components/dashboard/Products/UpdateProduct';
+// ================= Orders management =====================
+import Orders from "./components/dashboard/Orders/Orders";
 
 const Layout = () => {
   const [currency, setCurrency] = useState("PKR");
@@ -100,6 +103,7 @@ const router = createBrowserRouter(
       <Route path="/signin" element={<><PageTitle title="Nayab Fashion - Sign In" /><SignIn /></>} />
       <Route path="/signup" element={<><PageTitle title="Nayab Fashion - Sign Up" /><SignUp /></>} />
       <Route path="/reset" element={<><PageTitle title="Nayab Fashion - Reset Password" /><Reset /></>} />
+      <Route path="/signup/privacy-policy" element={<><PageTitle title="Nayab Fashion - Privacy Policy" /><PrivacyPolicy /></>} />
       {/* Dashboard Routes */}
       <Route path="/dashboard/home" element={<><PageTitle title="Nayab Fashion - Dashboard" /><DashboardHome /></>} />
       {/* User management routes */}
@@ -115,7 +119,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard/products/addProduct" element={<><PageTitle title="Nayab Fashion - Add Product" /><AddProduct /></>} />
       <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="Nayab Fashion - Update Product" /><UpdateProduct /></>} />
       {/* Orders management routes */}
-      <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Categories /></>} />
+      <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Orders /></>} />
     </Route>
   )
 );

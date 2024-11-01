@@ -19,8 +19,8 @@ router.delete('/api/deleteUser', async (req, res) => {
         if(!user){
             return res.status(400).json({error: "User not found!"});
         }
-        const profileImageObj = user.profileImage[0];
 
+        const profileImageObj = user.profileImage[0];
         if(profileImageObj && profileImageObj.imagePath){
             const fullImagePath = path.join(__dirname, '../../public', profileImageObj.imagePath);
             fs.unlink(fullImagePath, (err) => {

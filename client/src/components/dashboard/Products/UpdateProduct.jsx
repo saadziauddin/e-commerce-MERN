@@ -16,19 +16,20 @@ function UpdateProduct() {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    color: [''],
-    size: [''],
+    color: [],
+    size: [],
     tags: '',
     stock: '',
     category: '',
     discount: '',
     status: '',
-    price1: '',
-    price2: '',
+    newPrice: '',
+    oldPrice: '',
     shortDescription: '',
     longDescription: '',
     images: [],
   });
+  const [initialFormData, setInitialFormData] = useState({});
   const [editing, setEditing] = useState(false);
   const [newImages, setNewImages] = useState([]);
   const { productId } = useParams();
@@ -52,10 +53,10 @@ function UpdateProduct() {
           name: product.name,
           shortDescription: product.shortDescription,
           longDescription: product.longDescription,
-          price1: product.price1,
-          price2: product.price2,
-          color: product.color,
-          size: product.size,
+          newPrice: product.newPrice,
+          oldPrice: product.oldPrice,
+          color: product.color ?? [''],
+          size: product.size ?? [''],
           tags: product.tags,
           discount: product.discount,
           status: product.status,
@@ -75,9 +76,9 @@ function UpdateProduct() {
 
   const handleInputChange = (e, index, field) => {
     const { value } = e.target;
-
+  
     if (field === 'color' || field === 'size') {
-      const updatedArray = [...formData[field]];
+      const updatedArray = formData[field] ? [...formData[field]] : [];
       updatedArray[index] = value;
       setFormData({
         ...formData,
@@ -85,80 +86,361 @@ function UpdateProduct() {
       });
     } else {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     }
   };
-
-  // const handleImageChange = (e) => {
-  //   setNewImages([...newImages, ...e.target.files]);
-  // };
 
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const totalImages = formData.images.length + newImages.length + selectedFiles.length;
 
-    if (totalImages > 5) {
-      toast.error('You can only upload up to 5 images!');
+    if (totalImages > 10) {
+      toast.error('You can only upload up to 10 images!');
       return;
     }
 
     setNewImages([...newImages, ...selectedFiles]);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formDataToSend = new FormData();
 
+  //   const colorData = formData.color.filter(color => color.trim() !== '');
+  //   const sizeData = formData.size.filter(size => size.trim() !== '');
+  
+  //   // Append only fields that have changed, handling null values where allowed
+  //   for (let key in formData) {
+  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
+  //       if (formData[key] !== initialFormData[key]) {
+  //         formDataToSend.append(key, formData[key] ?? null);
+  //       }
+  //     }
+  //   }
+
+  //   if (colorData.length > 0) {
+  //     colorData.forEach(color => formDataToSend.append('color[]', color));
+  //   } else {
+  //     formDataToSend.append('color', null);
+  //   }
+  
+  //   if (sizeData.length > 0) {
+  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
+  //   } else {
+  //     formDataToSend.append('size', null);
+  //   }
+    
+  //   (newImages || []).forEach((image) => {
+  //     formDataToSend.append('images', image);
+  //   });
+  
+  //   // Append only remaining existing images if they differ
+  //   (formData.images || []).forEach((image, index) => {
+  //     if (image !== initialFormData.images?.[index]) {
+  //       formDataToSend.append('existingImages', image);
+  //     }
+  //   });
+  
+  //   try {
+  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
+  //       headers: { 'Content-Type': 'multipart/form-data' },
+  //     });
+  
+  //     if (updateProduct.data.message === "Product updated successfully!") {
+  //       toast.success("Product updated successfully!");
+  //       setNewImages([]);
+  //       setEditing(false);
+  
+  //       // Refetch product data to reflect changes
+  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
+  //       const product = refetchProductsData.data.product[0];
+  //       setFormData({
+  //         name: product.name,
+  //         shortDescription: product.shortDescription,
+  //         longDescription: product.longDescription,
+  //         newPrice: product.newPrice,
+  //         oldPrice: product.oldPrice,
+  //         color: product.color ?? [''],
+  //         size: product.size ?? [''],
+  //         tags: product.tags,
+  //         discount: product.discount,
+  //         status: product.status,
+  //         category: product.category,
+  //         stock: product.stock,
+  //         images: product.images
+  //       });
+  //     }
+  //   } catch (error) {
+  //     const errorMessage = error.response?.data?.error || "Error updating product!";
+  //     toast.error(errorMessage);
+  //   }
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formDataToSend = new FormData();
+  
+  //   const colorData = formData.color.filter(color => color.trim() !== '');
+  //   const sizeData = formData.size.filter(size => size.trim() !== '');
+  
+  //   // Append only fields that have changed, handling null values where allowed
+  //   for (let key in formData) {
+  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
+  //       if (formData[key] !== initialFormData[key]) {
+  //         formDataToSend.append(key, formData[key] !== '' ? formData[key] : null);
+  //       }
+  //     }
+  //   }
+  
+  //   // Handle color data, appending null if no valid colors are provided
+  //   if (colorData.length > 0) {
+  //     colorData.forEach(color => formDataToSend.append('color[]', color));
+  //   } else {
+  //     formDataToSend.append('color', null);
+  //   }
+  
+  //   // Handle size data, appending null if no valid sizes are provided
+  //   if (sizeData.length > 0) {
+  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
+  //   } else {
+  //     formDataToSend.append('size', null);
+  //   }
+  
+  //   // Append new images if any
+  //   (newImages || []).forEach((image) => {
+  //     formDataToSend.append('images', image);
+  //   });
+  
+  //   // Append only remaining existing images if they differ
+  //   (formData.images || []).forEach((image, index) => {
+  //     if (image !== initialFormData.images?.[index]) {
+  //       formDataToSend.append('existingImages', image);
+  //     }
+  //   });
+  
+  //   try {
+  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
+  //       headers: { 'Content-Type': 'multipart/form-data' },
+  //     });
+  
+  //     if (updateProduct.data.message === "Product updated successfully!") {
+  //       toast.success("Product updated successfully!");
+  //       setNewImages([]);
+  //       setEditing(false);
+  
+  //       // Refetch product data to reflect changes
+  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
+  //       const product = refetchProductsData.data.product[0];
+  //       setFormData({
+  //         name: product.name,
+  //         shortDescription: product.shortDescription,
+  //         longDescription: product.longDescription,
+  //         newPrice: product.newPrice,
+  //         oldPrice: product.oldPrice,
+  //         color: product.color ?? [''],
+  //         size: product.size ?? [''],
+  //         tags: product.tags ?? null, // Ensure tags are set to null if empty
+  //         discount: product.discount ?? null,
+  //         status: product.status ?? null,
+  //         category: product.category ?? null,
+  //         stock: product.stock ?? null,
+  //         images: product.images ?? null,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     const errorMessage = error.response?.data?.error || "Error updating product!";
+  //     toast.error(errorMessage);
+  //   }
+  // };
+  
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formDataToSend = new FormData();
+  
+  //   const colorData = formData.color.filter(color => color.trim() !== '');
+  //   const sizeData = formData.size.filter(size => size.trim() !== '');
+  
+  //   // Append only fields that have changed, using actual null values for empty fields
+  //   for (let key in formData) {
+  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
+  //       const value = formData[key];
+        
+  //       // Convert empty strings or NaN values to null for numbers
+  //       if (value === '' || (['newPrice', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
+  //         formDataToSend.append(key, null);
+  //       } else {
+  //         formDataToSend.append(key, value);
+  //       }
+  //     }
+  //   }
+  
+  //   // Handle color data, appending null if no valid colors are provided
+  //   if (colorData.length > 0) {
+  //     colorData.forEach(color => formDataToSend.append('color[]', color));
+  //   } else {
+  //     formDataToSend.append('color', null);
+  //   }
+  
+  //   // Handle size data, appending null if no valid sizes are provided
+  //   if (sizeData.length > 0) {
+  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
+  //   } else {
+  //     formDataToSend.append('size', null);
+  //   }
+  
+  //   // Append new images if any
+  //   (newImages || []).forEach((image) => {
+  //     formDataToSend.append('images', image);
+  //   });
+  
+  //   // Append only remaining existing images if they differ
+  //   (formData.images || []).forEach((image, index) => {
+  //     if (image !== initialFormData.images?.[index]) {
+  //       formDataToSend.append('existingImages', image);
+  //     }
+  //   });
+  
+  //   try {
+  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
+  //       headers: { 'Content-Type': 'multipart/form-data' },
+  //     });
+  
+  //     if (updateProduct.data.message === "Product updated successfully!") {
+  //       toast.success("Product updated successfully!");
+  //       setNewImages([]);
+  //       setEditing(false);
+  
+  //       // Refetch product data to reflect changes
+  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
+  //       const product = refetchProductsData.data.product[0];
+  //       setFormData({
+  //         name: product.name,
+  //         shortDescription: product.shortDescription,
+  //         longDescription: product.longDescription,
+  //         newPrice: product.newPrice ?? null,
+  //         oldPrice: product.oldPrice ?? null,
+  //         color: product.color ?? [''],
+  //         size: product.size ?? [''],
+  //         tags: product.tags ?? null,
+  //         discount: product.discount ?? null,
+  //         status: product.status ?? null,
+  //         category: product.category ?? null,
+  //         stock: product.stock ?? null,
+  //         images: product.images ?? null,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     const errorMessage = error.response?.data?.error || "Error updating product!";
+  //     toast.error(errorMessage);
+  //   }
+  // };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataToSend = new FormData();
-
-    // Append all fields except images, color, and size
+  
+    const colorData = formData.color.filter(color => color.trim() !== '');
+    const sizeData = formData.size.filter(size => size.trim() !== '');
+  
     for (let key in formData) {
       if (key !== 'images' && key !== 'color' && key !== 'size') {
-        formDataToSend.append(key, formData[key]);
+        const value = formData[key];
+        
+        // Send empty strings for fields you want to store as null
+        if (value === '' || value === null || (['tags', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
+          formDataToSend.append(key, '');
+        } else {
+          formDataToSend.append(key, value);
+        }
       }
     }
-    // Append color array
-    formData.color.forEach((color) => {
-      formDataToSend.append('color[]', color);
-    });
-    // Append size array
-    formData.size.forEach((size) => {
-      formDataToSend.append('size[]', size);
-    });
-    // Append new images if any
-    newImages.forEach((image) => {
+    for (let key in formData) {
+      if (key !== 'images' && key !== 'color' && key !== 'size') {
+        const value = formData[key];
+  
+        // Send empty strings for fields you want to store as null
+        if (value === '' || value === null || (['tags', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
+          formDataToSend.append(key, ''); // Set as empty string
+        } else {
+          formDataToSend.append(key, value);
+        }
+      }
+    }
+  
+    // Handle color and size fields
+    if (colorData.length > 0) {
+      colorData.forEach(color => formDataToSend.append('color[]', color));
+    } else {
+      formDataToSend.append('color', ''); // Set to empty to indicate no colors
+    }
+  
+    if (sizeData.length > 0) {
+      sizeData.forEach(size => formDataToSend.append('size[]', size));
+    } else {
+      formDataToSend.append('size', ''); // Set to empty to indicate no sizes
+    }
+  
+    // Handle tags field
+    if (formData.tags && formData.tags.trim() !== '') {
+      formDataToSend.append('tags', formData.tags.trim());
+    } else {
+      formDataToSend.append('tags', ''); // Set to empty to indicate no tags
+    }
+  
+    // Handle color and size fields
+    // if (colorData.length > 0) {
+    //   colorData.forEach(color => formDataToSend.append('color[]', color));
+    // } else {
+    //   formDataToSend.append('color', '');
+    // }
+  
+    // if (sizeData.length > 0) {
+    //   sizeData.forEach(size => formDataToSend.append('size[]', size));
+    // } else {
+    //   formDataToSend.append('size', '');
+    // }
+  
+    // Append new and existing images
+    (newImages || []).forEach((image) => {
       formDataToSend.append('images', image);
     });
-    // Send only remaining existing images
-    formData.images.forEach((image) => {
-      formDataToSend.append('existingImages', image);
+  
+    (formData.images || []).forEach((image, index) => {
+      if (image !== initialFormData.images?.[index]) {
+        formDataToSend.append('existingImages', image);
+      }
     });
-
+  
     try {
       const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-
+  
       if (updateProduct.data.message === "Product updated successfully!") {
         toast.success("Product updated successfully!");
         setNewImages([]);
         setEditing(false);
-
+  
+        // Refetch product data to reflect changes
         const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
         const product = refetchProductsData.data.product[0];
         setFormData({
           name: product.name,
-          description: product.description,
-          price1: product.price1,
-          price2: product.price2,
-          color: product.color,
-          size: product.size,
-          tags: product.tags,
-          discount: product.discount,
-          status: product.status,
-          category: product.category,
-          stock: product.stock,
-          images: product.images
+          shortDescription: product.shortDescription,
+          longDescription: product.longDescription,
+          newPrice: product.newPrice ?? null,
+          oldPrice: product.oldPrice ?? null,
+          color: product.color ?? [''],
+          size: product.size ?? [''],
+          tags: product.tags ?? null,
+          discount: product.discount ?? null,
+          status: product.status ?? null,
+          category: product.category ?? null,
+          stock: product.stock ?? null,
+          images: product.images ?? null,
         });
       }
     } catch (error) {
@@ -166,7 +448,7 @@ function UpdateProduct() {
       toast.error(errorMessage);
     }
   };
-
+  
   const handleEdit = (e) => {
     e.preventDefault();
     setEditing(true);
@@ -175,11 +457,6 @@ function UpdateProduct() {
   const goBack = () => {
     navigate('/dashboard/products');
   };
-
-  // const removeExistingImage = (index) => {
-  //   const updatedImages = formData.images.filter((_, i) => i !== index);
-  //   setFormData({ ...formData, images: updatedImages });
-  // };
 
   const removeExistingImage = async (index) => {
     const imageToRemove = formData.images[index];
@@ -313,7 +590,8 @@ function UpdateProduct() {
                 {/* Colors */}
                 <div className="flex flex-col">
                   <label htmlFor="color" className="mb-2 text-sm font-semibold text-gray-700">Colors:</label>
-                  {formData.color.map((color, index) => (
+                  {/* {formData.color.map((color, index) => ( */}
+                  {(formData.color || []).map((color, index) => (
                     <div key={index} className="relative flex items-center mb-2">
                       <input
                         type="text"
@@ -354,7 +632,7 @@ function UpdateProduct() {
                 {/* Sizes */}
                 <div className="flex flex-col">
                   <label htmlFor="size" className="mb-2 text-sm font-semibold text-gray-700">Sizes:</label>
-                  {formData.size.map((size, index) => (
+                  {(formData.size || []).map((size, index) => (
                     <div key={index} className="relative flex items-center mb-2">
                       <input
                         type="text"
@@ -371,7 +649,7 @@ function UpdateProduct() {
                           {index === formData.size.length - 1 && (
                             <button
                               type="button"
-                              className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs"
+                              className="absolute top-[10px] right-9 text-gray-700 hover:text-green-500 text-xs block"
                               onClick={addSize}
                             >
                               <FontAwesomeIcon icon={faPlus} />
@@ -380,7 +658,7 @@ function UpdateProduct() {
                           {/* Remove size button */}
                           <button
                             type="button"
-                            className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm"
+                            className="absolute top-2 right-4 text-gray-700 hover:text-red-500 font-semibold text-sm block"
                             onClick={() => removeSize(index)}
                           >
                             <FontAwesomeIcon icon={faTrash} />
@@ -441,12 +719,12 @@ function UpdateProduct() {
 
                 {/* New Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price1" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
+                  <label htmlFor="newPrice" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
                   <input
                     type="text"
-                    id="price1"
-                    name="price1"
-                    value={formData.price1}
+                    id="newPrice"
+                    name="newPrice"
+                    value={formData.newPrice}
                     onChange={handleInputChange}
                     className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                     disabled={!editing}
@@ -455,12 +733,12 @@ function UpdateProduct() {
 
                 {/* Old Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="price2" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
+                  <label htmlFor="oldPrice" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
                   <input
                     type="text"
-                    id="price2"
-                    name="price2"
-                    value={formData.price2}
+                    id="oldPrice"
+                    name="oldPrice"
+                    value={formData.oldPrice}
                     onChange={handleInputChange}
                     className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
                     disabled={!editing}

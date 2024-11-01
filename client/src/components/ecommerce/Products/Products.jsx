@@ -96,9 +96,9 @@ function Products() {
       case "Z-A":
         return b.name.localeCompare(a.name);
       case "Price: Low to High":
-        return a.price1 - b.price1;
+        return a.newPrice - b.newPrice;
       case "Price: High to Low":
-        return b.price1 - a.price1;
+        return b.newPrice - a.newPrice;
       default:
         return 0;
     }
@@ -117,7 +117,7 @@ function Products() {
     const isPriceSelected =
       checkedPrices.length === 0 ||
       checkedPrices.some(
-        (priceRange) => item.price1 >= priceRange.priceOne && item.price1 <= priceRange.priceTwo
+        (priceRange) => item.newPrice >= priceRange.priceOne && item.newPrice <= priceRange.priceTwo
       );
 
     return isCategorySelected && isBrandSelected && isPriceSelected;
@@ -300,8 +300,9 @@ function Products() {
                     _id={product._id}
                     img={imagePaths}
                     productName={product.name}
-                    price1={product.price1 !== null ? product.price1 : "Price Not Available"}
-                    price2={product.price2 !== null ? product.price2 : "Price Not Available"}
+                    // newPrice={product.newPrice !== null ? product.newPrice : "Price Not Available"}
+                    newPrice={product.newPrice}
+                    oldPrice={product.oldPrice !== null ? product.oldPrice : "Price Not Available"}
                     color={product.color ? product.color.join(", ") : "N/A"}
                     size={product.size ? product.size.join(", ") : "N/A"}
                     tags={product.tags}

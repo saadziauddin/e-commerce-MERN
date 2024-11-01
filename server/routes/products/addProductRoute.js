@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
+  limits: { fileSize: 1024 * 1024 * 10 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
       cb(null, true);
@@ -52,8 +52,8 @@ const validateProductFields = (body) => {
   if (!body.name || body.name.trim() === '') {
     errors.name = 'Product name is required.';
   }
-  if (!body.price1 || isNaN(body.price1)) {
-    errors.price1 = 'Valid price is required.';
+  if (!body.newPrice || isNaN(body.newPrice)) {
+    errors.newPrice = 'Valid price is required.';
   }
   if (!body.category || body.category.trim() === '') {
     errors.category = 'Product category is required.';
@@ -66,14 +66,14 @@ const validateProductFields = (body) => {
 };
 
 router.post('/api/products/addProduct', (req, res) => {
-  upload.array('images', 5)(req, res, async (uploadError) => {
+  upload.array('images', 10)(req, res, async (uploadError) => {
     if (uploadError) {
       if (uploadError instanceof multer.MulterError) {
         if (uploadError.code === 'LIMIT_FILE_SIZE') {
           return res.status(400).json({ error: 'File size limit exceeds 5MB!' });
         }
         if (uploadError.code === 'LIMIT_UNEXPECTED_FILE') {
-          return res.status(400).json({ error: 'You can only upload up to 5 images at a time!' });
+          return res.status(400).json({ error: 'You can only upload up to 10 images at a time!' });
         }
       } else if (uploadError.message) {
         return res.status(400).json({ error: uploadError.message });
@@ -91,8 +91,8 @@ router.post('/api/products/addProduct', (req, res) => {
       category,
       discount,
       status,
-      price1,
-      price2,
+      newPrice,
+      oldPrice,
       shortDescription,
       longDescription,
     } = req.body;
@@ -102,16 +102,15 @@ router.post('/api/products/addProduct', (req, res) => {
       return res.status(400).json({ errors });
     }
 
+    if(!name || !category || !status || !newPrice ||!shortDescription || !longDescription){
+      return res.status(400).json({error: "Missing required fields e.g. Product Name, Category, Status, New Price, Short and Long Description."})
+    }
+
     try {
-      // Convert image paths to relative URLs
-      // const images = req.files.map(file => ({
-      //   imageName: file.filename,
-      //   imagePath: `/uploads/product_images/${file.filename}`
-      // }));
       const images = req.files && req.files.length > 0
         ? req.files.map(file => ({
-          imageName: file.filename,
-          imagePath: file.filename ? `/uploads/product_images/${file.filename}` : null
+          imageName: file.filename, imagePath: file.filename ? `/uploads/product_images/${file.filename}` 
+        : null
         }))
         : null;
 
@@ -124,8 +123,8 @@ router.post('/api/products/addProduct', (req, res) => {
         category: sanitizeField(category),
         discount: sanitizeField(discount),
         status: sanitizeField(status),
-        price1: sanitizeField(price1),
-        price2: sanitizeField(price2),
+        newPrice: sanitizeField(newPrice),
+        oldPrice: sanitizeField(oldPrice),
         shortDescription: sanitizeField(shortDescription),
         longDescription: sanitizeField(longDescription),
         images,

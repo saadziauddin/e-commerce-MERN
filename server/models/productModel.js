@@ -7,15 +7,16 @@ const productSchema = new mongoose.Schema({
     status: { type: String, required: true, enum: ['Available', 'Out of Stock'] },
     shortDescription: { type: String, required: true, trim: true },
     longDescription: { type: String, required: true, trim: true },
-    newPrice: { type: Number, required: true },
+    newPrice: { type: Number, required: true, trim: true },
+    youtubeVideoLink: { type: String },
     
     tags: { type: String, trim: true },
     stock: { type: Number },
     discount: { type: Number },
     oldPrice: { type: Number },
 
-    color: [{ type: String }],
-    size: [{ type: String }],
+    color: [{ type: String, trim: true }],
+    size: [{ type: String, trim: true }],
     images: [{ imageName: String, imagePath: String}],
     dateAdded: { type: Date, default: Date.now }
 });

@@ -95,6 +95,7 @@ router.post('/api/products/addProduct', (req, res) => {
       oldPrice,
       shortDescription,
       longDescription,
+      youtubeVideoLink
     } = req.body;
 
     const errors = validateProductFields(req.body);
@@ -127,6 +128,7 @@ router.post('/api/products/addProduct', (req, res) => {
         oldPrice: sanitizeField(oldPrice),
         shortDescription: sanitizeField(shortDescription),
         longDescription: sanitizeField(longDescription),
+        youtubeVideoLink,
         images,
       };
 

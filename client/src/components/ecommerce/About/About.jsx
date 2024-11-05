@@ -1,35 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { Link, useLocation } from "react-router-dom";
-// import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
-
-// const About = () => {
-//   const location = useLocation();
-//   const [prevLocation, setPrevLocation] = useState("");
-//   useEffect(() => {
-//     setPrevLocation(location.state.data);
-//   }, [location]);
-//   return (
-//     <div className="max-w-container mx-auto px-4">
-//       <Breadcrumbs title="About" prevLocation={prevLocation} />
-//       <div className="pb-10">
-//         <h1 className="max-w-[600px] text-base text-lightText mb-2">
-//           <span className="text-primeColor font-semibold text-lg">Orebi</span>{" "}
-//           is one of the world's leading ecommerce brands and is internationally
-//           recognized for celebrating the essence of classic Worldwide cool
-//           looking style.
-//         </h1>
-//         <Link to="/shop">
-//           <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-//             Continue Shopping
-//           </button>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default About;
-
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
@@ -39,27 +7,22 @@ const About = () => {
   const [prevLocation, setPrevLocation] = useState("");
 
   useEffect(() => {
-    // Check if location.state exists and has a data property
     if (location.state && location.state.data) {
       setPrevLocation(location.state.data);
     } else {
-      // Fallback if there's no previous location data
-      setPrevLocation("Home"); // or any default value you want
+      setPrevLocation("Home");
     }
   }, [location]);
 
   return (
     <div className="max-w-container mx-auto px-4">
-      <Breadcrumbs title="About" prevLocation={prevLocation} />
+      <Breadcrumbs title="About Us" prevLocation={prevLocation} />
       <div className="pb-10">
-        <h1 className="max-w-[600px] text-base text-lightText mb-2">
-          <span className="text-primeColor font-semibold text-lg">Orebi</span>{" "}
-          is one of the world's leading ecommerce brands and is internationally
-          recognized for celebrating the essence of classic Worldwide cool
-          looking style.
+        <h1 className="max-w-[1000px] text-base font-heading text-gray-800">
+          Established in 2017, <b>Nayab Fashion</b> has become a trusted name in providing elegant, high-quality fashion that seamlessly blends traditional craftsmanship with contemporary design. Based in Pakistan, we pride ourselves on curating a diverse range of clothing that caters to discerning tastes both <b>locally</b> and <b>internationally</b>. Our commitment is to deliver exceptional pieces that embody style, comfort, and individuality. With a seamless online shopping experience and reliable courier partners like DHL, M&P, and FedEx, we ensure timely delivery and customer satisfaction, whether you’re in Pakistan, the UK, USA, or Europe. Discover fashion that speaks to your unique style at <b>Nayab Fashion</b>.
         </h1>
-        <Link to="/shop">
-          <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
+        <Link to="/products">
+          <button className="w-48 h-11 text-sm mt-6 bg-transparent border border-black text-black hover:bg-[#7b246d] hover:text-white uppercase duration-300 rounded-md">
             Continue Shopping
           </button>
         </Link>

@@ -114,16 +114,17 @@ function Products() {
                       },
                       {
                         name: 'Color',
-                        selector: row => Array.isArray(row.color) && row.color.length > 0 ? row.color[0] : 'N/A',
+                        selector: row => Array.isArray(row.color) && row.color.length > 0 && row.color[0] !== 'null' ? row.color[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
                       {
                         name: 'Size',
-                        selector: row => Array.isArray(row.size) && row.size.length > 0 ? row.size[0] : 'N/A',
+                        selector: row => Array.isArray(row.size) && row.size.length > 0 && row.size[0] !== 'null' ? row.size[0] : 'N/A',
                         sortable: true,
                         wrap: true,
                       },
+                      
                       {
                         name: 'Tags',
                         selector: row => row.tags && row.tags.length > 0 ? row.tags[0] : 'N/A',

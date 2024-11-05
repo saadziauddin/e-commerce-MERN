@@ -85,8 +85,8 @@ function SpecialOffers({ selectedCurrency }) {
   };
 
   return (
-    <div className="mb-10">
-      <div className="text-lg md:text-xl lg:text-2xl xl:text-2xl text-center font-semibold uppercase">
+    <div className="mb-10 z-10">
+      <div className="text-lg md:text-xl lg:text-2xl text-center font-semibold uppercase">
         <p className="bg-[#7b246d] text-white">Special Offers</p>
       </div>
       <Slider {...settings}>
@@ -104,7 +104,7 @@ function SpecialOffers({ selectedCurrency }) {
                   img={imagePaths}
                   productName={product.name || "Product Name Not Available"}
                   newPrice={product.newPrice || "Price Not Available"}
-                  oldPrice={product.oldPrice || "Price Not Available"}
+                  oldPrice={product.oldPrice}
                   color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
                   size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
                   tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}

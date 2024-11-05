@@ -23,6 +23,7 @@ function Cart() {
   return (
     <div className="max-w-container mx-auto px-4 py-8">
       <Breadcrumbs title="Shopping Cart" />
+
       {products.length > 0 ? (
         <div className="pb-20">
           {/* Cart Items - Mobile */}
@@ -47,23 +48,21 @@ function Cart() {
                 <div className="flex justify-between items-center mt-4">
                   <div className="flex items-center space-x-3">
                     <button
-                      onClick={() =>
-                        dispatch(decreaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
+                      onClick={() => dispatch(decreaseQuantity({ id: item.id }))}
                       className="px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-300 transition duration-200"
                     >
                       -
                     </button>
                     <span className="font-semibold">{item.quantity}</span>
                     <button
-                      onClick={() =>
-                        dispatch(increaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
+                      onClick={() => dispatch(increaseQuantity({ id: item.id }))}
                       className="px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-300 transition duration-200"
                     >
                       +
                     </button>
                   </div>
                   <button
-                    onClick={() => dispatch(deleteItem({ _id: item._id, size: item.size, color: item.color }))}
+                    onClick={() => dispatch(deleteItem({ id: item.id }))}
                     className="text-red-400 hover:text-red-600 transition duration-200"
                   >
                     <ImCross />
@@ -94,21 +93,21 @@ function Cart() {
                     <td className="px-6 py-4 text-center">
                       <img src={item.image} alt={item.name} className="w-24 h-32 object-cover rounded-md cursor-pointer" />
                     </td>
-                    <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">{item.size}</td>
-                    <td className="px-6 py-4">{item.color}</td>
+                    <td className="px-6 py-4">{item.name || "N/A"}</td>
+                    <td className="px-6 py-4">{item.size || "N/A"}</td>
+                    <td className="px-6 py-4">{item.color || "N/A"}</td>
                     <td className="px-6 py-4"><FormatPrice price={item.price} currency={selectedCurrency} /></td>
                     <td className="px-6 py-4 text-center">
                       <div className="inline-flex items-center space-x-2">
                         <button
-                          onClick={() => dispatch(decreaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
+                          onClick={() => dispatch(decreaseQuantity({ id: item.id }))}
                           className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300 transition"
                         >
                           -
                         </button>
                         <span>{item.quantity}</span>
                         <button
-                          onClick={() => dispatch(increaseQuantity({ _id: item._id, size: item.size, color: item.color }))}
+                          onClick={() => dispatch(increaseQuantity({ id: item.id }))}
                           className="px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-300 transition"
                         >
                           +
@@ -118,7 +117,7 @@ function Cart() {
                     <td className="px-6 py-4"><FormatPrice price={item.price * item.quantity} currency={selectedCurrency} /></td>
                     <td className="px-6 py-4 text-center">
                       <button
-                        onClick={() => dispatch(deleteItem({ _id: item._id, size: item.size, color: item.color }))}
+                        onClick={() => dispatch(deleteItem({ id: item.id }))}
                         className="text-red-400 hover:text-red-600 transition"
                       >
                         <ImCross />
@@ -148,7 +147,7 @@ function Cart() {
                   <FormatPrice price={totalAmt + shippingCharge} currency={selectedCurrency} />
                 </p>
               </div>
-              <Link to="/order" className="mt-6 block">
+              <Link to="/checkout" className="mt-6 block">
                 <button className="w-full py-3 bg-[#7b246d] text-white text-lg font-semibold rounded-lg hover:bg-black transition duration-300">
                   Proceed to Checkout
                 </button>
@@ -179,6 +178,6 @@ function Cart() {
       )}
     </div>
   );
-}
+};
 
 export default Cart;

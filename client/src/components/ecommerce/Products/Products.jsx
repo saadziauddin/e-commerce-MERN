@@ -289,7 +289,7 @@ function Products() {
 
           {currentItems.length > 0 ? (
             currentItems.map((product) => {
-              
+
               const imagePaths = product.images && product.images.length > 0
                 ? product.images.map((img) => `${apiUrl}/uploads/product_images/${img.imageName}`)
                 : [`${apiUrl}/default_images/image-not-available.png`];
@@ -299,16 +299,15 @@ function Products() {
                   <Product
                     _id={product._id}
                     img={imagePaths}
-                    productName={product.name}
-                    // newPrice={product.newPrice !== null ? product.newPrice : "Price Not Available"}
-                    newPrice={product.newPrice}
-                    oldPrice={product.oldPrice !== null ? product.oldPrice : "Price Not Available"}
-                    color={product.color ? product.color.join(", ") : "N/A"}
-                    size={product.size ? product.size.join(", ") : "N/A"}
-                    tags={product.tags}
-                    shortDescription={product.shortDescription}
-                    longDescription={product.longDescription}
-                    status={product.status}
+                    productName={product.name || "Product Name Not Available"}
+                    newPrice={product.newPrice || "Price Not Available"}
+                    oldPrice={product.oldPrice}
+                    color={Array.isArray(product.color) && product.color.length > 0 ? product.color.join(", ") : null}
+                    size={Array.isArray(product.size) && product.size.length > 0 ? product.size.join(", ") : null}
+                    tags={Array.isArray(product.tags) && product.tags.length > 0 ? product.tags : null}
+                    shortDescription={product.shortDescription || null}
+                    longDescription={product.longDescription || null}
+                    status={product.status || null}
                     selectedCurrency={selectedCurrency}
                   />
                 </div>

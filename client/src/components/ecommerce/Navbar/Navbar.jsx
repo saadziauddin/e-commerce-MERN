@@ -26,6 +26,26 @@ const Navbar = ({ onCurrencyChange }) => {
   const currencyRef = useRef(null);
   const userRef = useRef(null);
 
+  const flagComponents = {
+    PKR: <PK className="inline-block w-5 h-5 mr-2" />,
+    USD: <US className="inline-block w-5 h-5 mr-2" />,
+    AED: <AE className="inline-block w-5 h-5 mr-2" />,
+    SAR: <SA className="inline-block w-5 h-5 mr-2" />,
+    OMR: <OM className="inline-block w-5 h-5 mr-2" />,
+    TRY: <TR className="inline-block w-5 h-5 mr-2" />,
+    GBP: <GB className="inline-block w-5 h-5 mr-2" />
+  };
+
+  const currencies = [
+    { code: "PKR", name: "Pakistani Rupee" },
+    { code: "USD", name: "US Dollar" },
+    { code: "AED", name: "UAE Dirham" },
+    { code: "SAR", name: "Saudi Riyal" },
+    { code: "OMR", name: "Omani Rial" },
+    { code: "TRY", name: "Turkish Lira" },
+    { code: "GBP", name: "British Pound" }
+  ];
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -72,27 +92,6 @@ const Navbar = ({ onCurrencyChange }) => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
-
-  const flagComponents = {
-    PKR: <PK className="inline-block w-5 h-5 mr-2" />,
-    USD: <US className="inline-block w-5 h-5 mr-2" />,
-    AED: <AE className="inline-block w-5 h-5 mr-2" />,
-    SAR: <SA className="inline-block w-5 h-5 mr-2" />,
-    OMR: <OM className="inline-block w-5 h-5 mr-2" />,
-    TRY: <TR className="inline-block w-5 h-5 mr-2" />,
-    GBP: <GB className="inline-block w-5 h-5 mr-2" />
-  };
-
-  const currencies = [
-    { code: "PKR", name: "Pakistani Rupee" },
-    { code: "USD", name: "US Dollar" },
-    { code: "AED", name: "UAE Dirham" },
-    { code: "SAR", name: "Saudi Riyal" },
-    { code: "OMR", name: "Omani Rial" },
-    { code: "TRY", name: "Turkish Lira" },
-    { code: "GBP", name: "British Pound" }
-  ];
-
   return (
     <>
       {/* Top Announcement Bars */}
@@ -106,7 +105,8 @@ const Navbar = ({ onCurrencyChange }) => {
       </div> */}
       <div className="w-full h-8 xs:h-6 sm:h-6 md:h-8 lg:h-8 xl:h-8 xs:text-xs sm:text-xs md:text-[15px] lg:text-[15px] xl:text-[15px] font-titleFont bg-gray-800 text-gray-200 text-center xs:py-1 sm:py-1 md:py-2 lg:py-2 xl:py-2 group overflow-hidden">
         <p className="flex min-w-[100%] animate-marquee group-hover:pause-marquee whitespace-nowrap group-hover:animate-none group-hover:justify-center cursor-pointer">
-          Welcome to your dream closet🌸 Enjoy free delivery in Pakistan&nbsp;{flagComponents.PKR}
+          {/* Welcome to your dream closet🌸 Enjoy free delivery in Pakistan&nbsp;{flagComponents.PKR} */}
+          Nayab Fashion is Pakistan's No.1 TRUSTED Women's Clothing Store.
         </p>
       </div>
       <div className="w-full h-[35px] bg-gray-200 text-gray-900 py-1 md:px-12 flex justify-between items-center overflow-hidden">
@@ -135,7 +135,7 @@ const Navbar = ({ onCurrencyChange }) => {
 
       {/* Navbar */}
       <div className="w-full h-[70px] bg-white sticky top-0 z-[70] border-b overflow-hidden">
-        <nav className="relative flex justify-between items-center h-full px-4 max-w-container mx-auto overflow-hidden">
+        <nav className="relative flex justify-between items-center h-full px-4 max-w-container mx-auto overflow-visible">
           {/* Left Section */}
           <div className="flex items-center flex-grow">
             <div className="hidden md:flex relative w-full">
@@ -172,9 +172,9 @@ const Navbar = ({ onCurrencyChange }) => {
           {/* Right Section */}
           <div className="flex items-center justify-end gap-1 flex-grow relative">
             {/* Currency Dropdown */}
-            <div className="relative" ref={currencyRef}>
+            <div className="relative" ref={currencyRef} style={{ zIndex: 50 }}>
               <div
-                className="flex items-center cursor-pointer border p-1 rounded-md"
+                className="flex items-center cursor-pointer border p-1 rounded-md z-80"
                 onClick={() => {
                   console.log("Currency dropdown clicked");
                   setIsOpen(!isOpen);
@@ -187,7 +187,8 @@ const Navbar = ({ onCurrencyChange }) => {
                 />
               </div>
               {isOpen && (
-                <div className="absolute top-full right-0 z-80 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg">
+                <div className="absolute top-full right-0 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                {/* <div className="absolute top-full right-0 z-80 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg"> */}
                   {currencies.map((curr) => (
                     <div
                       key={curr.code}

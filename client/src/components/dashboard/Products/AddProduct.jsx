@@ -26,7 +26,8 @@ function AddProduct() {
     stock: '',
     status: '',
     discount: '',
-    images: []
+    images: [],
+    youtubeVideoLink: ''
   });
   const navigate = useNavigate();
 
@@ -82,10 +83,11 @@ function AddProduct() {
       }
     }
 
+    // Append `color` only if it contains values
     if (colorData.length > 0) {
       colorData.forEach(color => formDataToSend.append('color[]', color));
     }
-  
+
     // Append `size` only if it contains values
     if (sizeData.length > 0) {
       sizeData.forEach(size => formDataToSend.append('size[]', size));
@@ -112,6 +114,7 @@ function AddProduct() {
           category: '',
           stock: '',
           images: [],
+          youtubeVideoLink
         });
       }
     } catch (error) {
@@ -366,6 +369,18 @@ function AddProduct() {
                     id="discount"
                     name="discount"
                     value={formData.discount}
+                    onChange={handleInputChange}
+                    className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                  />
+                </div>
+
+                {/* YouTube Video Link */}
+                <div className="flex flex-col">
+                  <label htmlFor="youtubeVideo" className="mb-2 text-sm font-semibold text-gray-700">YouTube Video Link:</label>
+                  <textarea
+                    id="youtubeVideo"
+                    name="youtubeVideoLink"
+                    value={formData.youtubeVideoLink}
                     onChange={handleInputChange}
                     className="text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
                   />

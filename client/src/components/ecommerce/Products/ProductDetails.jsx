@@ -13,8 +13,8 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import FormatPrice from "../../../helpers/FormatPrice.js";
-import SizeGuideIcon from "../../../../public/Images/SizeGuide.png";
-import SizeGuideImage from "../../../../public/Images/Slider/Nayab Exclusive 2 (Slider 1).png";
+import SizeGuideIcon from "/Images/SizeGuideScaleIcon.png";
+import SizeGuideImage from "/Images/SizeGuideImage.jpg";
 
 function ProductDetails() {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -34,15 +34,15 @@ function ProductDetails() {
     const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
     const productImages = Array.isArray(productInfo?.images) && productInfo.images.length > 0
-    ? productInfo.images.map(image => `${apiUrl}/uploads/product_images/${image.imageName}`)
-    : [`${apiUrl}/default_images/image-not-available.png`];
+        ? productInfo.images.map(image => `${apiUrl}/uploads/product_images/${image.imageName}`)
+        : [`${apiUrl}/default_images/image-not-available.png`];
 
-    // Utility function to check if the array is valid
-    const isValidArray = (arr) => Array.isArray(arr) && arr.length > 0 && arr.some(item => item !== null);
+    // Utility function to check if the array is valid (no null or "null" values)
+    const isValidArray = (arr) => Array.isArray(arr) && arr.length > 0 && arr.some(item => item !== null && item !== 'null');
 
-    // Filter out null values from arrays
-    const availableColors = isValidArray(productInfo?.color) ? productInfo.color.filter(color => color !== null) : [];
-    const availableSizes = isValidArray(productInfo?.size) ? productInfo.size.filter(size => size !== null) : [];
+    // Filter out null or "null" values from arrays
+    const availableColors = isValidArray(productInfo?.color) ? productInfo.color.filter(color => color !== null && color !== 'null') : [];
+    const availableSizes = isValidArray(productInfo?.size) ? productInfo.size.filter(size => size !== null && size !== 'null') : [];
 
     useEffect(() => {
         const slideInterval = setInterval(() => {
@@ -93,7 +93,7 @@ function ProductDetails() {
         }
 
         const cartItem = {
-            id: productInfo._id,
+            id: `${productInfo._id}-${selectedColor}-${selectedSize}-${productInfo.category}`, // Unique ID
             name: productInfo.name,
             image: productImages[selectedImageIndex],
             color: selectedColor,
@@ -101,7 +101,7 @@ function ProductDetails() {
             category: productInfo.category,
             price: productInfo.newPrice,
             quantity: quantity,
-        };
+        };          
 
         dispatch(addToCart(cartItem));
         setIsModalOpen(true);
@@ -116,9 +116,9 @@ function ProductDetails() {
             alert("Please select a size before proceeding to checkout.");
             return;
         }
-
+        
         const cartItem = {
-            id: productInfo._id,
+            id: `${productInfo._id}-${selectedColor}-${selectedSize}-${productInfo.category}`, // Unique ID
             name: productInfo.name,
             image: productImages[selectedImageIndex],
             color: selectedColor,
@@ -126,10 +126,15 @@ function ProductDetails() {
             category: productInfo.category,
             price: productInfo.newPrice,
             quantity: quantity,
-        };
+        };  
+
         dispatch(addToCart(cartItem));
         navigate('/cart');
     };
+
+    const handleNavigate = () => {
+        navigate('/cart');
+    }
 
     if (isLoading) {
         return <p>Loading...</p>;
@@ -139,13 +144,12 @@ function ProductDetails() {
         return <p>Product not found!</p>;
     };
 
-    // Function to format description with bold labels and line breaks
     const formatDescription = (description) => {
         const keywords = ["FABRIC:", "DUPPATA:", "LENGTH:", "WIDTH:", "TROUSER:", "WORK:", "STITCHING FACILITY:"];
         const regex = new RegExp(`(${keywords.join('|')})`, 'gi');
 
         // First, replace keywords with bold text
-        let formattedDescription = description.replace(regex, '<strong>$1</strong>');
+        let formattedDescription = description.replace(regex, '<strong>$1</strong>').trim();
 
         // Then, replace newlines with <br> tags
         formattedDescription = formattedDescription.replace(/\n/g, '<br />');
@@ -278,15 +282,17 @@ function ProductDetails() {
                     </div>
 
                     {/* YouTube Video */}
-                    <div className="relative pt-[55%] w-full md:pt-[46%] md:w-[90%] shadow-lg rounded-lg overflow-hidden">
-                        <iframe
-                            src="https://www.youtube.com/embed/mZnNVNvN-pg?si=QbSJCkWQif_s1UgH&autoplay=1&mute=1"
-                            title="YouTube video player"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            className="absolute top-0 left-0 w-full h-full"
-                        ></iframe>
-                    </div>
+                    {productInfo.youtubeVideoLink &&
+                        <div className="relative pt-[55%] w-full md:pt-[46%] md:w-[90%] shadow-lg rounded-lg overflow-hidden">
+                            <iframe
+                                src={productInfo.youtubeVideoLink}
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="absolute top-0 left-0 w-full h-full"
+                            ></iframe>
+                        </div>
+                    }
 
                     {/* Action Buttons */}
                     <div className="flex flex-col lg:flex-row gap-4 mt-4 mb-4">

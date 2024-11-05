@@ -39,14 +39,11 @@ app.use((req, res, next) => {
 
 // Server Initialization
 const port = process.env.PORT || 8090;
-// app.listen(port, () => {
-//     console.log("Server is running at PORT: " + port);
-// });
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:${port}`);
 });
 
-// ======================= Auth Routes ==============================
+// ======================= Authentication Routes ==============================
 import signinRouter from './routes/auth/signinRoute.js';
 app.post('/api/signin', signinRouter);
 
@@ -71,6 +68,21 @@ app.post('/api/resetPassword', resetRouter);
 
 import logoutRouter from './routes/auth/logoutRoute.js';
 app.get('/api/logout', logoutRouter);
+
+// ======================= User Routes =================================
+import updateUserRouter from './routes/users/updateUserRoute.js';
+app.put('/api/updateUser/:userId', updateUserRouter);
+
+import deleteUserRouter from './routes/users/deleteUserRoute.js';
+app.delete('/api/deleteUser', deleteUserRouter);
+
+import deleteProfileImageRouter from './routes/users/deleteProfileImageRoute.js';
+app.delete('/api/deleteProfileImage/:userId', deleteProfileImageRouter);
+
+import fetchUsersRouter from './routes/users/fetchUsersRoute.js';
+app.get('/api/roles', fetchUsersRouter); // Fetch Roles
+app.get('/api/getUser', fetchUsersRouter); // Fetch All Users
+app.get('/api/getUserById/:userId', fetchUsersRouter); // Fetch User by ID
 
 // ======================= Category Routes =============================
 import addCategoryRouter from './routes/categories/addCategoryRoute.js';
@@ -108,17 +120,6 @@ app.get('/api/fetchProductsByCategory/newArrivals', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/bestSellers', fetchProductsRouter);
 app.get('/api/fetchProductsByCategory/specialOffers', fetchProductsRouter);
 
-// ======================= User Routes =================================
-import updateUserRouter from './routes/users/updateUserRoute.js';
-app.put('/api/updateUser/:userId', updateUserRouter);
-
-import deleteUserRouter from './routes/users/deleteUserRoute.js';
-app.delete('/api/deleteUser', deleteUserRouter);
-
-import deleteProfileImageRouter from './routes/users/deleteProfileImageRoute.js';
-app.delete('/api/deleteProfileImage/:userId', deleteProfileImageRouter);
-
-import fetchUsersRouter from './routes/users/fetchUsersRoute.js';
-app.get('/api/roles', fetchUsersRouter); // Fetch Roles
-app.get('/api/getUser', fetchUsersRouter); // Fetch Users
-app.get('/api/getUserById/:userId', fetchUsersRouter); // Fetch User by ID
+// ======================= Order Routes =================================
+import ordersRouter from './routes/orders/orderRoute.js';
+app.post('/api/orders/createOrder', ordersRouter);

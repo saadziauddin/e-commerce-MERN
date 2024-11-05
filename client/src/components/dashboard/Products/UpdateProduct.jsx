@@ -28,6 +28,7 @@ function UpdateProduct() {
     shortDescription: '',
     longDescription: '',
     images: [],
+    youtubeVideoLink: ''
   });
   const [initialFormData, setInitialFormData] = useState({});
   const [editing, setEditing] = useState(false);
@@ -62,7 +63,8 @@ function UpdateProduct() {
           status: product.status,
           category: product.category,
           stock: product.stock,
-          images: product.images
+          images: product.images,
+          youtubeVideoLink: product.youtubeVideoLink
         });
       } catch (error) {
         console.log("Error fetching product data: ", error);
@@ -76,7 +78,7 @@ function UpdateProduct() {
 
   const handleInputChange = (e, index, field) => {
     const { value } = e.target;
-  
+
     if (field === 'color' || field === 'size') {
       const updatedArray = formData[field] ? [...formData[field]] : [];
       updatedArray[index] = value;
@@ -105,263 +107,19 @@ function UpdateProduct() {
     setNewImages([...newImages, ...selectedFiles]);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formDataToSend = new FormData();
-
-  //   const colorData = formData.color.filter(color => color.trim() !== '');
-  //   const sizeData = formData.size.filter(size => size.trim() !== '');
-  
-  //   // Append only fields that have changed, handling null values where allowed
-  //   for (let key in formData) {
-  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
-  //       if (formData[key] !== initialFormData[key]) {
-  //         formDataToSend.append(key, formData[key] ?? null);
-  //       }
-  //     }
-  //   }
-
-  //   if (colorData.length > 0) {
-  //     colorData.forEach(color => formDataToSend.append('color[]', color));
-  //   } else {
-  //     formDataToSend.append('color', null);
-  //   }
-  
-  //   if (sizeData.length > 0) {
-  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
-  //   } else {
-  //     formDataToSend.append('size', null);
-  //   }
-    
-  //   (newImages || []).forEach((image) => {
-  //     formDataToSend.append('images', image);
-  //   });
-  
-  //   // Append only remaining existing images if they differ
-  //   (formData.images || []).forEach((image, index) => {
-  //     if (image !== initialFormData.images?.[index]) {
-  //       formDataToSend.append('existingImages', image);
-  //     }
-  //   });
-  
-  //   try {
-  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
-  //       headers: { 'Content-Type': 'multipart/form-data' },
-  //     });
-  
-  //     if (updateProduct.data.message === "Product updated successfully!") {
-  //       toast.success("Product updated successfully!");
-  //       setNewImages([]);
-  //       setEditing(false);
-  
-  //       // Refetch product data to reflect changes
-  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
-  //       const product = refetchProductsData.data.product[0];
-  //       setFormData({
-  //         name: product.name,
-  //         shortDescription: product.shortDescription,
-  //         longDescription: product.longDescription,
-  //         newPrice: product.newPrice,
-  //         oldPrice: product.oldPrice,
-  //         color: product.color ?? [''],
-  //         size: product.size ?? [''],
-  //         tags: product.tags,
-  //         discount: product.discount,
-  //         status: product.status,
-  //         category: product.category,
-  //         stock: product.stock,
-  //         images: product.images
-  //       });
-  //     }
-  //   } catch (error) {
-  //     const errorMessage = error.response?.data?.error || "Error updating product!";
-  //     toast.error(errorMessage);
-  //   }
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formDataToSend = new FormData();
-  
-  //   const colorData = formData.color.filter(color => color.trim() !== '');
-  //   const sizeData = formData.size.filter(size => size.trim() !== '');
-  
-  //   // Append only fields that have changed, handling null values where allowed
-  //   for (let key in formData) {
-  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
-  //       if (formData[key] !== initialFormData[key]) {
-  //         formDataToSend.append(key, formData[key] !== '' ? formData[key] : null);
-  //       }
-  //     }
-  //   }
-  
-  //   // Handle color data, appending null if no valid colors are provided
-  //   if (colorData.length > 0) {
-  //     colorData.forEach(color => formDataToSend.append('color[]', color));
-  //   } else {
-  //     formDataToSend.append('color', null);
-  //   }
-  
-  //   // Handle size data, appending null if no valid sizes are provided
-  //   if (sizeData.length > 0) {
-  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
-  //   } else {
-  //     formDataToSend.append('size', null);
-  //   }
-  
-  //   // Append new images if any
-  //   (newImages || []).forEach((image) => {
-  //     formDataToSend.append('images', image);
-  //   });
-  
-  //   // Append only remaining existing images if they differ
-  //   (formData.images || []).forEach((image, index) => {
-  //     if (image !== initialFormData.images?.[index]) {
-  //       formDataToSend.append('existingImages', image);
-  //     }
-  //   });
-  
-  //   try {
-  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
-  //       headers: { 'Content-Type': 'multipart/form-data' },
-  //     });
-  
-  //     if (updateProduct.data.message === "Product updated successfully!") {
-  //       toast.success("Product updated successfully!");
-  //       setNewImages([]);
-  //       setEditing(false);
-  
-  //       // Refetch product data to reflect changes
-  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
-  //       const product = refetchProductsData.data.product[0];
-  //       setFormData({
-  //         name: product.name,
-  //         shortDescription: product.shortDescription,
-  //         longDescription: product.longDescription,
-  //         newPrice: product.newPrice,
-  //         oldPrice: product.oldPrice,
-  //         color: product.color ?? [''],
-  //         size: product.size ?? [''],
-  //         tags: product.tags ?? null, // Ensure tags are set to null if empty
-  //         discount: product.discount ?? null,
-  //         status: product.status ?? null,
-  //         category: product.category ?? null,
-  //         stock: product.stock ?? null,
-  //         images: product.images ?? null,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     const errorMessage = error.response?.data?.error || "Error updating product!";
-  //     toast.error(errorMessage);
-  //   }
-  // };
-  
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formDataToSend = new FormData();
-  
-  //   const colorData = formData.color.filter(color => color.trim() !== '');
-  //   const sizeData = formData.size.filter(size => size.trim() !== '');
-  
-  //   // Append only fields that have changed, using actual null values for empty fields
-  //   for (let key in formData) {
-  //     if (key !== 'images' && key !== 'color' && key !== 'size') {
-  //       const value = formData[key];
-        
-  //       // Convert empty strings or NaN values to null for numbers
-  //       if (value === '' || (['newPrice', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
-  //         formDataToSend.append(key, null);
-  //       } else {
-  //         formDataToSend.append(key, value);
-  //       }
-  //     }
-  //   }
-  
-  //   // Handle color data, appending null if no valid colors are provided
-  //   if (colorData.length > 0) {
-  //     colorData.forEach(color => formDataToSend.append('color[]', color));
-  //   } else {
-  //     formDataToSend.append('color', null);
-  //   }
-  
-  //   // Handle size data, appending null if no valid sizes are provided
-  //   if (sizeData.length > 0) {
-  //     sizeData.forEach(size => formDataToSend.append('size[]', size));
-  //   } else {
-  //     formDataToSend.append('size', null);
-  //   }
-  
-  //   // Append new images if any
-  //   (newImages || []).forEach((image) => {
-  //     formDataToSend.append('images', image);
-  //   });
-  
-  //   // Append only remaining existing images if they differ
-  //   (formData.images || []).forEach((image, index) => {
-  //     if (image !== initialFormData.images?.[index]) {
-  //       formDataToSend.append('existingImages', image);
-  //     }
-  //   });
-  
-  //   try {
-  //     const updateProduct = await api.put(`/api/updateProduct/${productId}`, formDataToSend, {
-  //       headers: { 'Content-Type': 'multipart/form-data' },
-  //     });
-  
-  //     if (updateProduct.data.message === "Product updated successfully!") {
-  //       toast.success("Product updated successfully!");
-  //       setNewImages([]);
-  //       setEditing(false);
-  
-  //       // Refetch product data to reflect changes
-  //       const refetchProductsData = await api.get(`/api/fetchProductById/${productId}`);
-  //       const product = refetchProductsData.data.product[0];
-  //       setFormData({
-  //         name: product.name,
-  //         shortDescription: product.shortDescription,
-  //         longDescription: product.longDescription,
-  //         newPrice: product.newPrice ?? null,
-  //         oldPrice: product.oldPrice ?? null,
-  //         color: product.color ?? [''],
-  //         size: product.size ?? [''],
-  //         tags: product.tags ?? null,
-  //         discount: product.discount ?? null,
-  //         status: product.status ?? null,
-  //         category: product.category ?? null,
-  //         stock: product.stock ?? null,
-  //         images: product.images ?? null,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     const errorMessage = error.response?.data?.error || "Error updating product!";
-  //     toast.error(errorMessage);
-  //   }
-  // };
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
   
-    const colorData = formData.color.filter(color => color.trim() !== '');
-    const sizeData = formData.size.filter(size => size.trim() !== '');
+    // Filter and sanitize color and size data
+    const colorData = formData.color.filter(color => typeof color === 'string' && color !== '');
+    const sizeData = formData.size.filter(size => typeof size === 'string' && size !== '');
   
-    for (let key in formData) {
-      if (key !== 'images' && key !== 'color' && key !== 'size') {
-        const value = formData[key];
-        
-        // Send empty strings for fields you want to store as null
-        if (value === '' || value === null || (['tags', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
-          formDataToSend.append(key, '');
-        } else {
-          formDataToSend.append(key, value);
-        }
-      }
-    }
+    // Append non-array fields to formDataToSend
     for (let key in formData) {
       if (key !== 'images' && key !== 'color' && key !== 'size') {
         const value = formData[key];
   
-        // Send empty strings for fields you want to store as null
         if (value === '' || value === null || (['tags', 'oldPrice', 'stock', 'discount'].includes(key) && isNaN(value))) {
           formDataToSend.append(key, ''); // Set as empty string
         } else {
@@ -374,34 +132,17 @@ function UpdateProduct() {
     if (colorData.length > 0) {
       colorData.forEach(color => formDataToSend.append('color[]', color));
     } else {
-      formDataToSend.append('color', ''); // Set to empty to indicate no colors
+      formDataToSend.append('color', null); // Set to empty to indicate no colors
     }
   
     if (sizeData.length > 0) {
       sizeData.forEach(size => formDataToSend.append('size[]', size));
     } else {
-      formDataToSend.append('size', ''); // Set to empty to indicate no sizes
+      formDataToSend.append('size', null); // Set to empty to indicate no sizes
     }
   
     // Handle tags field
-    if (formData.tags && formData.tags.trim() !== '') {
-      formDataToSend.append('tags', formData.tags.trim());
-    } else {
-      formDataToSend.append('tags', ''); // Set to empty to indicate no tags
-    }
-  
-    // Handle color and size fields
-    // if (colorData.length > 0) {
-    //   colorData.forEach(color => formDataToSend.append('color[]', color));
-    // } else {
-    //   formDataToSend.append('color', '');
-    // }
-  
-    // if (sizeData.length > 0) {
-    //   sizeData.forEach(size => formDataToSend.append('size[]', size));
-    // } else {
-    //   formDataToSend.append('size', '');
-    // }
+    formDataToSend.append('tags', formData.tags || null);
   
     // Append new and existing images
     (newImages || []).forEach((image) => {
@@ -441,6 +182,7 @@ function UpdateProduct() {
           category: product.category ?? null,
           stock: product.stock ?? null,
           images: product.images ?? null,
+          youtubeVideoLink: product.youtubeVideoLink ?? null
         });
       }
     } catch (error) {
@@ -575,7 +317,7 @@ function UpdateProduct() {
 
                 {/* Product Name */}
                 <div className="flex flex-col">
-                  <label htmlFor="name" className="mb-2 text-sm font-semibold text-gray-700">Product Name:</label>
+                  <label htmlFor="name" className="mb-2 pl-1 text-base font-semibold text-gray-700">Product Name:</label>
                   <input
                     type="text"
                     id="name"
@@ -589,7 +331,7 @@ function UpdateProduct() {
 
                 {/* Colors */}
                 <div className="flex flex-col">
-                  <label htmlFor="color" className="mb-2 text-sm font-semibold text-gray-700">Colors:</label>
+                  <label htmlFor="color" className="mb-2 pl-1 text-base font-semibold text-gray-700">Colors:</label>
                   {/* {formData.color.map((color, index) => ( */}
                   {(formData.color || []).map((color, index) => (
                     <div key={index} className="relative flex items-center mb-2">
@@ -631,7 +373,7 @@ function UpdateProduct() {
 
                 {/* Sizes */}
                 <div className="flex flex-col">
-                  <label htmlFor="size" className="mb-2 text-sm font-semibold text-gray-700">Sizes:</label>
+                  <label htmlFor="size" className="mb-2 pl-1 text-base font-semibold text-gray-700">Sizes:</label>
                   {(formData.size || []).map((size, index) => (
                     <div key={index} className="relative flex items-center mb-2">
                       <input
@@ -671,7 +413,7 @@ function UpdateProduct() {
 
                 {/* Tags */}
                 <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Tags:</label>
+                  <label htmlFor="status" className="mb-2 pl-1 text-base font-semibold text-gray-700">Tags:</label>
                   <input
                     type="text"
                     id="tags"
@@ -685,7 +427,7 @@ function UpdateProduct() {
 
                 {/* Stock */}
                 <div className="flex flex-col">
-                  <label htmlFor="stock" className="mb-2 text-sm font-semibold text-gray-700">Stock:</label>
+                  <label htmlFor="stock" className="mb-2 pl-1 text-base font-semibold text-gray-700">Stock:</label>
                   <input
                     type="text"
                     id="stock"
@@ -699,7 +441,7 @@ function UpdateProduct() {
 
                 {/* Category */}
                 <div className="flex flex-col">
-                  <label htmlFor="category" className="mb-2 text-sm font-semibold text-gray-700">Category:</label>
+                  <label htmlFor="category" className="mb-2 pl-1 text-base font-semibold text-gray-700">Category:</label>
                   <select
                     id="category"
                     name="category"
@@ -719,7 +461,7 @@ function UpdateProduct() {
 
                 {/* New Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="newPrice" className="mb-2 text-sm font-semibold text-gray-700">New Price:</label>
+                  <label htmlFor="newPrice" className="mb-2 pl-1 text-base font-semibold text-gray-700">New Price:</label>
                   <input
                     type="text"
                     id="newPrice"
@@ -733,7 +475,7 @@ function UpdateProduct() {
 
                 {/* Old Price */}
                 <div className="flex flex-col">
-                  <label htmlFor="oldPrice" className="mb-2 text-sm font-semibold text-gray-700">Old Price:</label>
+                  <label htmlFor="oldPrice" className="mb-2 pl-1 text-base font-semibold text-gray-700">Old Price:</label>
                   <input
                     type="text"
                     id="oldPrice"
@@ -747,7 +489,7 @@ function UpdateProduct() {
 
                 {/* Status */}
                 <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Status:</label>
+                  <label htmlFor="status" className="mb-2 pl-1 text-base font-semibold text-gray-700">Status:</label>
                   <select
                     id="status"
                     name="status"
@@ -764,7 +506,7 @@ function UpdateProduct() {
 
                 {/* Discount */}
                 <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Discount:</label>
+                  <label htmlFor="status" className="mb-2 pl-1 text-base font-semibold text-gray-700">Discount:</label>
                   <input
                     type="text"
                     id="discount"
@@ -776,9 +518,22 @@ function UpdateProduct() {
                   />
                 </div>
 
+                {/* YouTube Video Link */}
+                <div className="flex flex-col">
+                  <label htmlFor="youtubeVideo" className="mb-2 pl-1 text-base font-semibold text-gray-700">YouTube Video (Embeded Link):</label>
+                  <textarea
+                    id="youtubeVideo"
+                    name="youtubeVideoLink"
+                    value={formData.youtubeVideoLink}
+                    onChange={handleInputChange}
+                    className={`text-sm text-gray-500 pl-3 pr-5 rounded-lg border border-gray-300 w-full py-2 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white ${!editing ? 'cursor-not-allowed' : ''}`}
+                    disabled={!editing}
+                  />
+                </div>
+
                 {/* Short Description */}
                 <div className="flex flex-col">
-                  <label htmlFor="status" className="mb-2 text-sm font-semibold text-gray-700">Short Description:</label>
+                  <label htmlFor="status" className="mb-2 pl-1 text-base font-semibold text-gray-700">Short Description:</label>
                   <textarea
                     id="shortDescription"
                     name="shortDescription"
@@ -791,7 +546,7 @@ function UpdateProduct() {
 
                 {/* Long Description */}
                 <div className="flex flex-col md:col-span-3">
-                  <label htmlFor="description" className="mb-2 text-sm font-semibold text-gray-700">Long Description:</label>
+                  <label htmlFor="description" className="mb-2 pl-1 text-base font-semibold text-gray-700">Long Description:</label>
                   <textarea
                     id="longDescription"
                     name="longDescription"
@@ -804,7 +559,7 @@ function UpdateProduct() {
 
                 {/* New Image Upload */}
                 <div className="flex flex-col md:col-span-3">
-                  <label htmlFor="images" className="mb-3 text-sm font-semibold text-gray-700">New Product Images:</label>
+                  <label htmlFor="images" className="mb-3 pl-1 text-base font-semibold text-gray-700">New Product Images:</label>
                   <div className="relative">
                     <label className="w-full py-2 rounded-lg border border-gray-300 rounded-lg-lg flex items-center bg-white cursor-pointer pl-3 pr-5 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent">
                       <input onChange={handleImageChange} type="file" id="images" name="images" className="hidden" multiple disabled={!editing} />
@@ -827,13 +582,12 @@ function UpdateProduct() {
                       </div>
                     ))}
                   </div>
-
                 </div>
               </form>
 
               {/* Existing Images Section */}
-              <div className="">
-                <label htmlFor="images" className="mb-3 text-[15px] font-semibold text-gray-700">Existing Product Images:</label>
+              <div>
+                <label htmlFor="images" className="mb-3 pl-1 text-base font-bold text-gray-700">Existing Product Images:</label>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                   {formData.images.length > 0 ? (
                     formData.images.map((image, index) => {
@@ -843,9 +597,8 @@ function UpdateProduct() {
                         : `${apiUrl}/default_images/image-not-available.png`;
 
                       return (
-                        <div key={index} className="relative w-full h-full bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+                        <div key={index} className="relative w-full h-full mt-5 bg-gray-100 border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
                           <img
-                            // src={`/uploads/product_images/${image.imageName}`}
                             src={imagePaths}
                             alt="product_image"
                             className="flex object-fit w-full h-full"

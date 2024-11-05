@@ -4,24 +4,26 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from './components/ecommerce/Loader/loader';
 
-// ================= Website =====================
+// ================= Website Home =====================
 import Home from "./components/ecommerce/Home/Home";
-// ================= Footer =====================
-import Footer from "./components/ecommerce/Footer/Footer";
-import FooterBottom from "./components/ecommerce/Footer/FooterBottom";
 // ================= Navbar =====================
 import Navbar from "./components/ecommerce/Navbar/Navbar";
 import NavbarBottom from "./components/ecommerce/Navbar/NavbarBottom";
+// ================= Footer =====================
+import Footer from "./components/ecommerce/Footer/Footer";
+import FooterBottom from "./components/ecommerce/Footer/FooterBottom";
 // ================= About =====================
 import About from "./components/ecommerce/About/About";
-// ================= Cart =====================
-import Cart from "./components/ecommerce/Cart/Cart";
 // ================= Contact =====================
 import Contact from "./components/ecommerce/Contact/Contact";
+// ================= Cart =====================
+import Cart from "./components/ecommerce/Cart/Cart";
+// ================= Checkout Form =====================
+import CheckoutForm from "./components/ecommerce/CheckoutForm/CheckoutForm";
 // ================= Payment =====================
 import Payment from "./components/ecommerce/payment/Payment";
-// ================= Order Form =====================
-import Order from "./components/ecommerce/Order/Order";
+// ================= Thankyou =====================
+import Thankyou from "./components/ecommerce/Thankyou/Thankyou";
 // ================= Products =====================
 import Product from "./components/ecommerce/Products/Products";
 import ProductDetails from "./components/ecommerce/Products/ProductDetails";
@@ -96,8 +98,9 @@ const router = createBrowserRouter(
         <Route path="/contact" element={<><PageTitle title="Nayab Fashion - Contact" /><Contact /></>} />
         <Route path="/product/:id" element={<><PageTitle title="Nayab Fashion - Product Details" /><ProductDetails /></>} />
         <Route path="/cart" element={<><PageTitle title="Nayab Fashion - Cart" /><Cart /></>} />
-        <Route path="/order" element={<><PageTitle title="Nayab Fashion - Order" /><Order /></>} />
+        <Route path="/checkout" element={<><PageTitle title="Nayab Fashion - CheckoutForm" /><CheckoutForm /></>} />
         <Route path="/paymentgateway" element={<><PageTitle title="Nayab Fashion - Payment" /><Payment /></>} />
+        <Route path="/thankyou" element={<><PageTitle title="Nayab Fashion - Thankyou" /><Thankyou /></>} />
       </Route>
       {/* Auth Routes */}
       <Route path="/signin" element={<><PageTitle title="Nayab Fashion - Sign In" /><SignIn /></>} />
@@ -132,7 +135,7 @@ function App() {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-      }, 3000); // Adjust the timeout as needed
+      }, 3000);
     };
 
     handlePageLoad();

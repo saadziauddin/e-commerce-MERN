@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useOutletContext } from "react-router-dom";
 import Banner from "../Banner/Banner";
 import BestSellers from "../Products/BestSellers/BestSellers";
@@ -11,17 +11,13 @@ const Home = () => {
   return (
     <>
       <Banner />
-
       <div id="new-arrivals">
         <NewArrivals selectedCurrency={selectedCurrency} />
       </div>
-
       <div id="nayab-exclusive">
         <NayabExclusive selectedCurrency={selectedCurrency} />
       </div>
-
       <BestSellers selectedCurrency={selectedCurrency} />
-
       <div id="special-offers">
         <SpecialOffers selectedCurrency={selectedCurrency} />
       </div>

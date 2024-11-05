@@ -22,8 +22,8 @@ const NayabExclusive = () => {
     //   </div>
     //   <img className="w-full h-80 object-fit" src={NayabExclusiveImage2} alt="Nayab Exclusive Image" />
     // </Link>
-    <Link to="/products" className="block">
-      <img className="w-full h-[120px] md:h-[250px] lg:h-[350px] xl:h-[350px] object-center cursor-pointer" src={NayabExclusiveImage} alt="Nayab Exclusive" />
+    <Link to="/products" className="z-10">
+      <img className="w-full h-[120px] md:h-[250px] lg:h-[350px] object-center cursor-pointer" src={NayabExclusiveImage} alt="Nayab Exclusive" />
     </Link>
   );
 };

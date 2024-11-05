@@ -74,7 +74,7 @@ const NavbarBottom = () => {
             to="/products"
             className="relative uppercase text-[16px] text-red-600 font-thin group animate-blink"
           >
-            Sale 30% Off
+            Sale
             <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#7b246d] transition-all duration-300 group-hover:w-[75%]"></span>
           </Link>
 
@@ -133,7 +133,7 @@ const NavbarBottom = () => {
             </span>
 
             {isDropdownOpen && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-200 z-10 p-4 w-60">
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-200 z-50 p-4 w-60">
                 <div className="overflow-hidden rounded-lg">
                   {categories.length > 0 ? (
                     <ul className="space-y-2">

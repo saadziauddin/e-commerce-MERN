@@ -7,6 +7,7 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 function Categories() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -127,16 +128,12 @@ function Categories() {
                         cell: row => (
                           <div className="flex justify-center space-x-4">
                             <button className="hover:text-blue-800 hover:font-semibold" onClick={() => handleEdit(row)}>
-                              <FontAwesomeIcon icon={faEdit} />
-                            </button>
-                            <button className="hover:text-rose-800 hover:font-extrabold" onClick={() => handleDelete(row._id)}>
-                              <FontAwesomeIcon icon={faTrashCan} />
+                              <FontAwesomeIcon icon={faEye} /> View Details
                             </button>
                           </div>
                         ),
                         sortable: true,
                         center: true.toString(),
-                        wrap: true,
                       }
                     ]}
                     customStyles={{

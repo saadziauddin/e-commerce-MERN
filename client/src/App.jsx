@@ -2,52 +2,52 @@ import React, {useState, useEffect} from "react";
 import { createBrowserRouter, RouterProvider, Outlet, createRoutesFromElements, Route, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from './components/ecommerce/Loader/loader';
+import Loader from './pages/ecommerce/Loader/loader';
 
 // ================= Website Home =====================
-import Home from "./components/ecommerce/Home/Home";
+import Home from "./pages/ecommerce/Home/Home";
 // ================= Navbar =====================
-import Navbar from "./components/ecommerce/Navbar/Navbar";
-import NavbarBottom from "./components/ecommerce/Navbar/NavbarBottom";
+import Navbar from "./pages/ecommerce/Navbar/Navbar";
+import NavbarBottom from "./pages/ecommerce/Navbar/NavbarBottom";
 // ================= Footer =====================
-import Footer from "./components/ecommerce/Footer/Footer";
-import FooterBottom from "./components/ecommerce/Footer/FooterBottom";
+import Footer from "./pages/ecommerce/Footer/Footer";
+import FooterBottom from "./pages/ecommerce/Footer/FooterBottom";
 // ================= About =====================
-import About from "./components/ecommerce/About/About";
+import About from "./pages/ecommerce/About/About";
 // ================= Contact =====================
-import Contact from "./components/ecommerce/Contact/Contact";
+import Contact from "./pages/ecommerce/Contact/Contact";
 // ================= Cart =====================
-import Cart from "./components/ecommerce/Cart/Cart";
+import Cart from "./pages/ecommerce/Cart/Cart";
 // ================= Checkout Form =====================
-import CheckoutForm from "./components/ecommerce/CheckoutForm/CheckoutForm";
+import CheckoutForm from "./pages/ecommerce/CheckoutForm/CheckoutForm";
 // ================= Payment =====================
-import Payment from "./components/ecommerce/payment/Payment";
+import Payment from "./pages/ecommerce/payment/Payment";
 // ================= Thankyou =====================
-import Thankyou from "./components/ecommerce/Thankyou/Thankyou";
+import Thankyou from "./pages/ecommerce/Thankyou/Thankyou";
 // ================= Products =====================
-import Product from "./components/ecommerce/Products/Products";
-import ProductDetails from "./components/ecommerce/Products/ProductDetails";
+import Product from "./pages/ecommerce/Products/Products";
+import ProductDetails from "./pages/ecommerce/Products/ProductDetails";
 // ================= Account =====================
-import SignIn from "./components/ecommerce/Account/SignIn";
-import SignUp from "./components/ecommerce/Account/SignUp";
-import Reset from "./components/ecommerce/Account/Reset";
-import PrivacyPolicy from "./components/ecommerce/PrivacyPolicy/PrivacyPolicy";
+import SignIn from "./pages/ecommerce/Account/SignIn";
+import SignUp from "./pages/ecommerce/Account/SignUp";
+import Reset from "./pages/ecommerce/Account/Reset";
+import PrivacyPolicy from "./pages/ecommerce/PrivacyPolicy/PrivacyPolicy";
 
 // ================= Dashboard =====================
-import DashboardHome from './components/dashboard/Home/Home';
+// import DashboardHome from './pages/dashboard/Home/Home';
 // ================= User management =====================
-import UserManagement from "./components/dashboard/UserManagement/UserManagement";
-import UserProfile from './components/dashboard/UserManagement/UserProfile';
+import UserManagement from "./pages/dashboard/UserManagement/UserManagement";
+import UserProfile from './pages/dashboard/UserManagement/UserProfile';
 // ================= Categories management =====================
-import Categories from './components/dashboard/Categories/Categories';
-import AddCategory from "./components/dashboard/Categories/AddCategory";
-import UpdateCategory from './components/dashboard/Categories/UpdateCategory';
+import Categories from './pages/dashboard/Categories/Categories';
+import AddCategory from "./pages/dashboard/Categories/AddCategory";
+import UpdateCategory from './pages/dashboard/Categories/UpdateCategory';
 // ================= Products management =====================
-import Products from './components/dashboard/Products/Products';
-import AddProduct from "./components/dashboard/Products/AddProduct";
-import UpdateProduct from './components/dashboard/Products/UpdateProduct';
+import Products from './pages/dashboard/Products/Products';
+import AddProduct from "./pages/dashboard/Products/AddProduct";
+import UpdateProduct from './pages/dashboard/Products/UpdateProduct';
 // ================= Orders management =====================
-import Orders from "./components/dashboard/Orders/Orders";
+import Orders from "./pages/dashboard/Orders/Orders";
 
 const Layout = () => {
   const [currency, setCurrency] = useState("PKR");
@@ -108,7 +108,7 @@ const router = createBrowserRouter(
       <Route path="/reset" element={<><PageTitle title="Nayab Fashion - Reset Password" /><Reset /></>} />
       <Route path="/signup/privacy-policy" element={<><PageTitle title="Nayab Fashion - Privacy Policy" /><PrivacyPolicy /></>} />
       {/* Dashboard Routes */}
-      <Route path="/dashboard/home" element={<><PageTitle title="Nayab Fashion - Dashboard" /><DashboardHome /></>} />
+      {/* <Route path="/dashboard/home" element={<><PageTitle title="Nayab Fashion - Dashboard" /><DashboardHome /></>} /> */}
       {/* User management routes */}
       <Route path="/dashboard/userManagement" element={<><PageTitle title="Nayab Fashion - User Management" /><UserManagement /></>} />
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="Nayab Fashion - Edit User" /><UserProfile /></>} />

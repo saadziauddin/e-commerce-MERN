@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faExclamationCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import api from "../../../api/api.js";
-import LottieAnimation from "../../../assets/Animations/LottieAnimation";
-import animationData from "../../../assets/Animations/LoginAnimation.json";
+import LottieAnimation from "../../../animations/LottieAnimation.jsx";
+import animationData from "../../../animations/LoginAnimation.json";
 import { ToastContainer, toast } from 'react-toastify';
 
 const SignIn = () => {
@@ -48,13 +48,13 @@ const SignIn = () => {
           const role = response.data.role;
 
           if (role === "Admin") {
-            navigate("/dashboard/home");
+            navigate("/dashboard/userManagement");
           }
           else if (role === "SubAdmin") {
-            navigate("/dashboard/home");
+            navigate("/dashboard/userManagement");
           }
           else if (role === "Client") {
-            navigate("/");
+            navigate("/dashboard/products");
           }
           else {
             toast.error("Invalid Role!");

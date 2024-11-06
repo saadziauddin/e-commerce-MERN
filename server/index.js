@@ -122,4 +122,4 @@ app.get('/api/fetchProductsByCategory/specialOffers', fetchProductsRouter);
 
 // ======================= Order Routes =================================
 import ordersRouter from './routes/orders/orderRoute.js';
-app.post('/api/orders/createOrder', ordersRouter);
+app.use('/api/orders', ordersRouter);

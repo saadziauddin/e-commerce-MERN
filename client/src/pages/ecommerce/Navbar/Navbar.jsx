@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-// Icons
 import { SlEnvolope, SlPhone } from "react-icons/sl";
 import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
 import { GoSearch } from "react-icons/go";
 import { CiUser } from "react-icons/ci";
 import { PiShoppingCartThin } from "react-icons/pi";
-import { PK, US, GB, TR, OM, AE, SA } from 'country-flag-icons/react/3x2';
+import { PK, US, GB, TR, OM, AE, SA, QA, CA, EU, AU, BD, HK, TH, NZ } from 'country-flag-icons/react/3x2';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import logo from "/Images/NayabLogo.png";
-import api from "../../../api/api";
+// import api from "../../../api/api";
 import MobileSidebar from "./MobileSidebar";
 
 const Navbar = ({ onCurrencyChange }) => {
   const [currency, setCurrency] = useState('PKR');
   const [sidenav, setSidenav] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const products = useSelector((state) => state.reduxReducer.products);
   const navigate = useNavigate();
@@ -26,6 +23,43 @@ const Navbar = ({ onCurrencyChange }) => {
   const currencyRef = useRef(null);
   const userRef = useRef(null);
 
+  // const flagComponents = {
+  //   PKR: <PK className="inline-block w-5 h-5 mr-2" />,
+  //   USD: <US className="inline-block w-5 h-5 mr-2" />,
+  //   AED: <AE className="inline-block w-5 h-5 mr-2" />,
+  //   SAR: <SA className="inline-block w-5 h-5 mr-2" />,
+  //   OMR: <OM className="inline-block w-5 h-5 mr-2" />,
+  //   TRY: <TR className="inline-block w-5 h-5 mr-2" />,
+  //   GBP: <GB className="inline-block w-5 h-5 mr-2" />
+  // };
+
+  // const currencies = [
+  //   { code: "PKR", name: "Pakistani Rupee" },
+  //   { code: "USD", name: "US Dollar" },
+  //   { code: "AED", name: "UAE Dirham" },
+  //   { code: "SAR", name: "Saudi Riyal" },
+  //   { code: "OMR", name: "Omani Rial" },
+  //   { code: "TRY", name: "Turkish Lira" },
+  //   { code: "GBP", name: "British Pound" }
+  // ];
+
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await api.get('/api/fetchOnlyRequiredCategories');
+  //       setCategories(response.data);
+  //     } catch (error) {
+  //       console.log('Error fetching categories:', error);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
+
+  // const handleCategoryClick = (categoryId, categoryName) => {
+  //   setSidenav(false);
+  //   navigate(`/products?category=${categoryName}`);
+  // };
+
   const flagComponents = {
     PKR: <PK className="inline-block w-5 h-5 mr-2" />,
     USD: <US className="inline-block w-5 h-5 mr-2" />,
@@ -33,7 +67,15 @@ const Navbar = ({ onCurrencyChange }) => {
     SAR: <SA className="inline-block w-5 h-5 mr-2" />,
     OMR: <OM className="inline-block w-5 h-5 mr-2" />,
     TRY: <TR className="inline-block w-5 h-5 mr-2" />,
-    GBP: <GB className="inline-block w-5 h-5 mr-2" />
+    GBP: <GB className="inline-block w-5 h-5 mr-2" />,
+    QAR: <QA className="inline-block w-5 h-5 mr-2" />,
+    CAD: <CA className="inline-block w-5 h-5 mr-2" />,
+    EUR: <EU className="inline-block w-5 h-5 mr-2" />,
+    AUD: <AU className="inline-block w-5 h-5 mr-2" />,
+    BDT: <BD className="inline-block w-5 h-5 mr-2" />,
+    HKD: <HK className="inline-block w-5 h-5 mr-2" />,
+    THB: <TH className="inline-block w-5 h-5 mr-2" />,
+    NZD: <NZ className="inline-block w-5 h-5 mr-2" />
   };
 
   const currencies = [
@@ -43,25 +85,16 @@ const Navbar = ({ onCurrencyChange }) => {
     { code: "SAR", name: "Saudi Riyal" },
     { code: "OMR", name: "Omani Rial" },
     { code: "TRY", name: "Turkish Lira" },
-    { code: "GBP", name: "British Pound" }
+    { code: "GBP", name: "British Pound" },
+    { code: "QAR", name: "Qatari Riyal" },
+    { code: "CAD", name: "Canadian Dollar" },
+    { code: "EUR", name: "Euro" },
+    { code: "AUD", name: "Australian Dollar" },
+    { code: "BDT", name: "Bangladeshi Taka" },
+    { code: "HKD", name: "Hong Kong Dollar" },
+    { code: "THB", name: "Thai Baht" },
+    { code: "NZD", name: "New Zealand Dollar" }
   ];
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await api.get('/api/fetchOnlyRequiredCategories');
-        setCategories(response.data);
-      } catch (error) {
-        console.log('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  const handleCategoryClick = (categoryId, categoryName) => {
-    setSidenav(false);
-    navigate(`/products?category=${categoryName}`);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,9 +105,12 @@ const Navbar = ({ onCurrencyChange }) => {
         setShowUser(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    // document.addEventListener("mousedown", handleClickOutside);
+    document.body.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [currencyRef, userRef]);
 
   const handleCurrencyChange = (e) => {
     const selectedCurrency = e.target.value;
@@ -134,8 +170,8 @@ const Navbar = ({ onCurrencyChange }) => {
       </div>
 
       {/* Navbar */}
-      <div className="w-full h-[70px] bg-white sticky top-0 z-[70] border-b overflow-hidden">
-        <nav className="relative flex justify-between items-center h-full px-4 max-w-container mx-auto overflow-visible">
+      <div className="w-full h-[70px] bg-white sticky top-0 z-[80] border-b border-b-gray-200">
+        <nav className="relative flex justify-between items-center h-full px-4 max-w-container mx-auto">
           {/* Left Section */}
           <div className="flex items-center flex-grow">
             <div className="hidden md:flex relative w-full">
@@ -151,12 +187,12 @@ const Navbar = ({ onCurrencyChange }) => {
 
             {/* Mobile Settings */}
             <HiOutlineBars3BottomLeft className="block md:hidden h-6 w-8 text-gray-700" onClick={() => setSidenav(!sidenav)} />
-            <GoSearch className="block md:hidden h-6 w-8 text-gray-700" onClick={() => setSidenav(!sidenav)} />
+            <GoSearch className="block md:hidden h-5 w-8 text-gray-700" onClick={() => setSidenav(!sidenav)} />
+
             <MobileSidebar
               sidenav={sidenav}
               setSidenav={setSidenav}
-              categories={categories}
-              handleCategoryClick={handleCategoryClick}
+              handleSearch={(e) => setSearchQuery(e.target.value)}
               searchQuery={searchQuery}
               logo={logo}
             />
@@ -170,31 +206,18 @@ const Navbar = ({ onCurrencyChange }) => {
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center justify-end gap-1 flex-grow relative">
+          <div className="flex flex-grow relative gap-1 items-center justify-end">
             {/* Currency Dropdown */}
-            <div className="relative" ref={currencyRef} style={{ zIndex: 50 }}>
-              <div
-                className="flex items-center cursor-pointer border p-1 rounded-md z-80"
-                onClick={() => {
-                  console.log("Currency dropdown clicked");
-                  setIsOpen(!isOpen);
-                }}
-              >
+            <div className="relative" onClick={() => { setIsOpen(!isOpen); }} ref={currencyRef}>
+              <div className="flex items-center p-1 border rounded-md cursor-pointer hover:bg-gray-100 transition-colors duration-200">
                 {flagComponents[currency]}
                 <span className="hidden md:inline">{currency}</span>
-                <RiArrowDropDownLine
-                  className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                />
+                <RiArrowDropDownLine className={`h-4 w-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
               </div>
               {isOpen && (
-                <div className="absolute top-full right-0 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                {/* <div className="absolute top-full right-0 z-80 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg"> */}
+                <div className="absolute top-full right-0 mt-1 w-60 bg-white border border-gray-300 rounded-md shadow-lg max-h-96 overflow-y-auto  md:scrollbar-none">
                   {currencies.map((curr) => (
-                    <div
-                      key={curr.code}
-                      className="flex items-center p-2 w-full hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleCurrencyChange({ target: { value: curr.code } })}
-                    >
+                    <div key={curr.code} className="flex items-center p-2 w-full border-b hover:bg-gray-100 cursor-pointer" onClick={() => handleCurrencyChange({ target: { value: curr.code } })}>
                       <div className="flex items-center justify-center w-10 h-8">
                         {flagComponents[curr.code]}
                       </div>
@@ -206,41 +229,36 @@ const Navbar = ({ onCurrencyChange }) => {
             </div>
 
             {/* User Dropdown */}
-            <div className="relative hidden md:block cursor-pointer" ref={userRef}>
-              <CiUser
-                className="w-8 h-6 text-gray-700"
-                onClick={() => {
-                  console.log("User dropdown clicked");
-                  setShowUser(!showUser);
-                }}
-              />
+            <div className="relative hidden md:block cursor-pointer" onClick={() => { setShowUser(!showUser); }} ref={userRef}>
+              <div className="flex items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 transition-colors duration-200">
+                <CiUser className="w-6 h-6 text-gray-700" />
+              </div>
               {showUser && (
-                <motion.ul
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute top-12 right-0 bg-white shadow-lg rounded-md w-44 z-80"
-                >
+                <div className="absolute top-full right-0 mt-3 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
                   <Link to="/signin">
-                    <li className="px-4 py-2 hover:bg-gray-200 border-b">Sign In</li>
+                    <div className="flex items-center px-3 py-2 w-full border-b hover:bg-gray-100 cursor-pointer">
+                      <span className="ml-2">Sign In</span>
+                    </div>
                   </Link>
                   <Link to="/signup">
-                    <li className="px-4 py-2 hover:bg-gray-200">Sign Up</li>
+                    <div className="flex items-center px-3 py-2 w-full hover:bg-gray-100 cursor-pointer">
+                      <span className="ml-2">Sign Up</span>
+                    </div>
                   </Link>
-                </motion.ul>
+                </div>
               )}
             </div>
 
             {/* Cart */}
-            <Link to="/cart" className="relative">
-              <PiShoppingCartThin className="w-8 h-6 text-gray-700" />
-              <span className="absolute -top-2 -right-2 w-4 h-4 bg-[#7b246d] text-white text-xs flex items-center justify-center rounded-full">
+            <Link to="/cart" className="relative flex items-center p-1 rounded-md hover:bg-gray-100 transition-colors duration-200">
+              <PiShoppingCartThin className="w-6 h-6 text-gray-700" />
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-[#7b246d] text-white text-xs flex items-center justify-center rounded-full shadow-md">
                 {products.length > 0 ? products.length : 0}
               </span>
             </Link>
           </div>
-        </nav >
-      </div >
+        </nav>
+      </div>
     </>
   );
 };

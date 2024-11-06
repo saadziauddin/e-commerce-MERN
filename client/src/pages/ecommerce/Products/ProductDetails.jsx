@@ -473,18 +473,18 @@ function ProductDetails() {
 
                 {/* Size Guide Modal */}
                 {sizeGuideOpen && (
-                    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-white w-11/12 md:w-1/2 lg:w-1/3 p-6 rounded-lg shadow-lg">
-                            <div className="flex justify-between items-start mb-4">
-                                <h2 className="text-lg font-titleFont text-gray-800 uppercase">Size Guide</h2>
-                                <button onClick={() => setSizeGuideOpen(false)} className="bg-transparent text-gray-600 hover:text-gray-800 transition text-xl">
+                    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center">
+                        <div className="bg-white w-11/12 md:w-1/3 p-5 rounded-lg shadow-lg">
+                            <div className="flex justify-between items-start mb-3">
+                                <h2 className="text-lg font-titleFont font-medium text-gray-800 uppercase">Size Guide</h2>
+                                <button onClick={() => setSizeGuideOpen(false)} className="font-titleFont font-medium bg-transparent text-gray-600 hover:text-gray-800 transition text-xl">
                                     <RxCross1 />
                                 </button>
                             </div>
                             <img
                                 src={SizeGuideImage}
-                                alt="Size Chart"
-                                className="w-full h-auto mb-4" // Adjust styling as needed
+                                alt="Size Guide Image"
+                                className="w-full h-auto"
                             />
                         </div>
                     </div>

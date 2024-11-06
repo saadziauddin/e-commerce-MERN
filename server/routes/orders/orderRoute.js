@@ -1,120 +1,104 @@
 // import express from 'express';
 // import Order from '../../models/orderModel.js';
 // import User from '../../models/userModel.js';
-// import { body, validationResult } from 'express-validator';
 
 // const router = express.Router();
 
-// const validateOrderData = [
-//     body('user').notEmpty().withMessage('User is required.'),
-//     body('products').isArray().withMessage('Products must be an array.'),
-//     body('shippingInfo').notEmpty().withMessage('Shipping info is required.'),
-//     body('paymentMethod').notEmpty().withMessage('Payment method is required.'),
-//     body('totalAmount').isNumeric().withMessage('Total amount must be a number.'),
-//     (req, res, next) => {
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             return res.status(400).json({ errors: errors.array() });
-//         }
-//         next();
-//     },
-// ];
+// router.post('/newOrder', async (req, res) => {
+//   const { user, products, grandTotal, userInfo, paymentInfo, paymentStatus, orderStatus } = req.body;
 
-// router.post('/orders', validateOrderData, async (req, res) => {
-//     const { user, products, shippingInfo, totalAmount, paymentInfo, orderStatus, paymentStatus } = req.body;
+//   try {
+//     let existingUser = await User.findOne({ email: user });
+//     const userExists = !!existingUser;
 
-//     try {
-//         // Find the user by ID or email
-//         let userId;
-//         if (mongoose.Types.ObjectId.isValid(user)) {
-//             userId = await User.findById(user);
-//         } else {
-//             userId = await User.findOne({ email: user });
-//         }
+//     const newOrder = new Order({
+//       user,
+//       userExists,
+//       products,
+//       grandTotal,
+//       userInfo,
+//       paymentInfo,
+//       paymentStatus,
+//       orderStatus
+//     });
 
-//         if (!userId) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
-
-//         // Create a new order
-//         const newOrder = new Order({
-//             user: userId._id, // Ensure you use the user's ID for the order
-//             products,
-//             shippingInfo,
-//             paymentInfo: {
-//                 paymentMethod,
-//             },
-//             totalAmount,
-//         });
-
-//         await newOrder.save();
-//         res.status(201).json(newOrder);
-//     } catch (error) {
-//         console.error("Order creation error:", error);
-//         res.status(500).json({ message: "Server error" });
-//     }
+//     await newOrder.save();
+//     res.status(201).json({ message: 'Order Successful!' });
+//   }
+//   catch (error) {
+//     console.error("Order creation error:", error);
+//     res.status(500).json({ message: "Internal server error!" });
+//   }
 // });
 
 // export default router;
 
 import express from 'express';
-import mongoose from 'mongoose';
 import Order from '../../models/orderModel.js';
 import User from '../../models/userModel.js';
-import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
-const validateOrderData = [
-  body('user').notEmpty().withMessage('User is required.'),
-  body('products').isArray({ min: 1 }).withMessage('Products must contain at least one item.'),
-  body('shippingInfo').notEmpty().withMessage('Shipping info is required.'),
-  body('paymentMethod').notEmpty().withMessage('Payment method is required.'),
-  body('totalAmount').isNumeric().withMessage('Total amount must be a number.'),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
+router.post('/newOrder', async (req, res) => {
+  const { user, products, grandTotal, userInfo, paymentInfo, paymentStatus, orderStatus } = req.body;
 
-router.post('/api/orders/createOrder', validateOrderData, async (req, res) => {
-  const { user, products, shippingInfo, paymentMethod, totalAmount, paymentInfo, orderStatus, paymentStatus } = req.body;
+  // Validate required fields according to the schema
+  if (!user) return res.status(400).json({ message: "User email is required." });
+
+  if (!products || !Array.isArray(products) || products.length === 0) {
+    return res.status(400).json({ message: "At least one product is required." });
+  } else {
+    for (const product of products) {
+      if (!product.productName) return res.status(400).json({ message: "Product name is required for each product." });
+      if (product.quantity == null || product.quantity <= 0) return res.status(400).json({ message: "Valid quantity is required for each product." });
+      if (product.price == null) return res.status(400).json({ message: "Product price is required for each product." });
+      if (product.totalAmount == null) return res.status(400).json({ message: "Total amount is required for each product." });
+    }
+  }
+
+  if (!grandTotal) return res.status(400).json({ message: "Grand total is required." });
+
+  if (!userInfo || typeof userInfo !== 'object') {
+    return res.status(400).json({ message: "User info is required and must be an object." });
+  } else {
+    const { name, email, phone, shippingAddress, billingAddress, city, country } = userInfo;
+    if (!name) return res.status(400).json({ message: "User name is required." });
+    if (!email) return res.status(400).json({ message: "User email is required." });
+    if (!phone) return res.status(400).json({ message: "User phone number is required." });
+    if (!shippingAddress) return res.status(400).json({ message: "Shipping address is required." });
+    if (!billingAddress) return res.status(400).json({ message: "Billing address is required." });
+    if (!city) return res.status(400).json({ message: "City is required." });
+    if (!country) return res.status(400).json({ message: "Country is required." });
+  }
+
+  if (!paymentStatus || !['Pending', 'Paid', 'Failed'].includes(paymentStatus)) {
+    return res.status(400).json({ message: "Valid payment status is required (Pending, Paid, or Failed)." });
+  }
+
+  if (!orderStatus || !['Processing', 'Shipped', 'Delivered', 'Cancelled'].includes(orderStatus)) {
+    return res.status(400).json({ message: "Valid order status is required (Processing, Shipped, Delivered, or Cancelled)." });
+  }
 
   try {
-    // Check if user exists by ID or email
-    let userId;
-    if (mongoose.Types.ObjectId.isValid(user)) {
-      userId = await User.findById(user);
-    } else {
-      userId = await User.findOne({ email: user });
-    }
+    let existingUser = await User.findOne({ email: user });
+    const userExists = !!existingUser;
 
-    if (!userId) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Prepare new order
     const newOrder = new Order({
-      user: userId._id,
+      user,
+      userExists,
       products,
-      shippingInfo,
-      paymentInfo: {
-        transactionId: paymentInfo?.transactionId || null,
-        paymentMethod,
-      },
-      totalAmount,
-      paymentStatus: paymentStatus || 'Pending',
-      orderStatus: orderStatus || 'Processing',
+      grandTotal,
+      userInfo,
+      paymentInfo,
+      paymentStatus,
+      orderStatus
     });
 
     await newOrder.save();
-    res.status(201).json(newOrder);
+    res.status(201).json({ message: 'Order Successful!' });
   } catch (error) {
     console.error("Order creation error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Internal server error!" });
   }
 });
 

@@ -26,7 +26,7 @@ function Order() {
     const products = useSelector((state) => state.reduxReducer.products);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-
+    console.log(products);
     const shippingCharge = 100;
     const totalAmt = products.reduce((total, item) => total + item.price * item.quantity, 0);
     const grandTotal = totalAmt + shippingCharge;
@@ -77,43 +77,50 @@ function Order() {
         if (Object.keys(validationErrors).length === 0) {
             setErrors({});
 
-            let userIdentifier = formData.email;
-
-            // if (currentUserId) {
-            //     userIdentifier = currentUserId;
-            // } else {
-            //     userIdentifier = formData.email;
-            // }
-
             const orderData = {
-                user: userIdentifier,
+                user: formData.email,
                 products: products.map(item => ({
-                    productId: item.id,
+                    productId: item.id.split('-')[0],
+                    productName: item.name,
                     quantity: item.quantity,
-                    // price: item.price,
-                    price: item.price * item.quantity
+                    color: item.color,
+                    size: item.size,
+                    price: item.price * item.quantity,
+                    totalAmount: totalAmt
                 })),
-                shippingInfo: {
+                grandTotal: grandTotal,
+                userInfo: {
                     name: formData.name,
-                    address: formData.shippingAddress,
-                    city: formData.city,
-                    postalCode: formData.postalCode,
-                    country: formData.country,
+                    email: formData.email,
                     phone: formData.contactNo,
+                    shippingAddress: formData.shippingAddress,
+                    billingAddress: formData.billingAddress,
+                    city: formData.city,
+                    country: formData.country,
+                    postalCode: formData.postalCode,
+                    additionalNotes: formData.notes
                 },
-                paymentMethod: paymentMethod,
-                totalAmount: grandTotal,
                 paymentInfo: {
-                    transactionId: '',  // Leave empty if not available at this stage
+                    transactionId: '',
+                    paymentMethod: paymentMethod
                 },
                 paymentStatus: 'Pending',
-                orderStatus: 'Processing',
+                orderStatus: 'Processing'
             };
+    
+            console.log("Order Form Data:", orderData);
 
             try {
-                await api.post('/api/orders', orderData, { headers: { 'Content-Type': 'multipart/form-data' } });
-                toast.success('Order Successfull!');
-                // navigate('/paymentgateway');
+                const response = await api.post('/api/orders/newOrder', orderData, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                console.log("Response from Order API: ", response);
+                if (response.status === 201) {
+                    toast.success('Order successfully placed!');
+                    // navigate('/paymentgateway');
+                } else {
+                    throw new Error("Failed to submit order.");
+                }
             } catch (error) {
                 console.error("Order submission error:", error);
                 toast.error("Failed to submit the order.");
@@ -122,16 +129,14 @@ function Order() {
             setErrors(validationErrors);
         }
     };
-
     return (
         <div className="max-w-container mx-auto px-4 py-6 lg:px-6 lg:py-10">
             <Breadcrumbs title="Checkout Form" />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Side: Form */}
+                {/* Left Side: Checkout Form */}
                 <div className="lg:col-span-2 bg-white p-6 rounded-md shadow-md">
                     <h2 className="text-2xl font-bold mb-5 text-gray-700">Order Information</h2>
-
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Input Fields */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -242,10 +247,6 @@ function Order() {
 
 
                         </div>
-
-
-
-
 
                         {/* Payment Options */}
                         <div className="space-y-4 mt-6">

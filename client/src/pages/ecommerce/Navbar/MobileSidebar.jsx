@@ -1,10 +1,32 @@
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { RxCross1 } from "react-icons/rx";
 import { FaSearch, FaSignInAlt, FaUserPlus, FaWhatsapp, FaFacebook, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ScrollLink } from "react-scroll";
+import api from "../../../api/api";
 
-const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, handleSearch, searchQuery, logo }) => {
+const MobileSidebar = ({ sidenav, setSidenav, handleSearch, searchQuery, logo }) => {
+    const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/api/fetchOnlyRequiredCategories');
+                setCategories(response.data);
+            } catch (error) {
+                console.log('Error fetching categories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const handleCategoryClick = (categoryId, categoryName) => {
+        setSidenav(false);
+        navigate(`/products?category=${categoryName}`);
+    };
+
     return (
         <>
             {sidenav && (
@@ -13,7 +35,7 @@ const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, h
                         initial={{ x: -300, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="w-[70%] h-screen relative bg-white shadow-xl rounded-r-3xl overflow-hidden"
+                        className="w-[60%] h-screen relative bg-white shadow-xl rounded-r-3xl overflow-hidden"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="h-full p-6 bg-gray-100 text-primeColor overflow-y-auto scrollbar-none">
@@ -32,11 +54,11 @@ const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, h
                             {/* Search Bar */}
                             <div className="relative mb-6">
                                 <input
-                                    className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder:text-gray-400 focus:ring focus:ring-gray-400 transition"
+                                    className="w-full h-9 px-4 rounded-full border border-gray-300 outline-none text-gray-800 placeholder-gray-500 placeholder:text-sm focus:ring focus:ring-gray-400 transition"
                                     type="text"
                                     onChange={handleSearch}
                                     value={searchQuery}
-                                    placeholder="Search products here"
+                                    placeholder="Search products, categories..."
                                 />
                                 <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
                             </div>
@@ -129,7 +151,7 @@ const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, h
                                     >
                                         {categories.map((category) => (
                                             <li key={category.id} className="relative block text-gray-700 font-light group text-[16px]">
-                                                <Button
+                                                <button
                                                     onClick={() => {
                                                         handleCategoryClick(category.id, category.name);
                                                         setSidenav(false);
@@ -137,9 +159,9 @@ const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, h
                                                 >
                                                     {category.name}
                                                     <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-red-500 transition-all duration-300 group-hover:w-[30%]"></span>
-                                                </Button>
+                                                </button>
                                             </li>
-                                        ))}                                        
+                                        ))}
                                     </motion.ul>
                                 ) : (
                                     <div className="px-4 py-2 text-gray-700">No Categories</div>
@@ -153,14 +175,14 @@ const MobileSidebar = ({ sidenav, setSidenav, categories, handleCategoryClick, h
                                     className="flex items-center text-gray-700 font-semibold font-heading hover:text-gray-500 transition duration-300"
                                     onClick={() => setSidenav(false)}
                                 >
-                                    <FaSignInAlt className="mr-2" /> Login
+                                    <FaSignInAlt className="mr-2" /> SignIn
                                 </Link>
                                 <Link
                                     to="/signup"
                                     className="flex items-center text-gray-700 font-semibold font-heading hover:text-gray-500 transition duration-300"
                                     onClick={() => setSidenav(false)}
                                 >
-                                    <FaUserPlus className="mr-2" /> Create Account
+                                    <FaUserPlus className="mr-2" /> SignUp
                                 </Link>
                             </div>
 

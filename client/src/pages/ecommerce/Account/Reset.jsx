@@ -7,8 +7,8 @@ import LottieAnimation from "../../../animations/LottieAnimation.jsx";
 import animationData from "../../../animations/LoginAnimation.json";
 import { ToastContainer, toast } from 'react-toastify';
 
-function Reset(){
-    const [values, setValues] = useState({ email: '', currentPassword: '', newPassword: '', confirmNewPassword: '' });
+function Reset() {
+    const [values, setValues] = useState({ email: '', newPassword: '', confirmNewPassword: '' });
     const [errors, setErrors] = useState({});
     const [filled, setFilled] = useState(false);
     const [emailVerified, setEmailVerified] = useState(false);
@@ -16,8 +16,8 @@ function Reset(){
 
     useEffect(() => {
         const checkFilled = () => {
-            const { email, currentPassword, newPassword, confirmNewPassword } = values;
-            setFilled(email && (emailVerified ? (currentPassword && newPassword && confirmNewPassword) : email));
+            const { email, newPassword, confirmNewPassword } = values;
+            setFilled(email && (emailVerified ? (newPassword && confirmNewPassword) : email));
         };
         checkFilled();
     }, [values, emailVerified]);
@@ -55,7 +55,6 @@ function Reset(){
                 toast.success("Password reset successfully, Sign in now!");
                 setValues({
                     email: '',
-                    currentPassword: '',
                     newPassword: '',
                     confirmNewPassword: ''
                 });
@@ -91,15 +90,11 @@ function Reset(){
         let errors = {};
         let isValid = true;
 
-        if (!values.currentPassword) {
-            errors.currentPassword = "Current Password is required";
-            isValid = false;
-        }
-
         if (!values.newPassword) {
             errors.newPassword = "New Password is required";
             isValid = false;
-        } else if (values.newPassword.length < 8 || !/(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}/.test(values.newPassword)) {
+        } 
+        else if (values.newPassword.length < 8 || !/(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}/.test(values.newPassword)) {
             errors.newPassword = "Password must be at least 8 characters long and include at least one uppercase letter and one number";
             isValid = false;
         }
@@ -155,11 +150,11 @@ function Reset(){
                                     <input
                                         onChange={handleChange}
                                         value={values.email}
-                                        className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
+                                        className={`pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor ${emailVerified ? 'cursor-not-allowed bg-gray-200' : ''}`}
                                         type="email"
                                         name="email"
                                         placeholder="Enter your email"
-                                        disabled={emailVerified}  // Disable email field after verification
+                                        disabled={emailVerified}
                                     />
                                 </div>
                                 {errors.email && (
@@ -172,27 +167,6 @@ function Reset(){
                             {/* Show password fields only after email is verified */}
                             {emailVerified && (
                                 <>
-                                    {/* Current Password */}
-                                    <div className="mb-0">
-                                        <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">Current Password*</label>
-                                        <div className="relative">
-                                            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-3.5 text-gray-400" />
-                                            <input
-                                                onChange={handleChange}
-                                                value={values.currentPassword}
-                                                className="pl-10 pr-3 py-2 border border-gray-300 w-full rounded-xl focus:outline-none focus:border-primeColor"
-                                                type="password"
-                                                name="currentPassword"
-                                                placeholder="********"
-                                            />
-                                        </div>
-                                        {errors.currentPassword && (
-                                            <p className="text-sm text-red-500 font-titleFont font-semibold px-4">
-                                                <FontAwesomeIcon icon={faExclamationCircle} /> {errors.currentPassword}
-                                            </p>
-                                        )}
-                                    </div>
-
                                     {/* New Password */}
                                     <div className="mb-0">
                                         <label className="text-gray-600 font-titleFont ml-2 mb-1 font-semibold">New Password*</label>
@@ -249,7 +223,7 @@ function Reset(){
                             <p className="text-gray-700 text-sm text-center w-full">
                                 Back to sign in?{' '}
                                 <Link to="/signin" className="text-primeColor font-medium hover:text-blue-600 duration-300">
-                                    Sign in
+                                    Click here
                                 </Link>
                             </p>
                         </div>

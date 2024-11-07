@@ -11,7 +11,7 @@ const Welcome = () => {
           transition={{ duration: 0.4 }}
           className="flex flex-col items-center gap-6 py-16"
         >
-          <img src={emptyCart} alt="Welcome" className="w-80" />
+          {/* <img src={emptyCart} alt="Welcome" className="w-80" /> */}
           <h2 className="text-3xl font-semibold text-gray-800">
             Welcome to Our Store!
           </h2>

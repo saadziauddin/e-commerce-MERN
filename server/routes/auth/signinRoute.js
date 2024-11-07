@@ -32,13 +32,13 @@ router.post('/api/signin', async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict'   
+            sameSite: 'strict'
         });
         
         return res.status(200).json({
+            token,
             Status: "Success",
             message: "Login Successfull!",
-            token,
             id: user._id,
             name: user.fullName,
             email: user.email,

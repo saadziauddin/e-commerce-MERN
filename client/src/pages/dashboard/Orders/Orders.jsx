@@ -5,51 +5,32 @@ import Sidebar from '../Constants/Sidebar.jsx';
 import api from '../../../api/api.js';
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 
-function Categories() {
+function Orders() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => { setIsSidebarOpen(!isSidebarOpen); };
   const closeSidebar = () => { setIsSidebarOpen(false); };
-  const [fetchCategoriesData, setfetchCategoriesData] = useState([]);
+  const [fetchOrdersData, setfetchOrdersData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchOrders = async () => {
       try {
-        const response = await api.get('/api/fetchCategories');
-        setfetchCategoriesData(response.data);
+        const response = await api.get('/api/orders/fetchOrders');
+        setfetchOrdersData(response.data);
       } catch (error) {
-        console.log("Error fetching categories: ", error);
+        console.log("Error fetching orders: ", error);
       }
     };
-    fetchCategories();
+    fetchOrders();
   }, []);
 
-  const addCategory = async () => {
-    navigate('/dashboard/categories/addCategory');
-  };
-
-  const handleEdit = (row) => {
-    const categoryId = row._id;
-    navigate(`/dashboard/categories/updateCategory/${categoryId}`);
-  };
-
-  const handleDelete = async (CategoryId) => {
-    try {
-      const response = await api.delete('/api/deleteCategory', { params: { CategoryId } });
-      setfetchCategoriesData(fetchCategoriesData.filter(category => category.categoryId !== CategoryId));
-      toast.success(response.data.message);
-
-      const reFetchCategories = await api.get('/api/fetchCategories');
-      setfetchCategoriesData(reFetchCategories.data);
-    } catch (error) {
-      console.error('Error deleting category:', error);
-      toast.error('Error deleting category, try checking browser console.');
-    }
+  const handleDetails = (row) => {
+    const orderId = row._id;
+    navigate(`/dashboard/orders/orderDetails/${orderId}`);
   };
 
   return (
@@ -90,44 +71,65 @@ function Categories() {
                   <DataTable
                     columns={[
                       {
-                        name: 'Image',
-                        selector: row => {
-                          const hasImage = Array.isArray(row.image) && row.image.length > 0 && row.image[0].imageName;
-                          return hasImage ? (
-                            <div className="h-10 w-10 rounded-full">
-                              <img src={`${apiUrl}/uploads/category_images/${row.image[0].imageName}`} alt="" />
-                            </div>
-                          ) : (
-                            "No Image"
-                          );
-                        },
-                        sortable: false,
-                        center: true.toString(),
-                        wrap: true,
+                        name: 'Order ID',
+                        selector: row => row.orderId,
+                        sortable: true,
+                        wrap: true
                       },
                       {
-                        name: 'Name',
-                        selector: row => row.name,
+                        name: 'User Email',
+                        selector: row => row.user,
                         sortable: true,
-                        wrap: true,
+                        wrap: true
                       },
                       {
-                        name: 'Description',
-                        selector: row => row.description,
+                        name: 'User Exists',
+                        selector: row => row.userExists ? 'Yes' : 'No',
                         sortable: true,
-                        // wrap: true,
+                        center: true
                       },
                       {
-                        name: 'Date Added',
-                        selector: row => row.dateAdded ? new Date(row.dateAdded).toLocaleDateString() : 'No Date',
+                        name: 'Products Ordered',
+                        selector: row => row.products.reduce((total, product) => total + product.quantity, 0),
                         sortable: true,
-                        wrap: true,
+                        center: true
+                      },                    
+                      {
+                        name: 'Payment Method',
+                        selector: row => row.paymentInfo?.paymentMethod || "No Payment Method",
+                        sortable: true,
+                        center: true
+                      },
+                      {
+                        name: 'Payment Status',
+                        selector: row => row.paymentStatus,
+                        sortable: true,
+                        center: true
+                      },
+                      {
+                        name: 'Order Status',
+                        selector: row => row.orderStatus,
+                        sortable: true,
+                        center: true
+                      },
+                      {
+                        name: 'Order Created',
+                        selector: row => new Intl.DateTimeFormat('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          second: 'numeric',
+                        }).format(new Date(row.orderDate)),
+                        sortable: true,
+                        wrap: true
                       },
                       {
                         name: 'Actions',
                         cell: row => (
                           <div className="flex justify-center space-x-4">
-                            <button className="hover:text-blue-800 hover:font-semibold" onClick={() => handleEdit(row)}>
+                            <button className="hover:text-blue-800 hover:font-semibold" onClick={() => handleDetails(row)}>
                               <FontAwesomeIcon icon={faEye} /> View Details
                             </button>
                           </div>
@@ -166,7 +168,7 @@ function Categories() {
                         },
                       },
                     }}
-                    data={fetchCategoriesData}
+                    data={fetchOrdersData}
                     fixedHeader
                     fixedHeaderScrollHeight="450px"
                     pagination
@@ -180,7 +182,7 @@ function Categories() {
         </div>
       </main>
     </div>
-  )
+  );
 };
 
-export default Categories;
+export default Orders;

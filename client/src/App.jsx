@@ -24,6 +24,8 @@ import CheckoutForm from "./pages/ecommerce/CheckoutForm/CheckoutForm";
 import Payment from "./pages/ecommerce/payment/Payment";
 // ================= Thankyou =====================
 import Thankyou from "./pages/ecommerce/Thankyou/Thankyou";
+// ================= Welcome =====================
+import Welcome from "./pages/ecommerce/Welcome/Welcome";
 // ================= Products =====================
 import Product from "./pages/ecommerce/Products/Products";
 import ProductDetails from "./pages/ecommerce/Products/ProductDetails";
@@ -48,6 +50,7 @@ import AddProduct from "./pages/dashboard/Products/AddProduct";
 import UpdateProduct from './pages/dashboard/Products/UpdateProduct';
 // ================= Orders management =====================
 import Orders from "./pages/dashboard/Orders/Orders";
+import OrderDetails from "./pages/dashboard/Orders/OrderDetails";
 
 const Layout = () => {
   const [currency, setCurrency] = useState("PKR");
@@ -101,14 +104,13 @@ const router = createBrowserRouter(
         <Route path="/checkout" element={<><PageTitle title="Nayab Fashion - CheckoutForm" /><CheckoutForm /></>} />
         <Route path="/paymentgateway" element={<><PageTitle title="Nayab Fashion - Payment" /><Payment /></>} />
         <Route path="/thankyou" element={<><PageTitle title="Nayab Fashion - Thankyou" /><Thankyou /></>} />
+        <Route path="/welcome" element={<><PageTitle title="Nayab Fashion - Welcome" /><Welcome /></>} />
       </Route>
       {/* Auth Routes */}
       <Route path="/signin" element={<><PageTitle title="Nayab Fashion - Sign In" /><SignIn /></>} />
       <Route path="/signup" element={<><PageTitle title="Nayab Fashion - Sign Up" /><SignUp /></>} />
       <Route path="/reset" element={<><PageTitle title="Nayab Fashion - Reset Password" /><Reset /></>} />
       <Route path="/signup/privacy-policy" element={<><PageTitle title="Nayab Fashion - Privacy Policy" /><PrivacyPolicy /></>} />
-      {/* Dashboard Routes */}
-      {/* <Route path="/dashboard/home" element={<><PageTitle title="Nayab Fashion - Dashboard" /><DashboardHome /></>} /> */}
       {/* User management routes */}
       <Route path="/dashboard/userManagement" element={<><PageTitle title="Nayab Fashion - User Management" /><UserManagement /></>} />
       <Route path="/dashboard/userManagement/userProfile/:userId" element={<><PageTitle title="Nayab Fashion - Edit User" /><UserProfile /></>} />
@@ -123,6 +125,7 @@ const router = createBrowserRouter(
       <Route path="/dashboard/products/updateProduct/:productId" element={<><PageTitle title="Nayab Fashion - Update Product" /><UpdateProduct /></>} />
       {/* Orders management routes */}
       <Route path="/dashboard/orders" element={<><PageTitle title="Nayab Fashion - Orders" /><Orders /></>} />
+      <Route path="/dashboard/orders/orderDetails/:orderId" element={<><PageTitle title="Nayab Fashion - Order Details" /><OrderDetails /></>} />
     </Route>
   )
 );

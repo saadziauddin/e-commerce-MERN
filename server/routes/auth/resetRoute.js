@@ -27,9 +27,9 @@ router.post('/api/verifyEmail', async (req, res) => {
 
 // Reset Password
 router.post('/api/resetPassword', async (req, res) => {
-    const { email, currentPassword, newPassword, confirmNewPassword } = req.body;
+    const { email, newPassword, confirmNewPassword } = req.body;
     try {
-        if (!email || !currentPassword || !newPassword || !confirmNewPassword) {
+        if (!email || !newPassword || !confirmNewPassword) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
@@ -38,15 +38,9 @@ router.post('/api/resetPassword', async (req, res) => {
             return res.status(400).json({ error: 'Invalid email address!' });
         }
 
-        // Check if current password matches
-        const passwordMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
-        if (!passwordMatch) {
-            return res.status(400).json({ error: 'Current password is incorrect!' });
-        }
-
         // Check if new password and confirm password match
         if (newPassword !== confirmNewPassword) {
-            return res.status(400).json({ error: 'New password and confirm password do not match!' });
+            return res.status(400).json({ error: 'Password and confirm password do not match!' });
         }
 
         // Hash the new password

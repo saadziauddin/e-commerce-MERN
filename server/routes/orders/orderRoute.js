@@ -1,44 +1,11 @@
-// import express from 'express';
-// import Order from '../../models/orderModel.js';
-// import User from '../../models/userModel.js';
-
-// const router = express.Router();
-
-// router.post('/newOrder', async (req, res) => {
-//   const { user, products, grandTotal, userInfo, paymentInfo, paymentStatus, orderStatus } = req.body;
-
-//   try {
-//     let existingUser = await User.findOne({ email: user });
-//     const userExists = !!existingUser;
-
-//     const newOrder = new Order({
-//       user,
-//       userExists,
-//       products,
-//       grandTotal,
-//       userInfo,
-//       paymentInfo,
-//       paymentStatus,
-//       orderStatus
-//     });
-
-//     await newOrder.save();
-//     res.status(201).json({ message: 'Order Successful!' });
-//   }
-//   catch (error) {
-//     console.error("Order creation error:", error);
-//     res.status(500).json({ message: "Internal server error!" });
-//   }
-// });
-
-// export default router;
-
 import express from 'express';
+import mongoose from 'mongoose';
 import Order from '../../models/orderModel.js';
 import User from '../../models/userModel.js';
 
 const router = express.Router();
 
+// Create Order
 router.post('/newOrder', async (req, res) => {
   const { user, products, grandTotal, userInfo, paymentInfo, paymentStatus, orderStatus } = req.body;
 
@@ -99,6 +66,32 @@ router.post('/newOrder', async (req, res) => {
   } catch (error) {
     console.error("Order creation error:", error);
     res.status(500).json({ message: "Internal server error!" });
+  }
+});
+
+// Update Order Status
+router.put('/updateOrderStatus/:orderId', async (req, res) => {
+  const { orderId } = req.params;
+  const { orderStatus } = req.body;
+
+  console.log("Order ID: ", orderId);
+  console.log("Order Status: ", orderStatus);
+
+  try {
+      const order = await Order.findByIdAndUpdate(
+          orderId,
+          { orderStatus: orderStatus },
+          { new: true }
+      );
+
+      if (!order) {
+          return res.status(404).json({ error: 'Order not found' });
+      }
+
+      return res.status(200).json({ message: `Order ${orderStatus.toLowerCase()} successfully`, order });
+  } catch (error) {
+      console.error("Error updating order status: ", error);
+      return res.status(500).json({ error: 'An error occurred while updating the order status' });
   }
 });
 

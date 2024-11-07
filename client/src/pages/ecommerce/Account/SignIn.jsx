@@ -40,7 +40,7 @@ const SignIn = () => {
     if (email && password) {
       try {
         const response = await api.post("/api/signin", { email, password });
-
+        
         if (response.data.message === "Login Successfull!") {
           setEmail("");
           setPassword("");
@@ -54,7 +54,8 @@ const SignIn = () => {
             navigate("/dashboard/userManagement");
           }
           else if (role === "Client") {
-            navigate("/dashboard/products");
+            localStorage.setItem("user", JSON.stringify(response.data));
+            navigate("/welcome");
           }
           else {
             toast.error("Invalid Role!");
@@ -157,9 +158,8 @@ const SignIn = () => {
               </button>
 
               <p className="text-gray-700 text-sm text-center w-full">
-                Forget password?{' '}
                 <Link to="/reset" className="text-primeColor font-medium hover:text-blue-600 duration-300">
-                  Reset
+                  Forget password?
                 </Link>
               </p>
 

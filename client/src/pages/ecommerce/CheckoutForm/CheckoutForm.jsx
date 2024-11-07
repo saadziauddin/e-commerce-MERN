@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import FormatPrice from "../../../helpers/FormatPrice";
@@ -9,6 +9,7 @@ import VisaCardImg from "/Images/VisaCard.svg";
 import UnionPayImg from "/Images/UnionPay.svg";
 import OnlinePayGif from "/Images/payment.gif";
 import api from '../../../api/api.js';
+import { resetCart } from "../../../redux/reduxSlice";
 
 function Order() {
     const { selectedCurrency } = useOutletContext();
@@ -23,10 +24,11 @@ function Order() {
         country: "",
         notes: "",
     });
+    const dispatch = useDispatch();
     const products = useSelector((state) => state.reduxReducer.products);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    console.log(products);
+    
     const shippingCharge = 100;
     const totalAmt = products.reduce((total, item) => total + item.price * item.quantity, 0);
     const grandTotal = totalAmt + shippingCharge;
@@ -76,6 +78,7 @@ function Order() {
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length === 0) {
             setErrors({});
+            const paymentMethodForDB = paymentMethod === "onlinePayment" ? "Online Payment" : "Cash On Delivery";
 
             const orderData = {
                 user: formData.email,
@@ -102,13 +105,11 @@ function Order() {
                 },
                 paymentInfo: {
                     transactionId: '',
-                    paymentMethod: paymentMethod
+                    paymentMethod: paymentMethodForDB
                 },
                 paymentStatus: 'Pending',
                 orderStatus: 'Processing'
             };
-    
-            console.log("Order Form Data:", orderData);
 
             try {
                 const response = await api.post('/api/orders/newOrder', orderData, {
@@ -117,7 +118,14 @@ function Order() {
                 console.log("Response from Order API: ", response);
                 if (response.status === 201) {
                     toast.success('Order successfully placed!');
-                    // navigate('/paymentgateway');
+                    
+                    dispatch(resetCart());
+
+                    if (paymentMethod === "onlinePayment") {
+                        navigate('/paymentgateway');
+                    } else {
+                        navigate('/thankyou');
+                    }
                 } else {
                     throw new Error("Failed to submit order.");
                 }
@@ -129,6 +137,7 @@ function Order() {
             setErrors(validationErrors);
         }
     };
+    
     return (
         <div className="max-w-container mx-auto px-4 py-6 lg:px-6 lg:py-10">
             <Breadcrumbs title="Checkout Form" />
@@ -244,8 +253,6 @@ function Order() {
                                 />
                                 {errors.postalCode && <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>}
                             </div>
-
-
                         </div>
 
                         {/* Payment Options */}
@@ -254,9 +261,6 @@ function Order() {
                             <p className="text-gray-500 text-sm mb-2">Choose a payment option below:</p>
 
                             {/* Online Payment */}
-
-
-
                             <div className={`border p-4 rounded-md cursor-pointer ${paymentMethod === "onlinePayment" ? "border-[#7b246d]" : "border-gray-300"}`}>
                                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                                     <div className="flex items-center mb-4 lg:mb-0">
@@ -291,8 +295,6 @@ function Order() {
                                     </div>
                                 )}
                             </div>
-
-
 
                             {/* Cash on Delivery (if allowed) */}
                             {isCODAllowed && (
@@ -329,10 +331,7 @@ function Order() {
                             />
                         </div>
 
-                        <button
-                            type="submit"
-                            className="w-full bg-[#7b246d] text-white font-heading py-3 rounded-lg hover:bg-[#5a1a52] transition uppercase"
-                        >
+                        <button type="submit" className="w-full bg-[#7b246d] text-white font-heading py-3 rounded-lg hover:bg-[#5a1a52] transition duration-300 uppercase shadow-md hover:shadow-lg">
                             Proceed to Payment
                         </button>
                     </form>

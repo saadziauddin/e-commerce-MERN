@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { SlEnvolope, SlPhone } from "react-icons/sl";
 import { HiOutlineBars3BottomLeft } from "react-icons/hi2";
 import { GoSearch } from "react-icons/go";
@@ -9,56 +9,22 @@ import { PiShoppingCartThin } from "react-icons/pi";
 import { PK, US, GB, TR, OM, AE, SA, QA, CA, EU, AU, BD, HK, TH, NZ } from 'country-flag-icons/react/3x2';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import logo from "/Images/NayabLogo.png";
-// import api from "../../../api/api";
+import api from "../../../api/api";
 import MobileSidebar from "./MobileSidebar";
 
 const Navbar = ({ onCurrencyChange }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [currency, setCurrency] = useState('PKR');
   const [sidenav, setSidenav] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const products = useSelector((state) => state.reduxReducer.products);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [showUser, setShowUser] = useState(false);
   const currencyRef = useRef(null);
   const userRef = useRef(null);
+  const navigate = useNavigate();
 
-  // const flagComponents = {
-  //   PKR: <PK className="inline-block w-5 h-5 mr-2" />,
-  //   USD: <US className="inline-block w-5 h-5 mr-2" />,
-  //   AED: <AE className="inline-block w-5 h-5 mr-2" />,
-  //   SAR: <SA className="inline-block w-5 h-5 mr-2" />,
-  //   OMR: <OM className="inline-block w-5 h-5 mr-2" />,
-  //   TRY: <TR className="inline-block w-5 h-5 mr-2" />,
-  //   GBP: <GB className="inline-block w-5 h-5 mr-2" />
-  // };
-
-  // const currencies = [
-  //   { code: "PKR", name: "Pakistani Rupee" },
-  //   { code: "USD", name: "US Dollar" },
-  //   { code: "AED", name: "UAE Dirham" },
-  //   { code: "SAR", name: "Saudi Riyal" },
-  //   { code: "OMR", name: "Omani Rial" },
-  //   { code: "TRY", name: "Turkish Lira" },
-  //   { code: "GBP", name: "British Pound" }
-  // ];
-
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await api.get('/api/fetchOnlyRequiredCategories');
-  //       setCategories(response.data);
-  //     } catch (error) {
-  //       console.log('Error fetching categories:', error);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
-  // const handleCategoryClick = (categoryId, categoryName) => {
-  //   setSidenav(false);
-  //   navigate(`/products?category=${categoryName}`);
-  // };
+  const [userInfo, setUserInfo] = useState(null);
 
   const flagComponents = {
     PKR: <PK className="inline-block w-5 h-5 mr-2" />,
@@ -105,8 +71,8 @@ const Navbar = ({ onCurrencyChange }) => {
         setShowUser(false);
       }
     };
-    // document.addEventListener("mousedown", handleClickOutside);
-    document.body.addEventListener("click", handleClickOutside);
+    document.body.addEventListener("mousedown", handleClickOutside);
+    // document.body.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -127,6 +93,28 @@ const Navbar = ({ onCurrencyChange }) => {
     }, 300);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  const userImage = userInfo?.image
+    ? `${apiUrl}/uploads/user_images/${userInfo.image}`
+    : `${apiUrl}/default_images/default_profile.png`;
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUserInfo(storedUser);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await api.get('/api/logout');
+      localStorage.removeItem("user");
+      setUserInfo(null);
+      navigate("/");
+    } catch (error) {
+      console.log("Error logging out:", error);
+    }
+  };
 
   return (
     <>
@@ -228,23 +216,50 @@ const Navbar = ({ onCurrencyChange }) => {
               )}
             </div>
 
-            {/* User Dropdown */}
             <div className="relative hidden md:block cursor-pointer" onClick={() => { setShowUser(!showUser); }} ref={userRef}>
               <div className="flex items-center cursor-pointer p-1 rounded-md hover:bg-gray-100 transition-colors duration-200">
-                <CiUser className="w-6 h-6 text-gray-700" />
+                {userInfo ? (
+                  <img src={userImage} alt="User Profile" className="w-6 h-6 rounded-full" />
+                ) : (
+                  <CiUser className="w-6 h-6 text-gray-700" />
+                )}
               </div>
               {showUser && (
                 <div className="absolute top-full right-0 mt-3 w-40 bg-white border border-gray-300 rounded-md shadow-lg">
-                  <Link to="/signin">
-                    <div className="flex items-center px-3 py-2 w-full border-b hover:bg-gray-100 cursor-pointer">
-                      <span className="ml-2">Sign In</span>
-                    </div>
-                  </Link>
-                  <Link to="/signup">
-                    <div className="flex items-center px-3 py-2 w-full hover:bg-gray-100 cursor-pointer">
-                      <span className="ml-2">Sign Up</span>
-                    </div>
-                  </Link>
+                  {userInfo ? (
+                    <>
+                      <div
+                        className="flex items-center px-3 py-2 w-full border-b hover:bg-gray-100 cursor-pointer"
+                      // onClick={handleEditProfile}
+                      >
+                        <span className="ml-2">Edit Profile</span>
+                      </div>
+                      <Link to="/dashboard/manage-orders">
+                        <div className="flex items-center px-3 py-2 w-full border-b hover:bg-gray-100 cursor-pointer">
+                          <span className="ml-2">Manage Orders</span>
+                        </div>
+                      </Link>
+                      <div
+                        className="flex items-center px-3 py-2 w-full hover:bg-gray-100 cursor-pointer"
+                        onClick={handleLogout}
+                      >
+                        <span className="ml-2">Logout</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/signin">
+                        <div className="flex items-center px-3 py-2 w-full border-b hover:bg-gray-100 cursor-pointer">
+                          <span className="ml-2">Sign In</span>
+                        </div>
+                      </Link>
+                      <Link to="/signup">
+                        <div className="flex items-center px-3 py-2 w-full hover:bg-gray-100 cursor-pointer">
+                          <span className="ml-2">Sign Up</span>
+                        </div>
+                      </Link>
+                    </>
+                  )}
                 </div>
               )}
             </div>

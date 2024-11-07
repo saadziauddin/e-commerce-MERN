@@ -58,10 +58,10 @@ export const reduxSlice = createSlice({
       toast.error("Product removed from cart");
     },
 
-    // resetCart: (state) => {
-    //   state.products = [];
-    //   toast.success("Cart reset successfully!");
-    // },
+    resetCart: (state) => {
+      state.products = [];
+      // toast.success("Cart reset successfully!");
+    },
 
     toggleBrand: (state, action) => {
       const brand = action.payload;

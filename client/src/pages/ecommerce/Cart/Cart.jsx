@@ -17,7 +17,8 @@ function Cart() {
   const totalAmt = products.reduce((total, item) => total + item.price * item.quantity, 0);
 
   useEffect(() => {
-    setShippingCharge(50);
+    setShippingCharge(0);
+    // Add logic here if you plan to dynamically change shippingCharge in the future
   }, [totalAmt]);
 
   return (
@@ -27,9 +28,9 @@ function Cart() {
       {products.length > 0 ? (
         <div className="pb-20">
           {/* Cart Items - Mobile */}
-          <div className="lg:hidden xl:hidden flex flex-col gap-6">
+          <div className="lg:hidden flex flex-col gap-6 font-heading">
             {products.map((item) => (
-              <div key={item._id} className="border border-gray-200 rounded-lg p-6 shadow-md transition-transform transform hover:scale-105">
+              <div key={item._id} className="border border-gray-200 rounded-md shadow-md p-6 transition-transform transform">
                 <div className="flex items-center gap-6">
                   <img
                     src={item.image}
@@ -73,7 +74,7 @@ function Cart() {
           </div>
 
           {/* Cart Items - Desktop */}
-          <div className="hidden lg:block xl:block">
+          <div className="hidden lg:block font-heading">
             <table className="min-w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
               <thead className="bg-gray-50">
                 <tr className="text-left">
@@ -132,15 +133,19 @@ function Cart() {
           {/* Cart Totals */}
           <div className="flex justify-end mt-8">
             <div className="w-full md:w-96 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Cart Totals</h2>
-              <div className="space-y-3">
+              <h2 className="text-2xl font-heading font-semibold text-gray-800 mb-4">Cart Totals</h2>
+              <div className="space-y-3 font-heading">
                 <p className="flex justify-between items-center text-gray-700">
                   <span className="font-medium">Subtotal</span>
                   <FormatPrice price={totalAmt} currency={selectedCurrency} />
                 </p>
                 <p className="flex justify-between items-center text-gray-700">
-                  <span className="font-medium">Shipping</span>
-                  <FormatPrice price={shippingCharge} currency={selectedCurrency} />
+                  <span className="font-medium">Delivery Charges</span>
+                  {shippingCharge === 0 ? (
+                    <span className="text-[17px] text-green-600">FREE</span>
+                  ) : (
+                    <FormatPrice price={shippingCharge} currency={selectedCurrency} />
+                  )}
                 </p>
                 <p className="flex justify-between items-center text-gray-900 text-lg font-bold">
                   <span>Total</span>
@@ -148,7 +153,7 @@ function Cart() {
                 </p>
               </div>
               <Link to="/checkout" className="mt-6 block">
-                <button className="w-full py-3 bg-[#7b246d] text-white text-lg font-semibold rounded-lg hover:bg-black transition duration-300">
+                <button className="w-full py-3 bg-[#7b246d] text-white text-[16px] font-titleFont font-semibold rounded-lg hover:bg-black uppercase transition duration-300">
                   Proceed to Checkout
                 </button>
               </Link>
@@ -163,14 +168,14 @@ function Cart() {
           className="flex flex-col items-center gap-6 py-16"
         >
           <img src={emptyCart} alt="emptyCart" className="w-80" />
-          <h2 className="text-2xl font-semibold text-gray-800">
+          <h2 className="text-2xl font-semibold font-heading text-gray-800">
             Your Cart is Empty
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 font-heading">
             Looks like you haven't added anything to your cart yet.
           </p>
           <Link to="/products">
-            <button className="px-8 py-3 bg-[#7b246d] text-white rounded-lg hover:bg-black transition duration-300">
+            <button className="px-8 py-3 bg-[#7b246d] text-white rounded-lg hover:bg-black uppercase transition duration-300">
               Start Shopping
             </button>
           </Link>

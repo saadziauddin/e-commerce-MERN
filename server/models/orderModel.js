@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 import './config.js';
 
 const orderSchema = new Schema({
+  orderId: { type: String, unique: true },
   user: { type: String, ref: 'User', required: true },
   userExists: { type: Boolean, required: true },
   products: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-      // productId: { type: String },
       productName: { type: String, required: true },
       quantity: { type: Number, required: true },
       color: { type: String },
@@ -35,7 +35,15 @@ const orderSchema = new Schema({
   },
   orderDate: { type: Date, default: Date.now },
   paymentStatus: { type: String, enum: ['Pending', 'Paid', 'Failed'], default: 'Pending' },
-  orderStatus: { type: String, enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Processing' }
+  orderStatus: { type: String, enum: ['Pending', 'Accepted', 'Cancelled', 'Processing', 'Shipped', 'Delivered'], default: 'Pending' }
+});
+
+// Pre-save hook to generate a unique orderId
+orderSchema.pre('save', function(next) {
+  if (!this.orderId) {
+    this.orderId = `NF-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`; // e.g., NF-1639941047268-1234
+  }
+  next();
 });
 
 const Order = mongoose.model('Order', orderSchema);

@@ -43,7 +43,7 @@ app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:${port}`);
 });
 
-// ======================= Authentication Routes ==============================
+// ======================= Authentication Routes =========================
 import signinRouter from './routes/auth/signinRoute.js';
 app.post('/api/signin', signinRouter);
 
@@ -122,4 +122,9 @@ app.get('/api/fetchProductsByCategory/specialOffers', fetchProductsRouter);
 
 // ======================= Order Routes =================================
 import ordersRouter from './routes/orders/orderRoute.js';
+app.post('/api/orders', ordersRouter);
 app.use('/api/orders', ordersRouter);
+
+import fetchOrdersRouter from './routes/orders/fetchOrderRoute.js';
+app.use('/api/orders', fetchOrdersRouter);
+app.use('/api/orders', fetchOrdersRouter);
